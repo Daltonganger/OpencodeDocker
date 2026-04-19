@@ -15,6 +15,8 @@ repo_dir="${OPENCODE_UPDATER_REPO_DIR:-/var/lib/opencode-updater/repo}"
 admin_target="${OPENCODE_UPDATER_ADMIN_TARGET:-/opt/stacks/opencode-admin}"
 stack_target="${OPENCODE_UPDATER_STACK_TARGET:-/opt/stacks/opencode-dev}"
 scope="${OPENCODE_UPDATER_SCOPE:-full}"
+skip_repo_sync="${OPENCODE_UPDATER_SKIP_REPO_SYNC:-false}"
+skip_repo_sync="${skip_repo_sync,,}"
 lock_file="${OPENCODE_UPDATER_LOCK_FILE:-/var/lib/opencode-updater/update.lock}"
 admin_services="${OPENCODE_UPDATER_ADMIN_SERVICES:-opencode-admin}"
 stack_services="${OPENCODE_UPDATER_STACK_SERVICES:-opencode-backend opencode-dev opencode-github-copilot-auth opencode-google-auth opencode-qwen-auth openchamber code-server sftpgo ssh-dev}"
@@ -33,7 +35,7 @@ if [ "$enabled" != "true" ] && [ "$force" != "true" ]; then
   exit 0
 fi
 
-if [ -z "$repo_url" ]; then
+if [ "$skip_repo_sync" != "true" ] && [ -z "$repo_url" ]; then
   log "OPENCODE_UPDATER_REPO_URL is empty"
   exit 0
 fi
@@ -67,14 +69,18 @@ case "$scope" in
     ;;
 esac
 
-if [ ! -d "$repo_dir/.git" ]; then
-  log "cloning $repo_url#$branch"
-  git clone --depth 1 --branch "$branch" "$repo_url" "$repo_dir"
+if [ "$skip_repo_sync" = "true" ]; then
+  log "skipping repo sync; using current stack files on disk"
 else
-  log "fetching updates"
-  git -C "$repo_dir" fetch --depth 1 origin "$branch"
-  git -C "$repo_dir" checkout -B "$branch" "origin/$branch"
-  git -C "$repo_dir" reset --hard "origin/$branch"
+  if [ ! -d "$repo_dir/.git" ]; then
+    log "cloning $repo_url#$branch"
+    git clone --depth 1 --branch "$branch" "$repo_url" "$repo_dir"
+  else
+    log "fetching updates"
+    git -C "$repo_dir" fetch --depth 1 origin "$branch"
+    git -C "$repo_dir" checkout -B "$branch" "origin/$branch"
+    git -C "$repo_dir" reset --hard "origin/$branch"
+  fi
 fi
 
 sync_dir() {
@@ -87,7 +93,7 @@ sync_dir() {
     "$src/" "$dst/"
 }
 
-if [ "$sync_admin" = "true" ]; then
+if [ "$sync_admin" = "true" ] && [ "$skip_repo_sync" != "true" ]; then
   log "syncing admin files"
   sync_dir "$repo_dir/opencode-admin" "$admin_target" \
     --exclude '.env' \
@@ -97,7 +103,7 @@ if [ "$sync_admin" = "true" ]; then
     --exclude 'updater-data/'
 fi
 
-if [ "$sync_stack" = "true" ]; then
+if [ "$sync_stack" = "true" ] && [ "$skip_repo_sync" != "true" ]; then
   log "syncing stack files"
   sync_dir "$repo_dir/generated/2631de/opencode-dev" "$stack_target" \
     --exclude '.env' \

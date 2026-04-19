@@ -53,23 +53,6 @@ async function readDockerOutput(args: string[]): Promise<string | null> {
   }
 }
 
-async function readUpdaterEnv(): Promise<Record<string, string>> {
-  const envJson = await readDockerOutput(['inspect', 'opencode-auto-updater', '--format', '{{json .Config.Env}}']);
-  if (!envJson) {
-    return {};
-  }
-
-  try {
-    const entries = JSON.parse(envJson) as string[];
-    return Object.fromEntries(entries.map((entry) => {
-      const index = entry.indexOf('=');
-      return index === -1 ? [entry, ''] : [entry.slice(0, index), entry.slice(index + 1)];
-    }));
-  } catch {
-    return {};
-  }
-}
-
 async function readRuntimeDetails(): Promise<RuntimeDetails> {
   const [version, upstreamRelease, source] = await Promise.all([
     readDockerOutput(['exec', 'opencode-backend', 'sh', '-lc', 'opencode --version']),
@@ -84,18 +67,12 @@ async function readRuntimeDetails(): Promise<RuntimeDetails> {
   };
 }
 
-async function assertUpdaterConfigured(): Promise<void> {
-  const env = await readUpdaterEnv();
-  if (!env.OPENCODE_UPDATER_REPO_URL) {
-    throw new Error('OPENCODE_UPDATER_REPO_URL is not configured on opencode-auto-updater.');
-  }
-}
-
 function startUpdateProcess() {
   activeProcess = spawn('docker', [
     'exec',
     '-e', 'OPENCODE_UPDATER_FORCE=true',
     '-e', 'OPENCODE_UPDATER_SCOPE=stack',
+    '-e', 'OPENCODE_UPDATER_SKIP_REPO_SYNC=true',
     'opencode-auto-updater',
     'bash', '/updater/update-once.sh',
   ], {
@@ -148,8 +125,6 @@ export async function triggerOpencodeUpdate(): Promise<OpencodeUpdateStatus> {
   if (activeProcess && updateStatus.running) {
     return getOpencodeUpdateStatus();
   }
-
-  await assertUpdaterConfigured();
 
   updateStatus = {
     running: true,
