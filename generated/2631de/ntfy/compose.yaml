@@ -1,0 +1,44 @@
+services:
+  ntfy:
+    image: binwiederhier/ntfy:latest
+    command: serve
+    restart: unless-stopped
+    networks:
+      - traefik-network
+    volumes:
+      - /opt/stacks/ntfy/config/ntfy/server.yml:/etc/ntfy/server.yml:ro
+      - ntfy-cache:/var/cache/ntfy
+      - ntfy-auth:/var/lib/ntfy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:80/v1/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+          pids: 128
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    init: true
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-network"
+      - "traefik.http.routers.ntfy.rule=Host(`notify.2631.eu`)"
+      - "traefik.http.routers.ntfy.entrypoints=websecure"
+      - "traefik.http.routers.ntfy.tls=true"
+      - "traefik.http.routers.ntfy.tls.certresolver=gcore"
+      - "traefik.http.routers.ntfy.middlewares=authelia@docker,webapp-chain@docker"
+      - "traefik.http.services.ntfy.loadbalancer.server.port=80"
+
+networks:
+  traefik-network:
+    external: true
+
+volumes:
+  ntfy-cache:
+  ntfy-auth:

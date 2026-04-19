@@ -1,0 +1,88 @@
+{
+  "$schema": "./schemas/mcp.schema.json",
+  "version": "1.0.0",
+  "servers": [
+    {
+      "id": "context7",
+      "name": "Context7",
+      "enabled": true,
+      "type": "local",
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"],
+      "envRefs": ["CONTEXT7_API_KEY"],
+      "transport": "stdio",
+      "description": "Documentation and library context",
+      "capabilities": ["docs", "reference"],
+      "testProfile": { "timeout": 5000, "testCommand": "search" }
+    },
+    {
+      "id": "tavily",
+      "name": "Tavily",
+      "enabled": true,
+      "type": "local",
+      "command": "npx",
+      "args": ["-y", "tavily-mcp"],
+      "envRefs": ["TAVILY_API_KEY"],
+      "transport": "stdio",
+      "description": "Web research MCP",
+      "capabilities": ["search", "research"],
+      "testProfile": { "timeout": 5000, "testCommand": "search" }
+    },
+    {
+      "id": "brave-search",
+      "name": "Brave Search",
+      "enabled": true,
+      "type": "local",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-brave-search"],
+      "envRefs": ["BRAVE_API_KEY"],
+      "transport": "stdio",
+      "description": "Search and news via Brave",
+      "capabilities": ["search", "news"],
+      "testProfile": { "timeout": 5000, "testCommand": "search" }
+    },
+    {
+      "id": "chrome-devtools",
+      "name": "Chrome DevTools",
+      "enabled": true,
+      "type": "local",
+      "command": "chrome-devtools-mcp",
+      "args": ["--headless", "--isolated", "--executablePath=/usr/local/bin/opencode-browser", "--no-usage-statistics"],
+      "envRefs": [],
+      "transport": "stdio",
+      "description": "Browser inspection and automation",
+      "capabilities": ["browser", "devtools"],
+      "testProfile": { "timeout": 5000, "testCommand": "ping" }
+    },
+    {
+      "id": "playwright",
+      "name": "Playwright",
+      "enabled": true,
+      "type": "local",
+      "command": "playwright-mcp",
+      "args": ["--headless", "--isolated", "--executable-path=/usr/local/bin/opencode-browser"],
+      "envRefs": [],
+      "transport": "stdio",
+      "description": "Browser automation server",
+      "capabilities": ["browser", "automation"],
+      "testProfile": { "timeout": 5000, "testCommand": "ping" }
+    },
+    {
+      "id": "browser",
+      "name": "Browser",
+      "enabled": true,
+      "type": "local",
+      "command": "playwright-mcp",
+      "args": ["--headless", "--isolated", "--executable-path=/usr/local/bin/opencode-browser", "--caps=vision,pdf,devtools"],
+      "envRefs": [],
+      "transport": "stdio",
+      "description": "Alias for browser flows",
+      "capabilities": ["browser"],
+      "testProfile": { "timeout": 5000, "testCommand": "ping" }
+    }
+  ],
+  "metadata": {
+    "lastModified": "2026-03-14T00:00:00Z",
+    "modifiedBy": "system"
+  }
+}

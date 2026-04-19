@@ -1,0 +1,83 @@
+{
+  "$schema": "./schemas/plugins.schema.json",
+  "version": "1.0.0",
+  "plugins": [
+    {
+      "id": "oh-my-opencode-slim",
+      "name": "oh-my-opencode-slim",
+      "package": "oh-my-opencode-slim",
+      "enabled": true,
+      "order": 10,
+      "version": "latest",
+      "description": "Agent orchestration and Pantheon profile layer",
+      "required": true
+    },
+    {
+      "id": "copilot-hydra",
+      "name": "CopilotHydra",
+      "package": "copilothydra",
+      "enabled": true,
+      "order": 20,
+      "version": "latest",
+      "description": "Multiple GitHub Copilot accounts side by side — account-scoped providers with explicit model routing"
+    },
+    {
+      "id": "dynamic-context-pruning",
+      "name": "Dynamic Context Pruning",
+      "package": "@tarquinen/opencode-dcp",
+      "enabled": true,
+      "order": 55,
+      "version": "latest",
+      "description": "Prunes context to keep sessions efficient"
+    },
+    {
+      "id": "vibeguard",
+      "name": "Vibeguard",
+      "package": "opencode-vibeguard",
+      "enabled": true,
+      "order": 30,
+      "version": "latest",
+      "description": "Safety guardrails and flow checks"
+    },
+    {
+      "id": "qwen-auth",
+      "name": "Qwen Auth",
+      "package": "@melodyoftears/opencode-qwen-auth",
+      "enabled": true,
+      "order": 40,
+      "version": "latest",
+      "description": "OAuth helper for Qwen auth flow"
+    },
+    {
+      "id": "antigravity-auth",
+      "name": "Antigravity Auth",
+      "package": "opencode-antigravity-auth@beta",
+      "enabled": true,
+      "order": 50,
+      "version": "beta",
+      "description": "Google and GitHub auth integration"
+    },
+    {
+      "id": "opencode-quota",
+      "name": "OpenCode Quota",
+      "package": "@slkiser/opencode-quota",
+      "enabled": true,
+      "order": 60,
+      "version": "latest",
+      "description": "Quota and usage monitoring across OAuth and provider accounts"
+    },
+    {
+      "id": "tokenspeed-monitor",
+      "name": "TokenSpeed Monitor",
+      "package": "opencode-tokenspeed-monitor@latest",
+      "enabled": true,
+      "order": 70,
+      "version": "latest",
+      "description": "Runtime token and latency monitoring"
+    }
+  ],
+  "metadata": {
+    "lastModified": "2026-03-14T00:00:00Z",
+    "modifiedBy": "system"
+  }
+}

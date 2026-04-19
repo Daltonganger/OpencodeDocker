@@ -1,0 +1,127 @@
+FROM ubuntu:24.04
+
+ARG TARGETARCH
+ARG OPENCODE_UPSTREAM_REPO=https://github.com/anomalyco/opencode
+ARG OPENCODE_UPSTREAM_RELEASE=latest
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+      bash \
+      ca-certificates \
+      curl \
+      git \
+      gnupg \
+      gosu \
+      jq \
+      openssh-client \
+      python3 \
+      tmux \
+      unzip \
+      wget \
+      xz-utils \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN set -eux; \
+    case "${TARGETARCH}" in \
+      amd64) node_arch="x64" ;; \
+      arm64) node_arch="arm64" ;; \
+      *) echo "Unsupported architecture: ${TARGETARCH}" >&2; exit 1 ;; \
+    esac; \
+    curl -fsSL "https://nodejs.org/dist/v22.14.0/node-v22.14.0-linux-${node_arch}.tar.xz" | tar -xJ --strip-components=1 -C /usr/local
+
+RUN set -eux; \
+    if [ "${TARGETARCH}" = "amd64" ]; then \
+      install -d -m 0755 /etc/apt/keyrings; \
+      curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /etc/apt/keyrings/google-chrome.gpg; \
+      chmod a+r /etc/apt/keyrings/google-chrome.gpg; \
+      printf 'deb [arch=amd64 signed-by=/etc/apt/keyrings/google-chrome.gpg] https://dl.google.com/linux/chrome/deb/ stable main\n' > /etc/apt/sources.list.d/google-chrome.list; \
+      apt-get update; \
+      apt-get install -y --no-install-recommends google-chrome-stable; \
+      rm -rf /var/lib/apt/lists/*; \
+    fi
+
+RUN cat > /usr/local/bin/opencode-browser <<'EOF'
+#!/usr/bin/env bash
+set -euo pipefail
+for candidate in /usr/bin/google-chrome-stable /usr/bin/google-chrome /usr/bin/chromium /usr/bin/chromium-browser; do
+  if [ -x "$candidate" ]; then
+    exec "$candidate" "$@"
+  fi
+done
+printf 'No supported browser binary found\n' >&2
+exit 1
+EOF
+RUN chmod +x /usr/local/bin/opencode-browser
+
+RUN set -eux; \
+    if id -u app >/dev/null 2>&1; then \
+      true; \
+    else \
+      existing_user="$(getent passwd 1000 | cut -d: -f1 || true)"; \
+      existing_group="$(getent group 1000 | cut -d: -f1 || true)"; \
+      if [ -n "$existing_group" ] && [ "$existing_group" != "app" ]; then groupmod -n app "$existing_group"; fi; \
+      if [ -n "$existing_user" ]; then \
+        usermod -l app "$existing_user"; \
+        usermod -d /home/app -m app; \
+        usermod -g 1000 app; \
+      else \
+        groupadd --gid 1000 --force app; \
+        useradd --uid 1000 --gid 1000 --create-home --shell /bin/bash app; \
+      fi; \
+    fi
+
+RUN case "${TARGETARCH}" in \
+      amd64) ttyd_arch="x86_64" ;; \
+      arm64) ttyd_arch="aarch64" ;; \
+      *) echo "Unsupported architecture: ${TARGETARCH}" >&2; exit 1 ;; \
+    esac \
+    && wget -O /usr/local/bin/ttyd "https://github.com/tsl0922/ttyd/releases/latest/download/ttyd.${ttyd_arch}" \
+    && chmod +x /usr/local/bin/ttyd
+
+RUN npm install -g @upstash/context7-mcp@latest tavily-mcp@latest @modelcontextprotocol/server-brave-search@latest @playwright/mcp@latest chrome-devtools-mcp@latest @browsermcp/mcp@latest
+
+USER app
+ENV HOME=/home/app \
+    LANG=C.UTF-8 \
+    LC_CTYPE=C.UTF-8 \
+    XDG_CONFIG_HOME=/home/app/.config \
+    XDG_DATA_HOME=/home/app/.local/share \
+    XDG_STATE_HOME=/home/app/.local/state \
+    XDG_CACHE_HOME=/home/app/.cache \
+    PATH=/home/app/.bun/bin:/home/app/.opencode/bin:/home/app/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+RUN mkdir -p \
+      /home/app/workspace \
+      /home/app/.config/opencode \
+      /home/app/.local/share/opencode \
+      /home/app/.local/state/opencode \
+      /home/app/.cache/opencode \
+      /home/app/.cache/opencode-seed
+
+RUN bash -lc 'curl -fsSL https://bun.sh/install | bash'
+RUN bash -lc 'set -euo pipefail; release="${OPENCODE_UPSTREAM_RELEASE}"; if [ "$release" = "latest" ]; then release="$(curl -fsSL https://api.github.com/repos/anomalyco/opencode/releases/latest | jq -r .tag_name)"; fi; clean_release="${release#v}"; curl -fsSL https://opencode.ai/install | bash -s -- --version "$clean_release"; opencode --version > /home/app/.local/share/opencode/version.txt; printf "%s\n" "$release" > /home/app/.local/share/opencode/upstream-release.txt; printf "%s\n" "${OPENCODE_UPSTREAM_REPO}" > /home/app/.local/share/opencode/upstream-source.txt'
+RUN bash -lc 'cd /home/app/.cache/opencode-seed && printf "{\n  \"dependencies\": {}\n}\n" > package.json && bun add --cwd /home/app/.cache/opencode-seed --exact oh-my-opencode-slim opencode-vibeguard @melodyoftears/opencode-qwen-auth opencode-antigravity-auth@beta @tarquinen/opencode-dcp @slkiser/opencode-quota opencode-tokenspeed-monitor'
+
+USER root
+WORKDIR /home/app/workspace
+
+COPY opencode-entrypoint.sh /usr/local/bin/opencode-entrypoint.sh
+COPY opencode-backend.sh /usr/local/bin/opencode-backend.sh
+COPY opencode-github-copilot-auth.sh /usr/local/bin/opencode-github-copilot-auth.sh
+COPY opencode-google-auth.sh /usr/local/bin/opencode-google-auth.sh
+COPY opencode-qwen-auth.sh /usr/local/bin/opencode-qwen-auth.sh
+COPY opencode-session.sh /usr/local/bin/opencode-session.sh
+COPY opencode-attach.sh /usr/local/bin/opencode-attach.sh
+RUN chmod +x /usr/local/bin/opencode-entrypoint.sh
+RUN chmod +x /usr/local/bin/opencode-backend.sh
+RUN chmod +x /usr/local/bin/opencode-github-copilot-auth.sh
+RUN chmod +x /usr/local/bin/opencode-google-auth.sh
+RUN chmod +x /usr/local/bin/opencode-qwen-auth.sh
+RUN chmod +x /usr/local/bin/opencode-session.sh
+RUN chmod +x /usr/local/bin/opencode-attach.sh
+
+EXPOSE 7681
+
+CMD ["/usr/local/bin/opencode-entrypoint.sh"]

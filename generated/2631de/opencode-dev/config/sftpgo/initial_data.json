@@ -1,0 +1,21 @@
+{
+  "users": [
+    {
+      "username": "webdav",
+      "password": "PASTE_HERE",
+      "status": 1,
+      "home_dir": "/srv/sftpgo/data/workspace",
+      "permissions": {
+        "/": ["*"]
+      },
+      "filesystem": {
+        "provider": 0,
+        "osfs_config": {
+          "base_dir": "/srv/sftpgo/data/workspace"
+        }
+      }
+    }
+  ],
+  "folders": [],
+  "groups": []
+}

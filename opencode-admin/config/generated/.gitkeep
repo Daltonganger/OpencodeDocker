@@ -1,0 +1,7 @@
+# Generated files
+# This directory contains runtime-generated configuration files
+# Do not edit manually - use the admin UI
+
+Generated files:
+- opencode.json
+- oh-my-opencode-slim.jsonc

@@ -1,0 +1,17 @@
+{
+  "$schema": "./schemas/features.schema.json",
+  "version": "1.0.0",
+  "flags": {
+    "advanced_json_enabled": true,
+    "audit_logging_enabled": true,
+    "oauth_status_enabled": true,
+    "apply_restart_enabled": false,
+    "mcp_test_enabled": true,
+    "show_provider_aliases": true,
+    "show_release_history": true
+  },
+  "metadata": {
+    "lastModified": "2026-03-14T00:00:00Z",
+    "modifiedBy": "system"
+  }
+}

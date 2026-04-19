@@ -1,0 +1,150 @@
+{
+  "$schema": "./schemas/routing.schema.json",
+  "version": "1.0.0",
+  "defaultPreset": "default",
+  "agents": {
+    "orchestrator": {
+      "enabled": true,
+      "displayName": "Orchestrator",
+      "description": "Primary orchestration and planning agent",
+      "primary": { "provider": "codexlb", "model": "gpt-5.4" },
+      "fallback": { "provider": "nanogpt", "model": "moonshotai/kimi-k2.5:thinking" },
+      "temperature": 0.4,
+      "maxReasoningEffort": "high",
+      "mcpAccess": "all",
+      "mcpAllowlist": ["tavily", "brave-search", "chrome-devtools"],
+      "mcpDenylist": [],
+      "skillsPolicy": "all",
+      "skillsAllowlist": ["*"],
+      "skillsDenylist": [],
+      "tmux": { "enabled": true, "sessionPrefix": "orc" }
+    },
+    "explorer": {
+      "enabled": true,
+      "displayName": "Explorer",
+      "description": "Fast discovery and search specialist",
+      "primary": { "provider": "kilo", "model": "minimax/minimax-m2.5:free" },
+      "fallback": { "provider": "qwen-code", "model": "coder-model" },
+      "temperature": 0.5,
+      "maxReasoningEffort": "medium",
+      "mcpAccess": "selected",
+      "mcpAllowlist": ["context7", "tavily", "brave-search"],
+      "mcpDenylist": [],
+      "skillsPolicy": "all",
+      "skillsAllowlist": [],
+      "skillsDenylist": [],
+      "tmux": { "enabled": true, "sessionPrefix": "exp" }
+    },
+    "oracle": {
+      "enabled": true,
+      "displayName": "Oracle",
+      "description": "High-confidence advisor for critical choices",
+      "primary": { "provider": "codexlb", "model": "gpt-5.4" },
+      "fallback": { "provider": "chat2631", "model": "google/gemini-3-flash-preview" },
+      "temperature": 0.2,
+      "maxReasoningEffort": "high",
+      "mcpAccess": "selected",
+      "mcpAllowlist": ["context7", "tavily"],
+      "mcpDenylist": [],
+      "skillsPolicy": "selected",
+      "skillsAllowlist": ["read", "search", "analyze"],
+      "skillsDenylist": ["write", "execute"],
+      "tmux": { "enabled": true, "sessionPrefix": "ora" }
+    },
+    "librarian": {
+      "enabled": true,
+      "displayName": "Librarian",
+      "description": "Documentation and library reference specialist",
+      "primary": { "provider": "google", "model": "antigravity-gemini-3-flash" },
+      "fallback": { "provider": "kilo", "model": "openrouter/hunter-alpha" },
+      "temperature": 0.3,
+      "maxReasoningEffort": "medium",
+      "mcpAccess": "selected",
+      "mcpAllowlist": ["context7", "tavily", "brave-search"],
+      "mcpDenylist": [],
+      "skillsPolicy": "all",
+      "skillsAllowlist": [],
+      "skillsDenylist": [],
+      "tmux": { "enabled": true, "sessionPrefix": "lib" }
+    },
+    "designer": {
+      "enabled": true,
+      "displayName": "Designer",
+      "description": "UI and UX design specialist",
+      "primary": { "provider": "google", "model": "antigravity-gemini-3-pro" },
+      "fallback": { "provider": "nanogpt", "model": "moonshotai/kimi-k2.5:thinking" },
+      "temperature": 0.7,
+      "maxReasoningEffort": "medium",
+      "mcpAccess": "selected",
+      "mcpAllowlist": ["chrome-devtools", "playwright", "browser"],
+      "mcpDenylist": [],
+      "skillsPolicy": "all",
+      "skillsAllowlist": [],
+      "skillsDenylist": [],
+      "tmux": { "enabled": true, "sessionPrefix": "des" }
+    },
+    "fixer": {
+      "enabled": true,
+      "displayName": "Fixer",
+      "description": "Fast implementation specialist",
+      "primary": { "provider": "nanogpt", "model": "zai-org/glm-5:thinking" },
+      "fallback": { "provider": "kilo", "model": "minimax/minimax-m2.5:free" },
+      "temperature": 0.2,
+      "maxReasoningEffort": "low",
+      "mcpAccess": "all",
+      "mcpAllowlist": [],
+      "mcpDenylist": [],
+      "skillsPolicy": "all",
+      "skillsAllowlist": [],
+      "skillsDenylist": [],
+      "tmux": { "enabled": true, "sessionPrefix": "fix" }
+    }
+  },
+  "presets": {
+    "default": { "name": "Default", "description": "Balanced daily-use preset" },
+    "quality": { "name": "Quality", "description": "Bias toward best reasoning models" },
+    "budget": { "name": "Budget", "description": "Bias toward cheaper models" }
+  },
+  "council": {
+    "master": {
+      "model": "github-copilot-acct-acct_eb51f2/claude-opus-4.6",
+      "variant": "high"
+    },
+    "master_fallback": [
+      "github-copilot-acct-acct_eb51f2/claude-sonnet-4.6",
+      "openai/gpt-5.4"
+    ],
+    "default_preset": "default",
+    "master_timeout": 300000,
+    "councillors_timeout": 180000,
+    "presets": {
+      "default": {
+        "alpha": {
+          "model": "openai/gpt-5.4",
+          "variant": "high"
+        },
+        "beta": {
+          "model": "github-copilot-acct-acct_0bc716/gemini-3.1-pro-preview",
+          "variant": "medium"
+        },
+        "gamma": {
+          "model": "qwen-code/coder-model",
+          "variant": "low"
+        }
+      },
+      "fast": {
+        "quick-openai": {
+          "model": "openai/gpt-5.4-mini"
+        },
+        "quick-qwen": {
+          "model": "qwen-code/coder-model",
+          "variant": "low"
+        }
+      }
+    }
+  },
+  "metadata": {
+    "lastModified": "2026-03-14T00:00:00Z",
+    "modifiedBy": "system"
+  }
+}

@@ -1,0 +1,173 @@
+{
+  "$schema": "./schemas/providers.schema.json",
+  "version": "1.0.0",
+  "providers": [
+    {
+      "id": "google",
+      "alias": "google",
+      "name": "Google / Antigravity",
+      "type": "google",
+      "baseUrl": "",
+      "enabled": true,
+      "secretRef": "",
+      "models": [
+        { "id": "antigravity-gemini-3-flash", "name": "Gemini 3 Flash (Antigravity)", "capabilities": ["reasoning", "fast"], "recommended": true },
+        { "id": "antigravity-gemini-3-pro", "name": "Gemini 3 Pro (Antigravity)", "capabilities": ["reasoning", "code"] },
+        { "id": "antigravity-gemini-3.1-pro", "name": "Gemini 3.1 Pro (Antigravity)", "capabilities": ["reasoning", "code"] },
+        { "id": "antigravity-claude-sonnet-4-6", "name": "Claude Sonnet 4.6 (Antigravity)", "capabilities": ["reasoning", "code"] },
+        { "id": "antigravity-claude-opus-4-6-thinking", "name": "Claude Opus 4.6 Thinking (Antigravity)", "capabilities": ["reasoning"] },
+        { "id": "gemini-2.5-flash", "name": "Gemini 2.5 Flash (Gemini CLI)", "capabilities": ["fast", "budget"] },
+        { "id": "gemini-2.5-pro", "name": "Gemini 2.5 Pro (Gemini CLI)", "capabilities": ["reasoning", "code"] },
+        { "id": "gemini-3-flash-preview", "name": "Gemini 3 Flash Preview (Gemini CLI)", "capabilities": ["fast", "budget"] },
+        { "id": "gemini-3-pro-preview", "name": "Gemini 3 Pro Preview (Gemini CLI)", "capabilities": ["reasoning", "code"] },
+        { "id": "gemini-3.1-pro-preview", "name": "Gemini 3.1 Pro Preview (Gemini CLI)", "capabilities": ["reasoning", "code"] },
+        { "id": "gemini-3.1-pro-preview-customtools", "name": "Gemini 3.1 Pro Preview Custom Tools (Gemini CLI)", "capabilities": ["reasoning", "code"] }
+      ],
+      "defaultModel": "antigravity-gemini-3-flash"
+    },
+    {
+      "id": "openai",
+      "alias": "openai",
+      "name": "OpenAI",
+      "type": "openai",
+      "baseUrl": "https://api.openai.com/v1",
+      "enabled": false,
+      "secretRef": "OPENAI_API_KEY",
+      "models": [
+        { "id": "gpt-4o", "name": "GPT-4o", "capabilities": ["reasoning", "code"], "recommended": true },
+        { "id": "gpt-4o-mini", "name": "GPT-4o Mini", "capabilities": ["fast", "budget", "code"] }
+      ],
+      "defaultModel": "gpt-4o"
+    },
+    {
+      "id": "openrouter",
+      "alias": "openrouter",
+      "name": "OpenRouter",
+      "type": "openai-compatible",
+      "baseUrl": "https://openrouter.ai/api/v1",
+      "enabled": true,
+      "secretRef": "OPENROUTER_API_KEY",
+      "models": [
+        { "id": "openai/gpt-4o-mini", "name": "GPT-4o Mini via OpenRouter", "capabilities": ["research", "budget"] },
+        { "id": "anthropic/claude-3.5-sonnet", "name": "Claude 3.5 Sonnet via OpenRouter", "capabilities": ["reasoning", "code"] }
+      ],
+      "defaultModel": "openai/gpt-4o-mini"
+    },
+    {
+      "id": "codexlb",
+      "alias": "codexlb",
+      "name": "CodexLB",
+      "type": "openai-compatible",
+      "baseUrl": "https://codex.2631.eu/v1",
+      "enabled": true,
+      "secretRef": "CODEXLB_API_KEY",
+      "models": [
+        { "id": "gpt-5", "name": "Gpt 5", "capabilities": ["reasoning", "code", "fast", "budget", "multimodal"], "recommended": true, "limit": { "context": 272000, "output": 8192 } },
+        { "id": "gpt-5.4", "name": "Gpt 5.4", "capabilities": ["reasoning", "code", "fast", "budget", "multimodal"], "limit": { "context": 272000, "output": 8192 } }
+      ],
+      "defaultModel": "gpt-5"
+    },
+    {
+      "id": "chat2631",
+      "alias": "chat2631",
+      "name": "chat.2631.eu",
+      "type": "openai-compatible",
+      "baseUrl": "https://chat.2631.eu/v1",
+      "enabled": true,
+      "secretRef": "CHAT2631_API_KEY",
+      "models": [
+        { "id": "anthropic/claude-haiku-4-5", "name": "Anthropic/Claude Haiku 4 5", "capabilities": ["reasoning", "code"], "limit": { "context": 200000, "output": 8192 } },
+        { "id": "google/gemini-3-flash-preview", "name": "Google/Gemini 3 Flash Preview", "capabilities": ["code", "fast", "budget"], "limit": { "context": 1000000, "output": 8192 } }
+      ],
+      "defaultModel": "anthropic/claude-haiku-4-5"
+    },
+    {
+      "id": "nanogpt",
+      "alias": "nanogpt",
+      "name": "NanoGPT / NanoProxy",
+      "type": "openai-compatible",
+      "baseUrl": "https://nanoproxy.2631.eu/v1",
+      "enabled": true,
+      "secretRef": "NANOGPT_API_KEY",
+      "models": [
+        { "id": "auto-model-standard", "name": "NanoGPT Auto Standard", "capabilities": ["budget", "reasoning"], "recommended": true },
+        { "id": "auto-model-premium", "name": "NanoGPT Auto Premium", "capabilities": ["reasoning", "code"] },
+        { "id": "auto-model-basic", "name": "NanoGPT Auto Basic", "capabilities": ["fast", "budget"] },
+        { "id": "moonshotai/kimi-k2.5:thinking", "name": "Moonshotai/Kimi K2.5:Thinking", "capabilities": ["reasoning", "code"] },
+        { "id": "zai-org/glm-5:thinking", "name": "Zai Org/Glm 5:Thinking", "capabilities": ["reasoning", "code"] }
+      ],
+      "defaultModel": "auto-model-standard"
+    },
+    {
+      "id": "nvidia",
+      "alias": "nvidia",
+      "name": "NVIDIA NIM",
+      "type": "openai-compatible",
+      "baseUrl": "https://integrate.api.nvidia.com/v1",
+      "enabled": false,
+      "secretRef": "NVIDIA_API_KEY",
+      "models": [
+        { "id": "nvidia/llama-3.1-nemotron-70b-instruct", "name": "Nemotron 70B", "capabilities": ["budget", "reasoning"] }
+      ],
+      "defaultModel": "nvidia/llama-3.1-nemotron-70b-instruct"
+    },
+    {
+      "id": "qwen-code",
+      "alias": "qwen-code",
+      "name": "Qwen Code",
+      "type": "openai-compatible",
+      "baseUrl": "https://portal.qwen.ai/v1",
+      "enabled": true,
+      "secretRef": "",
+      "models": [
+        { "id": "coder-model", "name": "Qwen Coder (Qwen 3.5 Plus)", "capabilities": ["reasoning", "code"], "recommended": true },
+        { "id": "vision-model", "name": "Qwen VL Plus (Vision)", "capabilities": ["multimodal"] }
+      ],
+      "defaultModel": "coder-model"
+    },
+    {
+      "id": "kilo",
+      "alias": "kilo",
+      "name": "Kilo Gateway",
+      "type": "openai-compatible",
+      "baseUrl": "https://api.kilo.ai/api/gateway",
+      "enabled": true,
+      "secretRef": "KILO_GATEWAY_API_KEY",
+      "models": [
+        { "id": "minimax/minimax-m2.5:free", "name": "Minimax/Minimax M2.5:Free", "capabilities": ["fast", "budget"] },
+        { "id": "openrouter/hunter-alpha", "name": "Openrouter/Hunter Alpha", "capabilities": ["reasoning", "code"] }
+      ],
+      "defaultModel": "minimax/minimax-m2.5:free"
+    },
+    {
+      "id": "zai",
+      "alias": "z.ai",
+      "name": "Z.AI",
+      "type": "openai-compatible",
+      "baseUrl": "https://api.z.ai/api/coding/paas/v4",
+      "enabled": false,
+      "secretRef": "ZAI_API_KEY",
+      "models": [
+        { "id": "glm-4.5", "name": "Glm 4.5", "capabilities": ["reasoning"] },
+        { "id": "glm-4.5-air", "name": "Glm 4.5 Air", "capabilities": ["reasoning", "budget"] },
+        { "id": "glm-4.6", "name": "Glm 4.6", "capabilities": ["reasoning"] },
+        { "id": "glm-4.7", "name": "Glm 4.7", "capabilities": ["reasoning"] },
+        { "id": "glm-5", "name": "Glm 5", "capabilities": ["reasoning", "code"] }
+      ],
+      "defaultModel": "glm-5"
+    }
+  ],
+  "functionalAliases": {
+    "primary_reasoning": "google",
+    "fast_coder": "codexlb",
+    "budget_coder": "openrouter",
+    "research": "openrouter",
+    "fallback_openai": "openrouter",
+    "oauth_google": "google",
+    "oauth_qwen": "qwen-code"
+  },
+  "metadata": {
+    "lastModified": "2026-03-14T00:00:00Z",
+    "modifiedBy": "system"
+  }
+}

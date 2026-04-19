@@ -1,0 +1,40 @@
+{
+  "agents": {
+    "orchestrator": {
+      "name": "Orchestrator",
+      "type": "orchestrator",
+      "description": "Coordinates and delegates tasks to specialized agents",
+      "enabled": true
+    },
+    "architect": {
+      "name": "Architect",
+      "type": "architect",
+      "description": "Plans and designs system architecture",
+      "enabled": true
+    },
+    "code": {
+      "name": "Code",
+      "type": "code",
+      "description": "Implements features and writes code",
+      "enabled": true
+    },
+    "test": {
+      "name": "Test",
+      "type": "test",
+      "description": "Writes and runs tests",
+      "enabled": true
+    },
+    "debug": {
+      "name": "Debug",
+      "type": "debug",
+      "description": "Investigates and diagnoses issues",
+      "enabled": true
+    },
+    "fixer": {
+      "name": "Fixer",
+      "type": "fixer",
+      "description": "Fixes bugs and implements solutions",
+      "enabled": true
+    }
+  }
+}

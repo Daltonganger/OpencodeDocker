@@ -1,0 +1,28 @@
+# Secrets / local env
+**/.env
+**/.env.local
+**/.env.*.local
+
+# Runtime state that should never be published
+generated/**/workspace/
+generated/**/cache/
+generated/**/state/
+generated/**/backups/
+generated/**/releases/
+
+# Sensitive generated/auth files
+generated/**/config/ssh/authorized_keys
+generated/**/config/opencode/antigravity-accounts.json
+generated/**/config/opencode/auth.json
+
+# Local editor / dependency output
+**/node_modules/
+**/dist/
+**/*.tsbuildinfo
+**/.DS_Store
+**/coverage/
+**/*.log
+opencode-admin/updater-data/
+
+# Server-side snapshots / helper copies
+**/README.github.md

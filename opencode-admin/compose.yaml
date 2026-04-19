@@ -1,0 +1,64 @@
+services:
+  opencode-admin:
+    build:
+      context: /opt/stacks/opencode-admin
+      dockerfile: /opt/stacks/opencode-admin/apps/api/Dockerfile
+    container_name: opencode-admin
+    user: "0:0"
+    restart: unless-stopped
+    env_file: /opt/stacks/opencode-admin/.env
+    environment:
+      TZ: ${TZ:-Europe/Amsterdam}
+      API_PORT: 3001
+      OPENCODE_ADMIN_BASE_URL: ${OPENCODE_ADMIN_BASE_URL:-https://opencode.2631.eu/manage}
+      OPENCODE_TARGET_STACK_PATH: ${OPENCODE_TARGET_STACK_PATH:-/opt/stacks/opencode-dev}
+      OPENCODE_TARGET_ENV_PATH: ${OPENCODE_TARGET_ENV_PATH:-/opt/stacks/opencode-dev/.env}
+      OPENCODE_APPLY_RESTART: ${OPENCODE_APPLY_RESTART:-true}
+      OPENCODE_APPLY_RESTART_SERVICES: ${OPENCODE_APPLY_RESTART_SERVICES:-opencode-backend opencode-dev openchamber}
+    networks:
+      - traefik-network
+    volumes:
+      - /opt/stacks/opencode-admin/config:/app/config
+      - /opt/stacks/opencode-admin/backups:/app/backups
+      - /opt/stacks/opencode-admin/releases:/app/releases
+      - /opt/stacks/opencode-dev:/opt/stacks/opencode-dev
+      - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: "traefik-network"
+      traefik.http.middlewares.opencode-admin-strip.stripprefix.prefixes: "/manage"
+      traefik.http.routers.opencode-admin.rule: "Host(`opencode.2631.eu`) && PathPrefix(`/manage`)"
+      traefik.http.routers.opencode-admin.entrypoints: "websecure"
+      traefik.http.routers.opencode-admin.priority: "80"
+      traefik.http.routers.opencode-admin.tls: "true"
+      traefik.http.routers.opencode-admin.tls.certresolver: "gcore"
+      traefik.http.routers.opencode-admin.middlewares: "authelia@docker,webapp-chain@docker,opencode-admin-strip"
+      traefik.http.services.opencode-admin.loadbalancer.server.port: "3001"
+
+  opencode-auto-updater:
+    build:
+      context: /opt/stacks/opencode-admin
+      dockerfile: /opt/stacks/opencode-admin/updater/Dockerfile
+    container_name: opencode-auto-updater
+    restart: unless-stopped
+    env_file: /opt/stacks/opencode-admin/.env
+    environment:
+      OPENCODE_UPDATER_ENABLED: ${OPENCODE_UPDATER_ENABLED:-false}
+      OPENCODE_UPDATER_REPO_URL: ${OPENCODE_UPDATER_REPO_URL:-}
+      OPENCODE_UPDATER_BRANCH: ${OPENCODE_UPDATER_BRANCH:-main}
+      OPENCODE_UPDATER_INTERVAL_HOURS: ${OPENCODE_UPDATER_INTERVAL_HOURS:-6}
+      OPENCODE_UPDATER_REPO_DIR: ${OPENCODE_UPDATER_REPO_DIR:-/var/lib/opencode-updater/repo}
+      OPENCODE_UPDATER_ADMIN_TARGET: /opt/stacks/opencode-admin
+      OPENCODE_UPDATER_STACK_TARGET: /opt/stacks/opencode-dev
+    command: ["bash", "/updater/auto-update-loop.sh"]
+    volumes:
+      - /opt/stacks/opencode-admin:/opt/stacks/opencode-admin
+      - /opt/stacks/opencode-dev:/opt/stacks/opencode-dev
+      - /opt/stacks/opencode-admin/updater:/updater
+      - /opt/stacks/opencode-admin/updater-data:/var/lib/opencode-updater
+      - /var/run/docker.sock:/var/run/docker.sock
+
+
+networks:
+  traefik-network:
+    external: true

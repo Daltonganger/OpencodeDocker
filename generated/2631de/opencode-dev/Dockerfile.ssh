@@ -1,0 +1,21 @@
+FROM ubuntu:24.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+      bash \
+      ca-certificates \
+      openssh-server \
+      tmux \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /var/run/sshd /root/.ssh /etc/ssh/sshd_config.d \
+    && chmod 700 /root/.ssh
+
+COPY ssh-entrypoint.sh /usr/local/bin/ssh-entrypoint.sh
+RUN chmod +x /usr/local/bin/ssh-entrypoint.sh
+
+EXPOSE 22
+
+ENTRYPOINT ["/usr/local/bin/ssh-entrypoint.sh"]

@@ -1,0 +1,50 @@
+FROM codercom/code-server:latest
+
+USER root
+
+ENV EXTENSIONS_GALLERY='{"serviceUrl":"https://marketplace.visualstudio.com/_apis/public/gallery","itemUrl":"https://marketplace.visualstudio.com/items","resourceUrlTemplate":"https://{publisher}.vscode-unpkg.net/{publisher}/{name}/{version}/{path}"}'
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+      ca-certificates \
+      curl \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN PRODUCT_JSON=/usr/lib/code-server/lib/vscode/product.json perl <<'EOF'
+use strict;
+use warnings;
+use JSON::PP;
+
+my $path = $ENV{PRODUCT_JSON};
+open my $in, '<', $path or die "Cannot read $path: $!\n";
+local $/;
+my $product = decode_json(<$in>);
+close $in;
+
+my %allowed = map { $_ => 1 } @{ $product->{extensionAllowedProposedApi} || [] };
+$allowed{'GitHub.copilot'} = 1;
+$allowed{'GitHub.copilot-chat'} = 1;
+
+$product->{extensionAllowedProposedApi} = [ sort keys %allowed ];
+$product->{extensionsGallery} = {
+  serviceUrl => 'https://marketplace.visualstudio.com/_apis/public/gallery',
+  itemUrl => 'https://marketplace.visualstudio.com/items',
+  resourceUrlTemplate => 'https://{publisher}.vscode-unpkg.net/{publisher}/{name}/{version}/{path}',
+};
+
+open my $out, '>', $path or die "Cannot write $path: $!\n";
+print {$out} JSON::PP->new->ascii->pretty->canonical->encode($product);
+close $out;
+EOF
+
+RUN install -d -o 1000 -g 1000 \
+    /home/coder/.config \
+    /home/coder/.cache \
+    /home/coder/.local/share \
+    /home/coder/.local/state \
+    /home/coder/.qwen
+
+COPY --chmod=755 code-server-entrypoint.sh /usr/local/bin/code-server-entrypoint.sh
+COPY --chmod=644 code-server-settings.json /usr/local/share/code-server-settings.json
+
+ENTRYPOINT ["/usr/local/bin/code-server-entrypoint.sh"]

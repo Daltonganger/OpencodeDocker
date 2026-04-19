@@ -1,0 +1,6 @@
+{
+  "name": "filesystem",
+  "transport": "stdio",
+  "command": "mcp-server-filesystem",
+  "enabled": true
+}

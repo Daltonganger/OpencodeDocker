@@ -1,0 +1,42 @@
+{
+  // Managed by render-opencode-config.sh
+  "preset": "default",
+  "presets": {
+    "default": {
+      "orchestrator": {
+        "model": "codexlb/gpt-5.4",
+        "skills": ["*"],
+        "mcps": ["*"]
+      },
+      "explorer": {
+        "model": "kilo/minimax/minimax-m2.5:free",
+        "skills": ["*"],
+        "mcps": ["context7", "tavily", "brave-search"]
+      },
+      "oracle": {
+        "model": "codexlb/gpt-5.4",
+        "skills": ["read", "search", "analyze"],
+        "mcps": ["context7", "tavily"]
+      },
+      "librarian": {
+        "model": "google/antigravity-gemini-3-flash",
+        "skills": ["*"],
+        "mcps": ["context7", "tavily", "brave-search"]
+      },
+      "designer": {
+        "model": "google/antigravity-gemini-3-pro",
+        "skills": ["*"],
+        "mcps": ["chrome-devtools", "playwright", "browser"]
+      },
+      "fixer": {
+        "model": "nanogpt/zai-org/glm-5:thinking",
+        "skills": ["*"],
+        "mcps": ["*"]
+      }
+    }
+  },
+  "tmux": {
+    "enabled": true,
+    "layout": "main-vertical"
+  }
+}

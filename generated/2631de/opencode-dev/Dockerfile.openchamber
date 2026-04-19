@@ -1,0 +1,74 @@
+FROM node:22-bookworm-slim
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+      bash \
+      build-essential \
+      ca-certificates \
+      curl \
+      git \
+      less \
+      openssh-client \
+      python3 \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN set -eux; \
+    if id -u openchamber >/dev/null 2>&1; then \
+      true; \
+    else \
+      existing_user="$(getent passwd 1000 | cut -d: -f1 || true)"; \
+      existing_group="$(getent group 1000 | cut -d: -f1 || true)"; \
+      if [ -n "$existing_group" ] && [ "$existing_group" != "openchamber" ]; then groupmod -n openchamber "$existing_group"; fi; \
+      if [ -n "$existing_user" ]; then \
+        usermod -l openchamber "$existing_user"; \
+        usermod -d /home/openchamber -m openchamber; \
+        usermod -g 1000 openchamber; \
+      else \
+        groupadd --gid 1000 --force openchamber; \
+        useradd -m -u 1000 -g 1000 -s /bin/bash openchamber; \
+      fi; \
+    fi
+
+USER openchamber
+ENV HOME=/home/openchamber \
+    NPM_CONFIG_PREFIX=/home/openchamber/.npm-global \
+    PATH=/home/openchamber/.npm-global/bin:${PATH}
+
+RUN mkdir -p /home/openchamber/.npm-global /home/openchamber/.local /home/openchamber/.config /home/openchamber/.ssh /home/openchamber/workspaces
+RUN npm config set prefix /home/openchamber/.npm-global && npm install -g opencode-ai @openchamber/web@1.8.7
+RUN python3 - <<'PY'
+from pathlib import Path
+
+assets = Path('/home/openchamber/.npm-global/lib/node_modules/@openchamber/web/dist/assets')
+needle = '{id:"google",name:"Google"},{id:"kimi-for-coding",name:"Kimi for Coding"}'
+replacement = '{id:"google",name:"Google"},{id:"kilo",name:"Kilo"},{id:"kimi-for-coding",name:"Kimi for Coding"}'
+
+patched = False
+for file in assets.glob('main-*.js'):
+    text = file.read_text()
+    if needle in text:
+        file.write_text(text.replace(needle, replacement))
+        patched = True
+        break
+
+if not patched:
+    raise SystemExit('Failed to patch OpenChamber Usage provider allowlist for Kilo')
+PY
+
+COPY --chown=openchamber:openchamber openchamber-quota-providers/codex.js /home/openchamber/.npm-global/lib/node_modules/@openchamber/web/server/lib/quota/providers/codex.js
+COPY --chown=openchamber:openchamber openchamber-quota-providers/kilo.js /home/openchamber/.npm-global/lib/node_modules/@openchamber/web/server/lib/quota/providers/kilo.js
+COPY --chown=openchamber:openchamber openchamber-quota-providers/nanogpt.js /home/openchamber/.npm-global/lib/node_modules/@openchamber/web/server/lib/quota/providers/nanogpt.js
+COPY --chown=openchamber:openchamber openchamber-quota-providers/openrouter.js /home/openchamber/.npm-global/lib/node_modules/@openchamber/web/server/lib/quota/providers/openrouter.js
+COPY --chown=openchamber:openchamber openchamber-quota-providers/index.js /home/openchamber/.npm-global/lib/node_modules/@openchamber/web/server/lib/quota/providers/index.js
+COPY --chown=openchamber:openchamber openchamber-quota-providers/zai.js /home/openchamber/.npm-global/lib/node_modules/@openchamber/web/server/lib/quota/providers/zai.js
+
+WORKDIR /home/openchamber
+
+COPY --chown=openchamber:openchamber openchamber-entrypoint.sh /home/openchamber/openchamber-entrypoint.sh
+RUN chmod +x /home/openchamber/openchamber-entrypoint.sh
+
+EXPOSE 3000
+
+ENTRYPOINT ["sh", "/home/openchamber/openchamber-entrypoint.sh"]

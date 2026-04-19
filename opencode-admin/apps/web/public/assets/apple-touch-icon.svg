@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="14" y1="10" x2="162" y2="167" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#08111F"/>
+      <stop offset="1" stop-color="#0F2747"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="31" y1="30" x2="101" y2="108" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#67E8F9"/>
+      <stop offset="1" stop-color="#22D3EE"/>
+    </linearGradient>
+  </defs>
+  <rect x="8" y="8" width="164" height="164" rx="38" fill="url(#bg)"/>
+  <rect x="25" y="26" width="130" height="83" rx="18" fill="#0B1628" stroke="#1E3A5F" stroke-width="2"/>
+  <rect x="33" y="34" width="71" height="49" rx="12" fill="url(#panel)"/>
+  <path d="M59 47L44 58V70L59 80" stroke="#08111F" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M75 80L89 48" stroke="#08111F" stroke-width="7" stroke-linecap="round"/>
+  <text x="35" y="100" fill="#E2E8F0" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800" letter-spacing="0.2">opencode</text>
+  <rect x="25" y="118" width="130" height="38" rx="15" fill="#F97316"/>
+  <text x="90" y="141" fill="#FFF7ED" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="900" text-anchor="middle" letter-spacing="0.8">2631.eu</text>
+</svg>

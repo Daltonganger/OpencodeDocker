@@ -1,0 +1,30 @@
+# Ntfy Server Configuration
+# See: https://ntfy.sh/docs/config/
+
+# Base URL for reverse proxy
+base-url: "https://notify.2631.eu"
+
+# Required when behind Traefik/proxy
+behind-proxy: true
+
+# Listen address (internal port)
+listen-http: ":80"
+
+# Persistent cache on named volume
+cache-file: "/var/cache/ntfy/cache.db"
+
+# --- Authentication (optional, configure later) ---
+# Uncomment to enable basic auth:
+# auth-file: /etc/ntfy/auth.db
+# auth-default-access: deny-all
+
+# --- Rate limiting (optional) ---
+# visitor-request-limit-burst: 60
+# visitor-request-limit-replenish: 5s
+
+# --- Attachments (optional) ---
+# attachment-cache-dir: /var/cache/ntfy/attachments
+# attachment-total-size-limit: "500M"
+
+# --- Logging ---
+log-level: info

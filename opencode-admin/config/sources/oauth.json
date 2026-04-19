@@ -1,0 +1,53 @@
+{
+  "$schema": "./schemas/oauth.schema.json",
+  "version": "1.0.0",
+  "providers": {
+    "github": {
+      "enabled": true,
+      "displayName": "GitHub",
+      "scopes": ["read:user", "user:email", "repo", "models:read", "copilot"],
+      "metadata": {
+        "oauthConsumer": "opencode-github",
+        "runtimeManagedAuth": true,
+        "directLoginPath": "/copilot-auth/",
+        "storesAuthJson": true
+      }
+    },
+    "google": {
+      "enabled": true,
+      "displayName": "Google",
+      "scopes": [
+        "https://www.googleapis.com/auth/cloud-platform",
+        "https://www.googleapis.com/auth/userinfo.email",
+        "https://www.googleapis.com/auth/userinfo.profile",
+        "https://www.googleapis.com/auth/cclog",
+        "https://www.googleapis.com/auth/experimentsandconfigs"
+      ],
+      "metadata": {
+        "oauthConsumer": "opencode-antigravity-auth",
+        "runtimeManagedAuth": true,
+        "directLoginPath": "/google-auth/"
+      }
+    },
+    "qwen": {
+      "enabled": true,
+      "displayName": "Qwen",
+      "scopes": ["openid", "profile", "email", "model.completion"],
+      "metadata": {
+        "oauthConsumer": "@melodyoftears/opencode-qwen-auth",
+        "runtimeManagedAuth": true,
+        "directLoginPath": "/qwen-auth/",
+        "storesAuthJson": true
+      }
+    }
+  },
+  "status": {
+    "github": { "configured": false, "connected": false, "lastChecked": null, "tokenExpiry": null, "error": null },
+    "google": { "configured": false, "connected": false, "lastChecked": null, "tokenExpiry": null, "error": null },
+    "qwen": { "configured": false, "connected": false, "lastChecked": null, "tokenExpiry": null, "error": null }
+  },
+  "metadata": {
+    "lastModified": "2026-03-14T00:00:00Z",
+    "modifiedBy": "system"
+  }
+}

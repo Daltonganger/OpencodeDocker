@@ -1,0 +1,263 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+    "model": "__OPENCODE_MODEL__",
+    "small_model": "__OPENCODE_SMALL_MODEL__",
+  "provider": {
+    "openai": {
+      "npm": "@ai-sdk/openai",
+      "options": {
+        "apiKey": "{env:OPENAI_API_KEY}"
+      }
+    },
+    "google": {
+      "npm": "@ai-sdk/google",
+      "options": {
+        "apiKey": "oauth-managed"
+      },
+      "models": {
+        "antigravity-gemini-3-pro": {
+          "name": "Gemini 3 Pro (Antigravity)",
+          "limit": { "context": 1048576, "output": 65535 },
+          "modalities": { "input": ["text", "image", "pdf"], "output": ["text"] },
+          "variants": {
+            "low": { "thinkingLevel": "low" },
+            "high": { "thinkingLevel": "high" }
+          }
+        },
+        "antigravity-gemini-3.1-pro": {
+          "name": "Gemini 3.1 Pro (Antigravity)",
+          "limit": { "context": 1048576, "output": 65535 },
+          "modalities": { "input": ["text", "image", "pdf"], "output": ["text"] },
+          "variants": {
+            "low": { "thinkingLevel": "low" },
+            "high": { "thinkingLevel": "high" }
+          }
+        },
+        "antigravity-gemini-3-flash": {
+          "name": "Gemini 3 Flash (Antigravity)",
+          "limit": { "context": 1048576, "output": 65536 },
+          "modalities": { "input": ["text", "image", "pdf"], "output": ["text"] },
+          "variants": {
+            "minimal": { "thinkingLevel": "minimal" },
+            "low": { "thinkingLevel": "low" },
+            "medium": { "thinkingLevel": "medium" },
+            "high": { "thinkingLevel": "high" }
+          }
+        },
+        "antigravity-claude-sonnet-4-6": {
+          "name": "Claude Sonnet 4.6 (Antigravity)",
+          "limit": { "context": 200000, "output": 64000 },
+          "modalities": { "input": ["text", "image", "pdf"], "output": ["text"] }
+        },
+        "antigravity-claude-opus-4-6-thinking": {
+          "name": "Claude Opus 4.6 Thinking (Antigravity)",
+          "limit": { "context": 200000, "output": 64000 },
+          "modalities": { "input": ["text", "image", "pdf"], "output": ["text"] },
+          "variants": {
+            "low": { "thinkingConfig": { "thinkingBudget": 8192 } },
+            "max": { "thinkingConfig": { "thinkingBudget": 32768 } }
+          }
+        },
+        "gemini-2.5-flash": {
+          "name": "Gemini 2.5 Flash (Gemini CLI)",
+          "limit": { "context": 1048576, "output": 65536 },
+          "modalities": { "input": ["text", "image", "pdf"], "output": ["text"] }
+        },
+        "gemini-2.5-pro": {
+          "name": "Gemini 2.5 Pro (Gemini CLI)",
+          "limit": { "context": 1048576, "output": 65536 },
+          "modalities": { "input": ["text", "image", "pdf"], "output": ["text"] }
+        },
+        "gemini-3-flash-preview": {
+          "name": "Gemini 3 Flash Preview (Gemini CLI)",
+          "limit": { "context": 1048576, "output": 65536 },
+          "modalities": { "input": ["text", "image", "pdf"], "output": ["text"] }
+        },
+        "gemini-3-pro-preview": {
+          "name": "Gemini 3 Pro Preview (Gemini CLI)",
+          "limit": { "context": 1048576, "output": 65535 },
+          "modalities": { "input": ["text", "image", "pdf"], "output": ["text"] }
+        },
+        "gemini-3.1-pro-preview": {
+          "name": "Gemini 3.1 Pro Preview (Gemini CLI)",
+          "limit": { "context": 1048576, "output": 65535 },
+          "modalities": { "input": ["text", "image", "pdf"], "output": ["text"] }
+        },
+        "gemini-3.1-pro-preview-customtools": {
+          "name": "Gemini 3.1 Pro Preview Custom Tools (Gemini CLI)",
+          "limit": { "context": 1048576, "output": 65535 },
+          "modalities": { "input": ["text", "image", "pdf"], "output": ["text"] }
+        }
+      }
+    },
+    "openrouter": {
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "apiKey": "{env:OPENROUTER_API_KEY}",
+        "baseURL": "__OPENROUTER_BASE_URL__"
+      }
+    },
+    "nanogpt": {
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "apiKey": "{env:NANOGPT_API_KEY}",
+        "baseURL": "__NANOGPT_BASE_URL__"
+      },
+      "models": {
+        "auto-model-standard": {
+          "id": "auto-model-standard",
+          "name": "NanoGPT Auto Standard",
+          "reasoning": true,
+          "limit": { "context": 262144, "output": 16384 },
+          "cost": { "input": 0, "output": 0 },
+          "modalities": {
+            "input": ["text"],
+            "output": ["text"]
+          }
+        },
+        "auto-model-premium": {
+          "id": "auto-model-premium",
+          "name": "NanoGPT Auto Premium",
+          "reasoning": true,
+          "limit": { "context": 262144, "output": 16384 },
+          "cost": { "input": 0, "output": 0 },
+          "modalities": {
+            "input": ["text"],
+            "output": ["text"]
+          }
+        },
+        "auto-model-basic": {
+          "id": "auto-model-basic",
+          "name": "NanoGPT Auto Basic",
+          "reasoning": false,
+          "limit": { "context": 131072, "output": 8192 },
+          "cost": { "input": 0, "output": 0 },
+          "modalities": {
+            "input": ["text"],
+            "output": ["text"]
+          }
+        }
+      }
+    },
+    "nvidia": {
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "apiKey": "{env:NVIDIA_API_KEY}",
+        "baseURL": "__NVIDIA_BASE_URL__"
+      }
+    },
+    "kilo": {
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "apiKey": "{env:KILO_GATEWAY_API_KEY}",
+        "baseURL": "__KILO_GATEWAY_BASE_URL__"
+      }
+    },
+    "chat2631": {
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "apiKey": "{env:CHAT2631_API_KEY}",
+        "baseURL": "__CHAT2631_BASE_URL__"
+      }
+    },
+    "codexlb": {
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "apiKey": "{env:CODEXLB_API_KEY}",
+        "baseURL": "__CODEXLB_BASE_URL__"
+      }
+    },
+    "z.ai": {
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "apiKey": "{env:ZAI_API_KEY}",
+        "baseURL": "__ZAI_BASE_URL__"
+      }
+    },
+    "qwen-code": {
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "baseURL": "https://portal.qwen.ai/v1"
+      },
+      "models": {
+        "coder-model": {
+          "id": "coder-model",
+          "name": "Qwen Coder (Qwen 3.5 Plus)",
+          "reasoning": true,
+          "limit": { "context": 1048576, "output": 65536 },
+          "cost": { "input": 0, "output": 0 },
+          "modalities": {
+            "input": ["text"],
+            "output": ["text"]
+          }
+        },
+        "vision-model": {
+          "id": "vision-model",
+          "name": "Qwen VL Plus (Vision)",
+          "reasoning": false,
+          "limit": { "context": 131072, "output": 8192 },
+          "cost": { "input": 0, "output": 0 },
+          "modalities": {
+            "input": ["text", "image"],
+            "output": ["text"]
+          }
+        }
+      }
+    }
+  },
+  "plugin": [
+    "oh-my-opencode-slim",
+    "opencode-vibeguard",
+    "@melodyoftears/opencode-qwen-auth",
+    "opencode-antigravity-auth@latest",
+    "@tarquinen/opencode-dcp@latest",
+    "@slkiser/opencode-quota",
+    "opencode-tokenspeed-monitor@latest"
+  ],
+  "mcp": {
+    "context7": {
+      "type": "local",
+      "enabled": true,
+      "command": ["/usr/local/bin/context7-mcp"],
+      "environment": {
+        "CONTEXT7_TOKEN": "{env:CONTEXT7_API_KEY}"
+      }
+    },
+    "tavily": {
+      "type": "local",
+      "enabled": true,
+      "command": ["/usr/local/bin/tavily-mcp"],
+      "environment": {
+        "TAVILY_API_KEY": "{env:TAVILY_API_KEY}"
+      }
+    },
+    "brave-search": {
+      "type": "local",
+      "enabled": true,
+      "command": ["/usr/local/bin/mcp-server-brave-search"],
+      "environment": {
+        "BRAVE_API_KEY": "{env:BRAVE_API_KEY}"
+      }
+    },
+    "chrome-devtools": {
+      "type": "local",
+      "enabled": true,
+      "command": ["/usr/local/bin/chrome-devtools-mcp", "--headless", "--isolated", "--executable-path=/usr/local/bin/opencode-browser", "--no-usage-statistics"]
+    },
+    "playwright": {
+      "type": "local",
+      "enabled": true,
+      "command": ["/usr/local/bin/playwright-mcp", "--headless", "--isolated", "--executable-path=/usr/local/bin/opencode-browser"]
+    },
+    "browser": {
+      "type": "local",
+      "enabled": true,
+      "command": ["/usr/local/bin/playwright-mcp", "--headless", "--isolated", "--executable-path=/usr/local/bin/opencode-browser", "--caps=vision,pdf,devtools"]
+    }
+  },
+  "permission": {
+    "skill": "allow",
+    "edit": "ask",
+    "bash": "ask"
+  }
+}

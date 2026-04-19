@@ -1,0 +1,448 @@
+services:
+  opencode-backend:
+    build:
+      context: /opt/stacks/opencode-dev
+      dockerfile: Dockerfile.opencode
+    container_name: opencode-backend
+    restart: unless-stopped
+    env_file: /opt/stacks/opencode-dev/.env
+    environment:
+      TZ: ${TZ:-Europe/Amsterdam}
+      HOME: /home/app
+      XDG_CONFIG_HOME: /home/app/.config
+      XDG_DATA_HOME: /home/app/.local/share
+      XDG_STATE_HOME: /home/app/.local/state
+      XDG_CACHE_HOME: /home/app/.cache
+    command: ["/usr/local/bin/opencode-backend.sh"]
+    volumes:
+      - /opt/stacks/opencode-dev/workspace:/home/app/workspace
+      - /opt/stacks/opencode-dev/config/opencode:/home/app/.config/opencode
+      - /opt/stacks/opencode-dev/state/opencode/qwen:/home/app/.qwen
+      - /opt/stacks/opencode-dev/state/opencode/share:/home/app/.local/share/opencode
+      - /opt/stacks/opencode-dev/state/opencode/state:/home/app/.local/state/opencode
+      - /opt/stacks/opencode-dev/cache/opencode:/home/app/.cache/opencode
+      - tmux-socket:/shared
+    networks:
+      - traefik-network
+    labels:
+      traefik.enable: "false"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:4096/config/providers >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+    cpus: 1.0
+    mem_limit: 2g
+    pids_limit: 512
+    security_opt:
+      - no-new-privileges:true
+
+  opencode-dev:
+    build:
+      context: /opt/stacks/opencode-dev
+      dockerfile: Dockerfile.opencode
+    container_name: opencode-dev
+    restart: unless-stopped
+    env_file: /opt/stacks/opencode-dev/.env
+    environment:
+      TZ: ${TZ:-Europe/Amsterdam}
+      HOME: /home/app
+      XDG_CONFIG_HOME: /home/app/.config
+      XDG_DATA_HOME: /home/app/.local/share
+      XDG_STATE_HOME: /home/app/.local/state
+      XDG_CACHE_HOME: /home/app/.cache
+      OPENCODE_BACKEND_URL: http://opencode-backend:4096
+    volumes:
+      - /opt/stacks/opencode-dev/workspace:/home/app/workspace
+      - /opt/stacks/opencode-dev/config/opencode:/home/app/.config/opencode
+      - /opt/stacks/opencode-dev/state/opencode/qwen:/home/app/.qwen
+      - /opt/stacks/opencode-dev/state/opencode/share:/home/app/.local/share/opencode
+      - /opt/stacks/opencode-dev/state/opencode/state:/home/app/.local/state/opencode
+      - /opt/stacks/opencode-dev/cache/opencode:/home/app/.cache/opencode
+      - tmux-socket:/shared
+    networks:
+      - traefik-network
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: "traefik-network"
+      traefik.http.routers.opencode-root.rule: "Host(`opencode.2631.eu`)"
+      traefik.http.routers.opencode-root.entrypoints: "websecure"
+      traefik.http.routers.opencode-root.tls: "true"
+      traefik.http.routers.opencode-root.tls.certresolver: "gcore"
+      traefik.http.routers.opencode-root.middlewares: "authelia@docker,webapp-chain@docker"
+      traefik.http.routers.opencode-root.priority: "10"
+      traefik.http.services.opencode-root.loadbalancer.server.port: "7681"
+    depends_on:
+      opencode-backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:7681/ >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+    cpus: 2.0
+    mem_limit: 2g
+    pids_limit: 512
+    security_opt:
+      - no-new-privileges:true
+
+  opencode-github-copilot-auth:
+    build:
+      context: /opt/stacks/opencode-dev
+      dockerfile: Dockerfile.opencode
+    container_name: opencode-github-copilot-auth
+    restart: unless-stopped
+    env_file: /opt/stacks/opencode-dev/.env
+    environment:
+      TZ: ${TZ:-Europe/Amsterdam}
+      HOME: /home/app
+      XDG_CONFIG_HOME: /home/app/.config
+      XDG_DATA_HOME: /home/app/.local/share
+      XDG_STATE_HOME: /home/app/.local/state
+      XDG_CACHE_HOME: /home/app/.cache
+    command: ["/usr/local/bin/opencode-github-copilot-auth.sh"]
+    volumes:
+      - /opt/stacks/opencode-dev/workspace:/home/app/workspace
+      - /opt/stacks/opencode-dev/config/opencode:/home/app/.config/opencode
+      - /opt/stacks/opencode-dev/state/opencode/qwen:/home/app/.qwen
+      - /opt/stacks/opencode-dev/state/opencode/share:/home/app/.local/share/opencode
+      - /opt/stacks/opencode-dev/state/opencode/state:/home/app/.local/state/opencode
+      - /opt/stacks/opencode-dev/cache/opencode:/home/app/.cache/opencode
+      - tmux-socket:/shared
+    networks:
+      - traefik-network
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: "traefik-network"
+      traefik.http.routers.opencode-copilot-auth.rule: "Host(`opencode.2631.eu`) && PathPrefix(`/copilot-auth`)"
+      traefik.http.routers.opencode-copilot-auth.entrypoints: "websecure"
+      traefik.http.routers.opencode-copilot-auth.tls: "true"
+      traefik.http.routers.opencode-copilot-auth.tls.certresolver: "gcore"
+      traefik.http.routers.opencode-copilot-auth.middlewares: "authelia@docker,webapp-chain@docker"
+      traefik.http.routers.opencode-copilot-auth.priority: "100"
+      traefik.http.services.opencode-copilot-auth.loadbalancer.server.port: "7682"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:7682/copilot-auth/ >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+    cpus: 1.0
+    mem_limit: 1g
+    pids_limit: 256
+    security_opt:
+      - no-new-privileges:true
+
+  opencode-google-auth:
+    build:
+      context: /opt/stacks/opencode-dev
+      dockerfile: Dockerfile.opencode
+    container_name: opencode-google-auth
+    restart: unless-stopped
+    env_file: /opt/stacks/opencode-dev/.env
+    environment:
+      TZ: ${TZ:-Europe/Amsterdam}
+      HOME: /home/app
+      XDG_CONFIG_HOME: /home/app/.config
+      XDG_DATA_HOME: /home/app/.local/share
+      XDG_STATE_HOME: /home/app/.local/state
+      XDG_CACHE_HOME: /home/app/.cache
+    command: ["/usr/local/bin/opencode-google-auth.sh"]
+    volumes:
+      - /opt/stacks/opencode-dev/workspace:/home/app/workspace
+      - /opt/stacks/opencode-dev/config/opencode:/home/app/.config/opencode
+      - /opt/stacks/opencode-dev/state/opencode/qwen:/home/app/.qwen
+      - /opt/stacks/opencode-dev/state/opencode/share:/home/app/.local/share/opencode
+      - /opt/stacks/opencode-dev/state/opencode/state:/home/app/.local/state/opencode
+      - /opt/stacks/opencode-dev/cache/opencode:/home/app/.cache/opencode
+      - tmux-socket:/shared
+    networks:
+      - traefik-network
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: "traefik-network"
+      traefik.http.routers.opencode-google-auth.rule: "Host(`opencode.2631.eu`) && PathPrefix(`/google-auth`)"
+      traefik.http.routers.opencode-google-auth.entrypoints: "websecure"
+      traefik.http.routers.opencode-google-auth.tls: "true"
+      traefik.http.routers.opencode-google-auth.tls.certresolver: "gcore"
+      traefik.http.routers.opencode-google-auth.middlewares: "authelia@docker,webapp-chain@docker"
+      traefik.http.routers.opencode-google-auth.priority: "100"
+      traefik.http.services.opencode-google-auth.loadbalancer.server.port: "7683"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:7683/google-auth/ >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+    cpus: 1.0
+    mem_limit: 1g
+    pids_limit: 256
+    security_opt:
+      - no-new-privileges:true
+
+  opencode-qwen-auth:
+    build:
+      context: /opt/stacks/opencode-dev
+      dockerfile: Dockerfile.opencode
+    container_name: opencode-qwen-auth
+    restart: unless-stopped
+    env_file: /opt/stacks/opencode-dev/.env
+    environment:
+      TZ: ${TZ:-Europe/Amsterdam}
+      HOME: /home/app
+      XDG_CONFIG_HOME: /home/app/.config
+      XDG_DATA_HOME: /home/app/.local/share
+      XDG_STATE_HOME: /home/app/.local/state
+      XDG_CACHE_HOME: /home/app/.cache
+    command: ["/usr/local/bin/opencode-qwen-auth.sh"]
+    volumes:
+      - /opt/stacks/opencode-dev/workspace:/home/app/workspace
+      - /opt/stacks/opencode-dev/config/opencode:/home/app/.config/opencode
+      - /opt/stacks/opencode-dev/state/opencode/qwen:/home/app/.qwen
+      - /opt/stacks/opencode-dev/state/opencode/share:/home/app/.local/share/opencode
+      - /opt/stacks/opencode-dev/state/opencode/state:/home/app/.local/state/opencode
+      - /opt/stacks/opencode-dev/cache/opencode:/home/app/.cache/opencode
+      - tmux-socket:/shared
+    networks:
+      - traefik-network
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: "traefik-network"
+      traefik.http.routers.opencode-qwen-auth.rule: "Host(`opencode.2631.eu`) && PathPrefix(`/qwen-auth`)"
+      traefik.http.routers.opencode-qwen-auth.entrypoints: "websecure"
+      traefik.http.routers.opencode-qwen-auth.tls: "true"
+      traefik.http.routers.opencode-qwen-auth.tls.certresolver: "gcore"
+      traefik.http.routers.opencode-qwen-auth.middlewares: "authelia@docker,webapp-chain@docker"
+      traefik.http.routers.opencode-qwen-auth.priority: "100"
+      traefik.http.services.opencode-qwen-auth.loadbalancer.server.port: "7684"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:7684/qwen-auth/ >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+    cpus: 1.0
+    mem_limit: 1g
+    pids_limit: 256
+    security_opt:
+      - no-new-privileges:true
+
+  openchamber:
+    build:
+      context: /opt/stacks/opencode-dev
+      dockerfile: Dockerfile.openchamber
+    container_name: openchamber
+    restart: unless-stopped
+    env_file: /opt/stacks/opencode-dev/.env
+    environment:
+      TZ: ${TZ:-Europe/Amsterdam}
+      HOME: /home/openchamber
+      OPENCODE_HOST: http://opencode-backend:4096
+      OPENCODE_SKIP_START: "true"
+    volumes:
+      - /opt/stacks/opencode-dev/state/openchamber:/home/openchamber/.config/openchamber
+      - /opt/stacks/opencode-dev/state/openchamber-ssh:/home/openchamber/.ssh
+      - /opt/stacks/opencode-dev/workspace:/home/openchamber/workspaces
+      - /opt/stacks/opencode-dev/config/opencode:/home/openchamber/.config/opencode
+      - /opt/stacks/opencode-dev/state/opencode/share:/home/openchamber/.local/share/opencode
+      - /opt/stacks/opencode-dev/state/opencode/state:/home/openchamber/.local/state/opencode
+      - /opt/stacks/opencode-dev/cache/opencode:/home/openchamber/.cache/opencode
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - traefik-network
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: "traefik-network"
+      traefik.http.routers.openchamber-mcp.rule: "Host(`openchamber.2631.eu`) && Path(`/api/mcp`)"
+      traefik.http.routers.openchamber-mcp.entrypoints: "websecure"
+      traefik.http.routers.openchamber-mcp.tls: "true"
+      traefik.http.routers.openchamber-mcp.tls.certresolver: "gcore"
+      traefik.http.routers.openchamber-mcp.middlewares: "authelia@docker,webapp-chain@docker,openchamber-mcp-no-cache@docker"
+      traefik.http.routers.openchamber-mcp.priority: "100"
+      traefik.http.routers.openchamber-mcp.service: "openchamber"
+      traefik.http.routers.openchamber.rule: "Host(`openchamber.2631.eu`)"
+      traefik.http.routers.openchamber.entrypoints: "websecure"
+      traefik.http.routers.openchamber.tls: "true"
+      traefik.http.routers.openchamber.tls.certresolver: "gcore"
+      traefik.http.routers.openchamber.middlewares: "authelia@docker,webapp-chain@docker"
+      traefik.http.middlewares.openchamber-mcp-no-cache.headers.customrequestheaders.If-None-Match: ""
+      traefik.http.middlewares.openchamber-mcp-no-cache.headers.customrequestheaders.x-opencode-directory: ""
+      traefik.http.middlewares.openchamber-mcp-no-cache.headers.customresponseheaders.Cache-Control: "no-store, no-cache, must-revalidate, max-age=0"
+      traefik.http.middlewares.openchamber-mcp-no-cache.headers.customresponseheaders.Pragma: "no-cache"
+      traefik.http.middlewares.openchamber-mcp-no-cache.headers.customresponseheaders.Expires: "0"
+      traefik.http.services.openchamber.loadbalancer.server.port: "3000"
+    depends_on:
+      opencode-backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:3000/ >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+    cpus: 2.0
+    mem_limit: 2g
+    pids_limit: 512
+    security_opt:
+      - no-new-privileges:true
+
+  opencode-extension-proxy:
+    image: nginx:alpine
+    container_name: opencode-extension-proxy
+    restart: unless-stopped
+    volumes:
+      - /opt/stacks/opencode-dev/code-server-opencode-proxy.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - traefik-network
+    depends_on:
+      opencode-backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:4096/mcp >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+    cpus: 0.5
+    mem_limit: 256m
+    pids_limit: 128
+    security_opt:
+      - no-new-privileges:true
+
+  code-server:
+    build:
+      context: /opt/stacks/opencode-dev
+      dockerfile: Dockerfile.code-server
+    container_name: code-server
+    restart: unless-stopped
+    env_file: /opt/stacks/opencode-dev/.env
+    user: "1000:1000"
+    environment:
+      TZ: ${TZ:-Europe/Amsterdam}
+      HOME: /home/coder
+      XDG_CONFIG_HOME: /home/coder/.config
+      XDG_DATA_HOME: /home/coder/.local/share
+      XDG_STATE_HOME: /home/coder/.local/state
+      XDG_CACHE_HOME: /home/coder/.cache
+    command: ["/usr/local/bin/code-server-entrypoint.sh"]
+    volumes:
+      - /opt/stacks/opencode-dev/workspace:/home/coder/project
+      - /opt/stacks/opencode-dev/config/opencode:/home/coder/opencode-config
+      - /opt/stacks/opencode-dev/config/opencode:/home/coder/.config/opencode
+      - /opt/stacks/opencode-dev/state/opencode/qwen:/home/coder/.qwen
+      - /opt/stacks/opencode-dev/state/opencode/share:/home/coder/.local/share/opencode
+      - /opt/stacks/opencode-dev/state/opencode/state:/home/coder/.local/state/opencode
+      - /opt/stacks/opencode-dev/cache/opencode:/home/coder/.cache/opencode
+      - /opt/stacks/opencode-dev/state/code-server:/home/coder/.local/share/code-server
+    networks:
+      - traefik-network
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: "traefik-network"
+      traefik.http.routers.code-root.rule: "Host(`code.2631.eu`)"
+      traefik.http.routers.code-root.entrypoints: "websecure"
+      traefik.http.routers.code-root.tls: "true"
+      traefik.http.routers.code-root.tls.certresolver: "gcore"
+      traefik.http.routers.code-root.middlewares: "authelia@docker,webapp-chain@docker"
+      traefik.http.routers.code-root.priority: "10"
+      traefik.http.services.code-root.loadbalancer.server.port: "8080"
+    depends_on:
+      opencode-extension-proxy:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8080/healthz >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+    cpus: 2.0
+    mem_limit: 2g
+    pids_limit: 512
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+
+  sftpgo:
+    image: drakkan/sftpgo:latest
+    container_name: sftpgo
+    restart: unless-stopped
+    env_file: /opt/stacks/opencode-dev/.env
+    user: "1000:1000"
+    environment:
+      TZ: ${TZ:-Europe/Amsterdam}
+      SFTPGO_WEBDAVD__BINDINGS__0__PORT: "8090"
+      SFTPGO_WEBDAVD__BINDINGS__0__ADDRESS: "0.0.0.0"
+      SFTPGO_WEBDAVD__BINDINGS__0__PREFIX: "/files"
+      SFTPGO_LOADDATA_FROM: "/var/lib/sftpgo/initial_data.json"
+      SFTPGO_LOADDATA_MODE: "0"
+      SFTPGO_SFTPD__BINDINGS__0__PORT: "0"
+      SFTPGO_FTPD__BINDINGS__0__PORT: "0"
+      SFTPGO_HTTPD__BINDINGS__0__PORT: "0"
+    volumes:
+      - /opt/stacks/opencode-dev/config/sftpgo:/var/lib/sftpgo
+      - /opt/stacks/opencode-dev/workspace:/srv/sftpgo/data/workspace
+    networks:
+      - traefik-network
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: "traefik-network"
+      traefik.http.routers.sftpgo-opencode-files.rule: "Host(`opencode.2631.eu`) && PathPrefix(`/files`)"
+      traefik.http.routers.sftpgo-opencode-files.entrypoints: "websecure"
+      traefik.http.routers.sftpgo-opencode-files.tls: "true"
+      traefik.http.routers.sftpgo-opencode-files.tls.certresolver: "gcore"
+      traefik.http.routers.sftpgo-opencode-files.middlewares: "webapp-chain@docker"
+      traefik.http.routers.sftpgo-opencode-files.priority: "100"
+      traefik.http.routers.sftpgo-opencode-files.service: "sftpgo"
+      traefik.http.routers.sftpgo-code-files.rule: "Host(`code.2631.eu`) && PathPrefix(`/files`)"
+      traefik.http.routers.sftpgo-code-files.entrypoints: "websecure"
+      traefik.http.routers.sftpgo-code-files.tls: "true"
+      traefik.http.routers.sftpgo-code-files.tls.certresolver: "gcore"
+      traefik.http.routers.sftpgo-code-files.middlewares: "webapp-chain@docker"
+      traefik.http.routers.sftpgo-code-files.priority: "100"
+      traefik.http.routers.sftpgo-code-files.service: "sftpgo"
+      traefik.http.services.sftpgo.loadbalancer.server.port: "8090"
+    healthcheck:
+      test: ["CMD-SHELL", "bash -lc 'exec 3<>/dev/tcp/127.0.0.1/8090'"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+    cpus: 1.0
+    mem_limit: 512m
+    pids_limit: 256
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+
+  ssh-dev:
+    build:
+      context: /opt/stacks/opencode-dev
+      dockerfile: Dockerfile.ssh
+    container_name: ssh-dev
+    restart: unless-stopped
+    ports:
+      - "2631:22"
+    volumes:
+      - tmux-socket:/shared
+      - /opt/stacks/opencode-dev/config/ssh/authorized_keys:/root/.ssh/authorized_keys:ro
+    depends_on:
+      opencode-backend:
+        condition: service_started
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /run
+      - /var/run
+      - /tmp
+
+networks:
+  traefik-network:
+    external: true
+
+volumes:
+  tmux-socket:
