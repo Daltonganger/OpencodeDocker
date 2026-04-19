@@ -21,6 +21,21 @@ lock_file="${OPENCODE_UPDATER_LOCK_FILE:-/var/lib/opencode-updater/update.lock}"
 admin_services="${OPENCODE_UPDATER_ADMIN_SERVICES:-opencode-admin}"
 stack_services="${OPENCODE_UPDATER_STACK_SERVICES:-opencode-backend opencode-dev opencode-github-copilot-auth opencode-google-auth opencode-qwen-auth openchamber code-server sftpgo ssh-dev}"
 
+pull_policy="always"
+compose_env=()
+if [ "$skip_repo_sync" = "true" ]; then
+  pull_policy="never"
+  compose_env=(env DOCKER_BUILDKIT=0 COMPOSE_DOCKER_CLI_BUILD=0)
+fi
+
+run_compose() {
+  if [ ${#compose_env[@]} -gt 0 ]; then
+    "${compose_env[@]}" docker compose "$@"
+  else
+    docker compose "$@"
+  fi
+}
+
 mkdir -p "$(dirname "$repo_dir")"
 mkdir -p "$(dirname "$lock_file")"
 
@@ -120,17 +135,17 @@ fi
 
 if [ "$update_admin" = "true" ]; then
   log "updating admin services"
-  docker compose -f "$admin_target/compose.yaml" up -d --build --pull always $admin_services
+  run_compose -f "$admin_target/compose.yaml" up -d --build --pull "$pull_policy" $admin_services
 fi
 
 if [ "$update_stack" = "true" ]; then
   log "updating stack services"
-  docker compose -f "$stack_target/compose.yaml" up -d --build --pull always $stack_services
+  run_compose -f "$stack_target/compose.yaml" up -d --build --pull "$pull_policy" $stack_services
 fi
 
 if [ "$refresh_updater" = "true" ]; then
   log "refreshing auto-updater service"
-  docker compose -f "$admin_target/compose.yaml" up -d --build --pull always opencode-auto-updater
+  run_compose -f "$admin_target/compose.yaml" up -d --build --pull "$pull_policy" opencode-auto-updater
 fi
 
 log "auto update complete"
