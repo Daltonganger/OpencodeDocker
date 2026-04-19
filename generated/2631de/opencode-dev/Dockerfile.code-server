@@ -44,7 +44,10 @@ RUN install -d -o 1000 -g 1000 \
     /home/coder/.local/state \
     /home/coder/.qwen
 
-COPY --chmod=755 code-server-entrypoint.sh /usr/local/bin/code-server-entrypoint.sh
-COPY --chmod=644 code-server-settings.json /usr/local/share/code-server-settings.json
+COPY code-server-entrypoint.sh /usr/local/bin/code-server-entrypoint.sh
+COPY code-server-settings.json /usr/local/share/code-server-settings.json
+
+RUN chmod 755 /usr/local/bin/code-server-entrypoint.sh \
+    && chmod 644 /usr/local/share/code-server-settings.json
 
 ENTRYPOINT ["/usr/local/bin/code-server-entrypoint.sh"]
