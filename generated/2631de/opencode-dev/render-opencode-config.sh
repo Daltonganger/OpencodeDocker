@@ -32,13 +32,16 @@ export SFTPGO_WEBDAV_USERNAME="${SFTPGO_WEBDAV_USERNAME:-webdav}"
 
 mkdir -p \
   "${STACK_DIR}/config/opencode" \
-  "${STACK_DIR}/config/sftpgo" \
   "${STACK_DIR}/state/opencode/qwen" \
   "${STACK_DIR}/state/opencode/share" \
   "${STACK_DIR}/state/opencode/state" \
+  "${STACK_DIR}/state/sftpgo" \
   "${STACK_DIR}/state/code-server" \
   "${STACK_DIR}/cache/opencode" \
   "${STACK_DIR}/workspace"
+
+chown 1000:1000 "${STACK_DIR}/state/sftpgo"
+chmod 775 "${STACK_DIR}/state/sftpgo"
 
 python3 - <<'PY'
 import os
@@ -74,7 +77,7 @@ for src_name, dst_name in [
     dst.write_text(text)
 PY
 
-cat > "${STACK_DIR}/config/sftpgo/initial_data.json" <<EOF
+cat > "${STACK_DIR}/state/sftpgo/initial_data.json" <<EOF
 {
   "users": [
     {
@@ -98,7 +101,10 @@ cat > "${STACK_DIR}/config/sftpgo/initial_data.json" <<EOF
 }
 EOF
 
+chown 1000:1000 "${STACK_DIR}/state/sftpgo/initial_data.json"
+chmod 600 "${STACK_DIR}/state/sftpgo/initial_data.json"
+
 echo "Rendered:"
 echo "- ${STACK_DIR}/config/opencode/opencode.json"
 echo "- ${STACK_DIR}/config/opencode/oh-my-opencode-slim.jsonc"
-echo "- ${STACK_DIR}/config/sftpgo/initial_data.json"
+echo "- ${STACK_DIR}/state/sftpgo/initial_data.json"

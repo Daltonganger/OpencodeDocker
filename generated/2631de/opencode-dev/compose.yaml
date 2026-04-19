@@ -374,6 +374,7 @@ services:
     user: "1000:1000"
     environment:
       TZ: ${TZ:-Europe/Amsterdam}
+      SFTPGO_DATA_PROVIDER__NAME: "/var/lib/sftpgo/sftpgo.db"
       SFTPGO_WEBDAVD__BINDINGS__0__PORT: "8090"
       SFTPGO_WEBDAVD__BINDINGS__0__ADDRESS: "0.0.0.0"
       SFTPGO_WEBDAVD__BINDINGS__0__PREFIX: "/files"
@@ -383,7 +384,7 @@ services:
       SFTPGO_FTPD__BINDINGS__0__PORT: "0"
       SFTPGO_HTTPD__BINDINGS__0__PORT: "0"
     volumes:
-      - /opt/stacks/opencode-dev/config/sftpgo:/var/lib/sftpgo
+      - /opt/stacks/opencode-dev/state/sftpgo:/var/lib/sftpgo
       - /opt/stacks/opencode-dev/workspace:/srv/sftpgo/data/workspace
     networks:
       - traefik-network
