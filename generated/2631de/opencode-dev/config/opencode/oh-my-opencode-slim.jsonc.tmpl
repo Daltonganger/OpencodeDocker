@@ -1,42 +1,243 @@
-{
-  // Managed by render-opencode-config.sh
+{// Managed by opencode-admin
+
   "preset": "default",
   "presets": {
     "default": {
       "orchestrator": {
         "model": "codexlb/gpt-5.4",
-        "skills": ["*"],
-        "mcps": ["*"]
+        "skills": [
+          "*"
+        ],
+        "mcps": [
+          "*"
+        ]
       },
       "explorer": {
         "model": "kilo/minimax/minimax-m2.5:free",
-        "skills": ["*"],
-        "mcps": ["context7", "tavily", "brave-search"]
+        "skills": [
+          "*"
+        ],
+        "mcps": [
+          "context7",
+          "tavily",
+          "brave-search"
+        ]
       },
       "oracle": {
         "model": "codexlb/gpt-5.4",
-        "skills": ["read", "search", "analyze"],
-        "mcps": ["context7", "tavily"]
+        "skills": [
+          "read",
+          "search",
+          "analyze"
+        ],
+        "mcps": [
+          "context7",
+          "tavily"
+        ]
       },
       "librarian": {
         "model": "google/antigravity-gemini-3-flash",
-        "skills": ["*"],
-        "mcps": ["context7", "tavily", "brave-search"]
+        "skills": [
+          "*"
+        ],
+        "mcps": [
+          "context7",
+          "tavily",
+          "brave-search"
+        ]
       },
       "designer": {
         "model": "google/antigravity-gemini-3-pro",
-        "skills": ["*"],
-        "mcps": ["chrome-devtools", "playwright", "browser"]
+        "skills": [
+          "*"
+        ],
+        "mcps": [
+          "chrome-devtools",
+          "playwright",
+          "browser"
+        ]
       },
       "fixer": {
         "model": "nanogpt/zai-org/glm-5:thinking",
-        "skills": ["*"],
-        "mcps": ["*"]
+        "skills": [
+          "*"
+        ],
+        "mcps": [
+          "*"
+        ]
+      }
+    },
+    "quality": {
+      "orchestrator": {
+        "model": "codexlb/gpt-5.4",
+        "skills": [
+          "*"
+        ],
+        "mcps": [
+          "*"
+        ]
+      },
+      "explorer": {
+        "model": "kilo/minimax/minimax-m2.5:free",
+        "skills": [
+          "*"
+        ],
+        "mcps": [
+          "context7",
+          "tavily",
+          "brave-search"
+        ]
+      },
+      "oracle": {
+        "model": "codexlb/gpt-5.4",
+        "skills": [
+          "read",
+          "search",
+          "analyze"
+        ],
+        "mcps": [
+          "context7",
+          "tavily"
+        ]
+      },
+      "librarian": {
+        "model": "google/antigravity-gemini-3-flash",
+        "skills": [
+          "*"
+        ],
+        "mcps": [
+          "context7",
+          "tavily",
+          "brave-search"
+        ]
+      },
+      "designer": {
+        "model": "google/antigravity-gemini-3-pro",
+        "skills": [
+          "*"
+        ],
+        "mcps": [
+          "chrome-devtools",
+          "playwright",
+          "browser"
+        ]
+      },
+      "fixer": {
+        "model": "nanogpt/zai-org/glm-5:thinking",
+        "skills": [
+          "*"
+        ],
+        "mcps": [
+          "*"
+        ]
+      }
+    },
+    "budget": {
+      "orchestrator": {
+        "model": "codexlb/gpt-5.4",
+        "skills": [
+          "*"
+        ],
+        "mcps": [
+          "*"
+        ]
+      },
+      "explorer": {
+        "model": "kilo/minimax/minimax-m2.5:free",
+        "skills": [
+          "*"
+        ],
+        "mcps": [
+          "context7",
+          "tavily",
+          "brave-search"
+        ]
+      },
+      "oracle": {
+        "model": "codexlb/gpt-5.4",
+        "skills": [
+          "read",
+          "search",
+          "analyze"
+        ],
+        "mcps": [
+          "context7",
+          "tavily"
+        ]
+      },
+      "librarian": {
+        "model": "google/antigravity-gemini-3-flash",
+        "skills": [
+          "*"
+        ],
+        "mcps": [
+          "context7",
+          "tavily",
+          "brave-search"
+        ]
+      },
+      "designer": {
+        "model": "google/antigravity-gemini-3-pro",
+        "skills": [
+          "*"
+        ],
+        "mcps": [
+          "chrome-devtools",
+          "playwright",
+          "browser"
+        ]
+      },
+      "fixer": {
+        "model": "nanogpt/zai-org/glm-5:thinking",
+        "skills": [
+          "*"
+        ],
+        "mcps": [
+          "*"
+        ]
       }
     }
   },
   "tmux": {
     "enabled": true,
     "layout": "main-vertical"
+  },
+  "council": {
+    "master": {
+      "model": "github-copilot-acct-acct_eb51f2/claude-opus-4.6",
+      "variant": "high"
+    },
+    "master_fallback": [
+      "github-copilot-acct-acct_eb51f2/claude-sonnet-4.6",
+      "openai/gpt-5.4"
+    ],
+    "default_preset": "default",
+    "master_timeout": 300000,
+    "councillors_timeout": 180000,
+    "presets": {
+      "default": {
+        "alpha": {
+          "model": "openai/gpt-5.4",
+          "variant": "high"
+        },
+        "beta": {
+          "model": "github-copilot-acct-acct_0bc716/gemini-3.1-pro-preview",
+          "variant": "medium"
+        },
+        "gamma": {
+          "model": "qwen-code/coder-model",
+          "variant": "low"
+        }
+      },
+      "fast": {
+        "quick-openai": {
+          "model": "openai/gpt-5.4-mini"
+        },
+        "quick-qwen": {
+          "model": "qwen-code/coder-model",
+          "variant": "low"
+        }
+      }
+    }
   }
 }

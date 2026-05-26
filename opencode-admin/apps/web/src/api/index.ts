@@ -14,6 +14,7 @@ import type {
   ProviderSyncResult,
   ProvidersSourceConfig,
   ReleaseInfo,
+  RuntimeStatus,
   Secret,
   ValidationResult,
 } from '@/types';
@@ -38,6 +39,7 @@ async function fetchApi<T>(endpoint: string, options?: RequestInit): Promise<Api
 }
 
 export const getDashboardStats = () => fetchApi<DashboardStats>('/dashboard');
+export const getRuntimeStatus = () => fetchApi<RuntimeStatus>('/runtime');
 
 export const getAgents = () => fetchApi<AgentConfig[]>('/agents');
 export const getAgent = (id: string) => fetchApi<AgentConfig>(`/agents/${id}`);

@@ -76,10 +76,14 @@ Na eerste deploy:
 
 - open `https://opencode.2631.eu/manage`
 - ga naar `OAuth`
-- GitHub, Google en Qwen gebruiken de directe OpenCode runtime-login
+- GitHub, Google, Qwen, Kiro en Cursor gebruiken de directe OpenCode runtime-login
+- GitHub login draait via `https://opencode.2631.eu/copilot-auth/`
+- Google login draait via `https://opencode.2631.eu/google-auth/`
 - Qwen login draait via `https://opencode.2631.eu/qwen-auth/`
+- Kiro login draait via `https://opencode.2631.eu/kiro-auth/` (`kiro-cli login`, plugin `@zhafron/opencode-kiro-auth` synct daarna)
+- Cursor login draait via `https://opencode.2631.eu/cursor-auth/` (`cursor-agent login`, plugin `@rama_nigg/open-cursor` proxyt op `127.0.0.1:32124`)
 
-Qwen tokens worden persistent opgeslagen in `state/opencode/qwen`.
+Qwen tokens worden persistent opgeslagen in `state/opencode/qwen`, Kiro CLI state in `state/opencode/kiro-cli`, Cursor state in `state/opencode/cursor`.
 
 ## OpenChamber
 

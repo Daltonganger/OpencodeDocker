@@ -26,7 +26,7 @@ export function OAuth() {
     <div>
       <div style={{ marginBottom: 20 }}>
         <h2 style={{ fontSize: 20, fontWeight: 600 }}>OAuth</h2>
-        <p style={{ color: 'var(--text-secondary)', marginTop: 4 }}>Beheer authenticatie voor GitHub, Google en Qwen. Alle drie gebruiken directe OpenCode runtime-login.</p>
+        <p style={{ color: 'var(--text-secondary)', marginTop: 4 }}>Beheer authenticatie voor GitHub, Google, Qwen, Kiro en Cursor. Deze providers gebruiken directe OpenCode runtime-login.</p>
       </div>
 
       <div className="card">
@@ -80,7 +80,7 @@ export function OAuth() {
 
       <div className="card" style={{ marginTop: 16 }}>
         <div style={{ color: 'var(--text-secondary)', fontSize: 14, lineHeight: 1.6 }}>
-          <strong style={{ color: 'var(--text-primary)' }}>Authenticatiemethodes:</strong> GitHub, Google en Qwen gebruiken een directe runtime login via <code>/copilot-auth</code>, <code>/google-auth</code> en <code>/qwen-auth</code>.
+          <strong style={{ color: 'var(--text-primary)' }}>Authenticatiemethodes:</strong> GitHub, Google, Qwen, Kiro en Cursor gebruiken een directe runtime login via <code>/copilot-auth</code>, <code>/google-auth</code>, <code>/qwen-auth</code>, <code>/kiro-auth</code> en <code>/cursor-auth</code>.
         </div>
       </div>
 

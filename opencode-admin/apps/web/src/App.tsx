@@ -10,6 +10,7 @@ import { ProvidersJson } from './pages/ProvidersJson';
 import { MCPServers } from './pages/MCPServers';
 import { OAuth } from './pages/OAuth';
 import { Secrets } from './pages/Secrets';
+import { Runtime } from './pages/Runtime';
 
 import { Apply } from './pages/Apply';
 import { Advanced } from './pages/Advanced';
@@ -31,6 +32,7 @@ const pageTitles: Record<string, string> = {
   'mcp-servers': 'MCP Servers',
   'oauth': 'OAuth',
   'secrets': 'Secrets',
+  'runtime': 'Sites & Runtime',
   'apply': 'Apply Changes',
   'advanced': 'Advanced JSON',
 };
@@ -122,6 +124,8 @@ export default function App() {
         return <OAuth />;
       case 'secrets':
         return <Secrets />;
+      case 'runtime':
+        return <Runtime />;
       case 'apply':
         return <Apply />;
       case 'advanced':

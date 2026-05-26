@@ -206,6 +206,61 @@ export interface OpencodeUpdateStatus {
   runtime: OpencodeRuntimeInfo;
 }
 
+export type RuntimeTone = 'success' | 'warning' | 'error' | 'info';
+
+export interface RuntimeContainerStatus {
+  name: string;
+  present: boolean;
+  running: boolean;
+  state: string;
+  health: string | null;
+  image: string | null;
+  error?: string;
+}
+
+export interface RuntimeSiteStatus {
+  id: string;
+  label: string;
+  url: string;
+  kind: 'web' | 'api' | 'ssh' | 'webdav';
+  container: string;
+  status: RuntimeTone;
+  message: string;
+}
+
+export interface IcloudRuntimeStatus {
+  remote: string;
+  hostPath: string;
+  adminMountPath: string;
+  adminMountAccessible: boolean;
+  adminMountEntries: string[];
+  rcloneConfigPresent: boolean;
+  container: RuntimeContainerStatus;
+  fuseMountActive: boolean | null;
+  status: RuntimeTone;
+  message: string;
+  commands: string[];
+}
+
+export interface TokenSpeedRuntimeStatus {
+  configuredInAdmin: boolean;
+  configuredInTarget: boolean;
+  seededInImage: boolean;
+  installedInBackend: boolean | null;
+  sshUsesSharedBackend: boolean;
+  status: RuntimeTone;
+  message: string;
+  commands: string[];
+}
+
+export interface RuntimeStatus {
+  targetStackPath: string;
+  sites: RuntimeSiteStatus[];
+  containers: RuntimeContainerStatus[];
+  icloud: IcloudRuntimeStatus;
+  tokenspeed: TokenSpeedRuntimeStatus;
+}
+
 export interface DashboardStats {
   currentRelease: ReleaseInfo | null;
   dirty: boolean;

@@ -13,6 +13,7 @@ import { rollbackRoutes } from './rollback.js';
 import { releasesRoutes } from './releases.js';
 import { configRoutes } from './config.js';
 import { updateRoutes } from './update.js';
+import { runtimeRoutes } from './runtime.js';
 
 export const apiRoutes: FastifyPluginAsync = async (fastify) => {
   await fastify.register(healthRoutes);
@@ -31,5 +32,6 @@ export const apiRoutes: FastifyPluginAsync = async (fastify) => {
     await instance.register(releasesRoutes, { prefix: '/releases' });
     await instance.register(configRoutes, { prefix: '/config' });
     await instance.register(updateRoutes, { prefix: '/update' });
+    await instance.register(runtimeRoutes, { prefix: '/runtime' });
   }, { prefix: '/api/v1' });
 };

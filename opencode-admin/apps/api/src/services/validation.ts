@@ -54,7 +54,8 @@ export function validateSources(sources: CombinedSources, envEntries: Record<str
   const providerIdSet = new Set<string>();
   for (const provider of sources.providers.providers) {
     if (!provider.id) pushUnique(errors, { path: 'providers[].id', message: 'Provider id is required' });
-    if (!provider.secretRef && provider.id !== 'google' && provider.id !== 'qwen-code') {
+    const authWithoutSecret = provider.type === 'plugin' || provider.metadata?.pluginManaged === true || ['google', 'qwen-code', 'cursor-acp'].includes(provider.id);
+    if (!provider.secretRef && !authWithoutSecret) {
       pushUnique(warnings, { path: `providers.${provider.id}.secretRef`, message: 'Secret ref is recommended' });
     }
     if (providerIdSet.has(provider.id)) pushUnique(errors, { path: `providers.${provider.id}`, message: 'Provider ids must be unique' });

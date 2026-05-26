@@ -60,8 +60,17 @@ export const config = {
   get targetAntigravityAccountsPath() {
     return path.join(this.targetOpenCodeConfigDir, 'antigravity-accounts.json');
   },
+  get targetKiroDbPath() {
+    return path.join(this.targetOpenCodeConfigDir, 'kiro.db');
+  },
+  get targetKiroConfigPath() {
+    return path.join(this.targetOpenCodeConfigDir, 'kiro.json');
+  },
   get targetAuthJsonPath() {
     return path.join(this.targetStackPath, 'state', 'opencode', 'share', 'auth.json');
+  },
+  get targetCursorStateDir() {
+    return path.join(this.targetStackPath, 'state', 'opencode', 'cursor');
   },
   get targetOhMySlimPath() {
     return path.join(this.targetStackPath, 'config', 'opencode', 'oh-my-opencode-slim.jsonc');

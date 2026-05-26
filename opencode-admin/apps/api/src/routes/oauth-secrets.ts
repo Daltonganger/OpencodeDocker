@@ -12,6 +12,24 @@ async function readJsonFile<T>(filePath: string, fallback: T): Promise<T> {
   }
 }
 
+async function pathExists(filePath: string): Promise<boolean> {
+  try {
+    await fs.stat(filePath);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function directoryHasEntries(dirPath: string): Promise<boolean> {
+  try {
+    const entries = await fs.readdir(dirPath);
+    return entries.length > 0;
+  } catch {
+    return false;
+  }
+}
+
 function getAppOrigin(): string {
   try {
     return new URL(config.appBaseUrl).origin;
@@ -65,6 +83,34 @@ async function buildOAuthRuntimeDetails(providerId: string, status: { connected:
       connected,
       accountCount: connected ? 1 : 0,
       accountSummary: connected ? 'Qwen login opgeslagen als actief profiel' : 'Nog geen Qwen login opgeslagen',
+    };
+  }
+
+  if (providerId === 'kiro') {
+    const [authJson, hasKiroDb, kiroConfig] = await Promise.all([
+      readJsonFile<Record<string, { accountId?: string } | undefined>>(config.targetAuthJsonPath, {}),
+      pathExists(config.targetKiroDbPath),
+      readJsonFile<{ auto_sync_kiro_cli?: boolean; account_selection_strategy?: string }>(config.targetKiroConfigPath, {}),
+    ]);
+    const kiro = authJson.kiro;
+    const connected = Boolean(kiro) || hasKiroDb || status.connected;
+    return {
+      connected,
+      accountCount: connected ? 1 : 0,
+      accountSummary: connected
+        ? `Kiro login beschikbaar${kiroConfig.auto_sync_kiro_cli ? ' (auto-sync via kiro-cli)' : ''}`
+        : 'Nog geen Kiro login opgeslagen',
+    };
+  }
+
+  if (providerId === 'cursor') {
+    const authJson = await readJsonFile<Record<string, { accountId?: string } | undefined>>(config.targetAuthJsonPath, {});
+    const hasCursorState = await directoryHasEntries(config.targetCursorStateDir);
+    const connected = Boolean(authJson['cursor-acp'] || authJson.cursor) || hasCursorState || status.connected;
+    return {
+      connected,
+      accountCount: connected ? 1 : 0,
+      accountSummary: connected ? 'Cursor login/profiel beschikbaar voor cursor-agent' : 'Nog geen Cursor login opgeslagen',
     };
   }
 
@@ -125,7 +171,11 @@ export const oauthRoutes: FastifyPluginAsync = async (fastify) => {
               ? 'Login with GitHub'
               : id === 'qwen'
                 ? 'Login with Qwen'
-                : 'Open login',
+                : id === 'kiro'
+                  ? 'Login with Kiro'
+                  : id === 'cursor'
+                    ? 'Login with Cursor'
+                    : 'Open login',
         loginEnabled,
         loginMode,
         metadata: provider.metadata,

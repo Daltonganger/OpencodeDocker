@@ -1,0 +1,97 @@
+services:
+  icloud-rclone:
+    image: ${ICLOUD_RCLONE_IMAGE:-rclone/rclone:latest}
+    container_name: icloud-rclone
+    restart: unless-stopped
+    env_file: /opt/stacks/opencode-dev/.env
+    environment:
+      TZ: ${TZ:-Europe/Amsterdam}
+      RCLONE_CONFIG: /config/rclone/rclone.conf
+    devices:
+      - /dev/fuse:/dev/fuse
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - apparmor:unconfined
+    entrypoint: ["/bin/sh", "/usr/local/bin/icloud-rclone-entrypoint.sh"]
+    volumes:
+      - type: bind
+        source: ${ICLOUD_HOST_PATH:-/opt/stacks/opencode-dev/icloud-drive}
+        target: /mnt/icloud
+        bind:
+          propagation: rshared
+      - type: bind
+        source: ${ICLOUD_RCLONE_CONFIG_DIR:-/opt/stacks/opencode-dev/state/rclone}
+        target: /config/rclone
+      - type: bind
+        source: ${ICLOUD_RCLONE_CACHE_DIR:-/opt/stacks/opencode-dev/cache/rclone}
+        target: /cache
+      - type: bind
+        source: ${ICLOUD_RCLONE_LOG_DIR:-/opt/stacks/opencode-dev/logs}
+        target: /logs
+      - type: bind
+        source: /opt/stacks/opencode-dev/icloud-rclone-entrypoint.sh
+        target: /usr/local/bin/icloud-rclone-entrypoint.sh
+        read_only: true
+    healthcheck:
+      test: ["CMD-SHELL", "grep -Eqs ' /mnt/icloud (fuse|fuse\\.rclone|rclone) ' /proc/mounts"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+    stop_grace_period: 30s
+
+  opencode-backend:
+    depends_on:
+      icloud-rclone:
+        condition: service_healthy
+    volumes:
+      - type: bind
+        source: ${ICLOUD_HOST_PATH:-/opt/stacks/opencode-dev/icloud-drive}
+        target: /home/app/workspace/icloud
+        bind:
+          propagation: rslave
+
+  opencode-dev:
+    depends_on:
+      icloud-rclone:
+        condition: service_healthy
+    volumes:
+      - type: bind
+        source: ${ICLOUD_HOST_PATH:-/opt/stacks/opencode-dev/icloud-drive}
+        target: /home/app/workspace/icloud
+        bind:
+          propagation: rslave
+
+  openchamber:
+    depends_on:
+      icloud-rclone:
+        condition: service_healthy
+    volumes:
+      - type: bind
+        source: ${ICLOUD_HOST_PATH:-/opt/stacks/opencode-dev/icloud-drive}
+        target: /home/openchamber/workspaces/icloud
+        bind:
+          propagation: rslave
+
+  code-server:
+    depends_on:
+      icloud-rclone:
+        condition: service_healthy
+    volumes:
+      - type: bind
+        source: ${ICLOUD_HOST_PATH:-/opt/stacks/opencode-dev/icloud-drive}
+        target: /home/coder/project/icloud
+        bind:
+          propagation: rslave
+
+  sftpgo:
+    depends_on:
+      icloud-rclone:
+        condition: service_healthy
+    volumes:
+      - type: bind
+        source: ${ICLOUD_HOST_PATH:-/opt/stacks/opencode-dev/icloud-drive}
+        target: /srv/sftpgo/data/workspace/icloud
+        bind:
+          propagation: rslave

@@ -13,8 +13,11 @@ services:
       OPENCODE_ADMIN_BASE_URL: ${OPENCODE_ADMIN_BASE_URL:-https://opencode.2631.eu/manage}
       OPENCODE_TARGET_STACK_PATH: ${OPENCODE_TARGET_STACK_PATH:-/opt/stacks/opencode-dev}
       OPENCODE_TARGET_ENV_PATH: ${OPENCODE_TARGET_ENV_PATH:-/opt/stacks/opencode-dev/.env}
-      OPENCODE_APPLY_RESTART: ${OPENCODE_APPLY_RESTART:-true}
+      OPENCODE_APPLY_RESTART: ${OPENCODE_APPLY_RESTART:-false}
       OPENCODE_APPLY_RESTART_SERVICES: ${OPENCODE_APPLY_RESTART_SERVICES:-opencode-backend opencode-dev openchamber}
+      OPENCODE_ICLOUD_HOST_PATH: ${OPENCODE_ICLOUD_HOST_PATH:-/opt/stacks/opencode-dev/icloud-drive}
+      OPENCODE_ICLOUD_ADMIN_MOUNT_PATH: /app/icloud
+      OPENCODE_ICLOUD_REMOTE: ${OPENCODE_ICLOUD_REMOTE:-icloud:opencode-sync}
     networks:
       - traefik-network
     volumes:
@@ -22,6 +25,12 @@ services:
       - /opt/stacks/opencode-admin/backups:/app/backups
       - /opt/stacks/opencode-admin/releases:/app/releases
       - /opt/stacks/opencode-dev:/opt/stacks/opencode-dev
+      - type: bind
+        source: ${OPENCODE_ICLOUD_HOST_PATH:-/opt/stacks/opencode-dev/icloud-drive}
+        target: /app/icloud
+        read_only: true
+        bind:
+          propagation: rslave
       - /var/run/docker.sock:/var/run/docker.sock
     labels:
       traefik.enable: "true"

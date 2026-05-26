@@ -9,6 +9,7 @@ export function Sidebar({ currentPage, isOpen, onNavigate }: { currentPage: stri
     { id: 'mcp-servers', label: 'MCP Servers', icon: '🖥️' },
     { id: 'oauth', label: 'OAuth', icon: '🔐' },
     { id: 'secrets', label: 'Secrets', icon: '🔑' },
+    { id: 'runtime', label: 'Sites & Runtime', icon: '🛰️' },
     { id: 'apply', label: 'Apply', icon: '✅' },
     { id: 'advanced', label: 'Advanced JSON', icon: '⚙️' },
   ];

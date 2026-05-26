@@ -11,17 +11,94 @@
       "enabled": true,
       "secretRef": "",
       "models": [
-        { "id": "antigravity-gemini-3-flash", "name": "Gemini 3 Flash (Antigravity)", "capabilities": ["reasoning", "fast"], "recommended": true },
-        { "id": "antigravity-gemini-3-pro", "name": "Gemini 3 Pro (Antigravity)", "capabilities": ["reasoning", "code"] },
-        { "id": "antigravity-gemini-3.1-pro", "name": "Gemini 3.1 Pro (Antigravity)", "capabilities": ["reasoning", "code"] },
-        { "id": "antigravity-claude-sonnet-4-6", "name": "Claude Sonnet 4.6 (Antigravity)", "capabilities": ["reasoning", "code"] },
-        { "id": "antigravity-claude-opus-4-6-thinking", "name": "Claude Opus 4.6 Thinking (Antigravity)", "capabilities": ["reasoning"] },
-        { "id": "gemini-2.5-flash", "name": "Gemini 2.5 Flash (Gemini CLI)", "capabilities": ["fast", "budget"] },
-        { "id": "gemini-2.5-pro", "name": "Gemini 2.5 Pro (Gemini CLI)", "capabilities": ["reasoning", "code"] },
-        { "id": "gemini-3-flash-preview", "name": "Gemini 3 Flash Preview (Gemini CLI)", "capabilities": ["fast", "budget"] },
-        { "id": "gemini-3-pro-preview", "name": "Gemini 3 Pro Preview (Gemini CLI)", "capabilities": ["reasoning", "code"] },
-        { "id": "gemini-3.1-pro-preview", "name": "Gemini 3.1 Pro Preview (Gemini CLI)", "capabilities": ["reasoning", "code"] },
-        { "id": "gemini-3.1-pro-preview-customtools", "name": "Gemini 3.1 Pro Preview Custom Tools (Gemini CLI)", "capabilities": ["reasoning", "code"] }
+        {
+          "id": "antigravity-gemini-3-flash",
+          "name": "Gemini 3 Flash (Antigravity)",
+          "capabilities": [
+            "reasoning",
+            "fast"
+          ],
+          "recommended": true
+        },
+        {
+          "id": "antigravity-gemini-3-pro",
+          "name": "Gemini 3 Pro (Antigravity)",
+          "capabilities": [
+            "reasoning",
+            "code"
+          ]
+        },
+        {
+          "id": "antigravity-gemini-3.1-pro",
+          "name": "Gemini 3.1 Pro (Antigravity)",
+          "capabilities": [
+            "reasoning",
+            "code"
+          ]
+        },
+        {
+          "id": "antigravity-claude-sonnet-4-6",
+          "name": "Claude Sonnet 4.6 (Antigravity)",
+          "capabilities": [
+            "reasoning",
+            "code"
+          ]
+        },
+        {
+          "id": "antigravity-claude-opus-4-6-thinking",
+          "name": "Claude Opus 4.6 Thinking (Antigravity)",
+          "capabilities": [
+            "reasoning"
+          ]
+        },
+        {
+          "id": "gemini-2.5-flash",
+          "name": "Gemini 2.5 Flash (Gemini CLI)",
+          "capabilities": [
+            "fast",
+            "budget"
+          ]
+        },
+        {
+          "id": "gemini-2.5-pro",
+          "name": "Gemini 2.5 Pro (Gemini CLI)",
+          "capabilities": [
+            "reasoning",
+            "code"
+          ]
+        },
+        {
+          "id": "gemini-3-flash-preview",
+          "name": "Gemini 3 Flash Preview (Gemini CLI)",
+          "capabilities": [
+            "fast",
+            "budget"
+          ]
+        },
+        {
+          "id": "gemini-3-pro-preview",
+          "name": "Gemini 3 Pro Preview (Gemini CLI)",
+          "capabilities": [
+            "reasoning",
+            "code"
+          ]
+        },
+        {
+          "id": "gemini-3.1-pro-preview",
+          "name": "Gemini 3.1 Pro Preview (Gemini CLI)",
+          "capabilities": [
+            "reasoning",
+            "code"
+          ]
+        },
+        {
+          "id": "gemini-3.1-pro-preview-customtools",
+          "name": "Gemini 3.1 Pro Preview Custom Tools (Gemini CLI)",
+          "capabilities": [
+            "reasoning",
+            "code"
+          ]
+        }
       ],
       "defaultModel": "antigravity-gemini-3-flash"
     },
@@ -34,8 +111,24 @@
       "enabled": false,
       "secretRef": "OPENAI_API_KEY",
       "models": [
-        { "id": "gpt-4o", "name": "GPT-4o", "capabilities": ["reasoning", "code"], "recommended": true },
-        { "id": "gpt-4o-mini", "name": "GPT-4o Mini", "capabilities": ["fast", "budget", "code"] }
+        {
+          "id": "gpt-4o",
+          "name": "GPT-4o",
+          "capabilities": [
+            "reasoning",
+            "code"
+          ],
+          "recommended": true
+        },
+        {
+          "id": "gpt-4o-mini",
+          "name": "GPT-4o Mini",
+          "capabilities": [
+            "fast",
+            "budget",
+            "code"
+          ]
+        }
       ],
       "defaultModel": "gpt-4o"
     },
@@ -48,22 +141,65 @@
       "enabled": true,
       "secretRef": "OPENROUTER_API_KEY",
       "models": [
-        { "id": "openai/gpt-4o-mini", "name": "GPT-4o Mini via OpenRouter", "capabilities": ["research", "budget"] },
-        { "id": "anthropic/claude-3.5-sonnet", "name": "Claude 3.5 Sonnet via OpenRouter", "capabilities": ["reasoning", "code"] }
+        {
+          "id": "openai/gpt-4o-mini",
+          "name": "GPT-4o Mini via OpenRouter",
+          "capabilities": [
+            "research",
+            "budget"
+          ]
+        },
+        {
+          "id": "anthropic/claude-3.5-sonnet",
+          "name": "Claude 3.5 Sonnet via OpenRouter",
+          "capabilities": [
+            "reasoning",
+            "code"
+          ]
+        }
       ],
       "defaultModel": "openai/gpt-4o-mini"
     },
     {
       "id": "codexlb",
       "alias": "codexlb",
-      "name": "CodexLB",
+      "name": "Codex (codex.2631.eu)",
       "type": "openai-compatible",
       "baseUrl": "https://codex.2631.eu/v1",
       "enabled": true,
       "secretRef": "CODEXLB_API_KEY",
       "models": [
-        { "id": "gpt-5", "name": "Gpt 5", "capabilities": ["reasoning", "code", "fast", "budget", "multimodal"], "recommended": true, "limit": { "context": 272000, "output": 8192 } },
-        { "id": "gpt-5.4", "name": "Gpt 5.4", "capabilities": ["reasoning", "code", "fast", "budget", "multimodal"], "limit": { "context": 272000, "output": 8192 } }
+        {
+          "id": "gpt-5",
+          "name": "Gpt 5",
+          "capabilities": [
+            "reasoning",
+            "code",
+            "fast",
+            "budget",
+            "multimodal"
+          ],
+          "recommended": true,
+          "limit": {
+            "context": 272000,
+            "output": 8192
+          }
+        },
+        {
+          "id": "gpt-5.4",
+          "name": "Gpt 5.4",
+          "capabilities": [
+            "reasoning",
+            "code",
+            "fast",
+            "budget",
+            "multimodal"
+          ],
+          "limit": {
+            "context": 272000,
+            "output": 8192
+          }
+        }
       ],
       "defaultModel": "gpt-5"
     },
@@ -76,8 +212,31 @@
       "enabled": true,
       "secretRef": "CHAT2631_API_KEY",
       "models": [
-        { "id": "anthropic/claude-haiku-4-5", "name": "Anthropic/Claude Haiku 4 5", "capabilities": ["reasoning", "code"], "limit": { "context": 200000, "output": 8192 } },
-        { "id": "google/gemini-3-flash-preview", "name": "Google/Gemini 3 Flash Preview", "capabilities": ["code", "fast", "budget"], "limit": { "context": 1000000, "output": 8192 } }
+        {
+          "id": "anthropic/claude-haiku-4-5",
+          "name": "Anthropic/Claude Haiku 4 5",
+          "capabilities": [
+            "reasoning",
+            "code"
+          ],
+          "limit": {
+            "context": 200000,
+            "output": 8192
+          }
+        },
+        {
+          "id": "google/gemini-3-flash-preview",
+          "name": "Google/Gemini 3 Flash Preview",
+          "capabilities": [
+            "code",
+            "fast",
+            "budget"
+          ],
+          "limit": {
+            "context": 1000000,
+            "output": 8192
+          }
+        }
       ],
       "defaultModel": "anthropic/claude-haiku-4-5"
     },
@@ -90,11 +249,47 @@
       "enabled": true,
       "secretRef": "NANOGPT_API_KEY",
       "models": [
-        { "id": "auto-model-standard", "name": "NanoGPT Auto Standard", "capabilities": ["budget", "reasoning"], "recommended": true },
-        { "id": "auto-model-premium", "name": "NanoGPT Auto Premium", "capabilities": ["reasoning", "code"] },
-        { "id": "auto-model-basic", "name": "NanoGPT Auto Basic", "capabilities": ["fast", "budget"] },
-        { "id": "moonshotai/kimi-k2.5:thinking", "name": "Moonshotai/Kimi K2.5:Thinking", "capabilities": ["reasoning", "code"] },
-        { "id": "zai-org/glm-5:thinking", "name": "Zai Org/Glm 5:Thinking", "capabilities": ["reasoning", "code"] }
+        {
+          "id": "auto-model-standard",
+          "name": "NanoGPT Auto Standard",
+          "capabilities": [
+            "budget",
+            "reasoning"
+          ],
+          "recommended": true
+        },
+        {
+          "id": "auto-model-premium",
+          "name": "NanoGPT Auto Premium",
+          "capabilities": [
+            "reasoning",
+            "code"
+          ]
+        },
+        {
+          "id": "auto-model-basic",
+          "name": "NanoGPT Auto Basic",
+          "capabilities": [
+            "fast",
+            "budget"
+          ]
+        },
+        {
+          "id": "moonshotai/kimi-k2.5:thinking",
+          "name": "Moonshotai/Kimi K2.5:Thinking",
+          "capabilities": [
+            "reasoning",
+            "code"
+          ]
+        },
+        {
+          "id": "zai-org/glm-5:thinking",
+          "name": "Zai Org/Glm 5:Thinking",
+          "capabilities": [
+            "reasoning",
+            "code"
+          ]
+        }
       ],
       "defaultModel": "auto-model-standard"
     },
@@ -107,7 +302,14 @@
       "enabled": false,
       "secretRef": "NVIDIA_API_KEY",
       "models": [
-        { "id": "nvidia/llama-3.1-nemotron-70b-instruct", "name": "Nemotron 70B", "capabilities": ["budget", "reasoning"] }
+        {
+          "id": "nvidia/llama-3.1-nemotron-70b-instruct",
+          "name": "Nemotron 70B",
+          "capabilities": [
+            "budget",
+            "reasoning"
+          ]
+        }
       ],
       "defaultModel": "nvidia/llama-3.1-nemotron-70b-instruct"
     },
@@ -120,8 +322,22 @@
       "enabled": true,
       "secretRef": "",
       "models": [
-        { "id": "coder-model", "name": "Qwen Coder (Qwen 3.5 Plus)", "capabilities": ["reasoning", "code"], "recommended": true },
-        { "id": "vision-model", "name": "Qwen VL Plus (Vision)", "capabilities": ["multimodal"] }
+        {
+          "id": "coder-model",
+          "name": "Qwen Coder (Qwen 3.5 Plus)",
+          "capabilities": [
+            "reasoning",
+            "code"
+          ],
+          "recommended": true
+        },
+        {
+          "id": "vision-model",
+          "name": "Qwen VL Plus (Vision)",
+          "capabilities": [
+            "multimodal"
+          ]
+        }
       ],
       "defaultModel": "coder-model"
     },
@@ -134,8 +350,22 @@
       "enabled": true,
       "secretRef": "KILO_GATEWAY_API_KEY",
       "models": [
-        { "id": "minimax/minimax-m2.5:free", "name": "Minimax/Minimax M2.5:Free", "capabilities": ["fast", "budget"] },
-        { "id": "openrouter/hunter-alpha", "name": "Openrouter/Hunter Alpha", "capabilities": ["reasoning", "code"] }
+        {
+          "id": "minimax/minimax-m2.5:free",
+          "name": "Minimax/Minimax M2.5:Free",
+          "capabilities": [
+            "fast",
+            "budget"
+          ]
+        },
+        {
+          "id": "openrouter/hunter-alpha",
+          "name": "Openrouter/Hunter Alpha",
+          "capabilities": [
+            "reasoning",
+            "code"
+          ]
+        }
       ],
       "defaultModel": "minimax/minimax-m2.5:free"
     },
@@ -148,13 +378,254 @@
       "enabled": false,
       "secretRef": "ZAI_API_KEY",
       "models": [
-        { "id": "glm-4.5", "name": "Glm 4.5", "capabilities": ["reasoning"] },
-        { "id": "glm-4.5-air", "name": "Glm 4.5 Air", "capabilities": ["reasoning", "budget"] },
-        { "id": "glm-4.6", "name": "Glm 4.6", "capabilities": ["reasoning"] },
-        { "id": "glm-4.7", "name": "Glm 4.7", "capabilities": ["reasoning"] },
-        { "id": "glm-5", "name": "Glm 5", "capabilities": ["reasoning", "code"] }
+        {
+          "id": "glm-4.5",
+          "name": "Glm 4.5",
+          "capabilities": [
+            "reasoning"
+          ]
+        },
+        {
+          "id": "glm-4.5-air",
+          "name": "Glm 4.5 Air",
+          "capabilities": [
+            "reasoning",
+            "budget"
+          ]
+        },
+        {
+          "id": "glm-4.6",
+          "name": "Glm 4.6",
+          "capabilities": [
+            "reasoning"
+          ]
+        },
+        {
+          "id": "glm-4.7",
+          "name": "Glm 4.7",
+          "capabilities": [
+            "reasoning"
+          ]
+        },
+        {
+          "id": "glm-5",
+          "name": "Glm 5",
+          "capabilities": [
+            "reasoning",
+            "code"
+          ]
+        }
       ],
       "defaultModel": "glm-5"
+    },
+    {
+      "id": "kiro",
+      "alias": "kiro",
+      "name": "Kiro CLI/Auth",
+      "type": "plugin",
+      "baseUrl": "",
+      "enabled": true,
+      "secretRef": "",
+      "models": [
+        {
+          "id": "auto",
+          "name": "Kiro Auto",
+          "capabilities": [
+            "code",
+            "reasoning"
+          ],
+          "recommended": true,
+          "limit": {
+            "context": 200000,
+            "output": 8192
+          }
+        },
+        {
+          "id": "claude-sonnet-4-6",
+          "name": "Claude Sonnet 4.6 (Kiro)",
+          "capabilities": [
+            "code",
+            "reasoning"
+          ],
+          "limit": {
+            "context": 200000,
+            "output": 8192
+          }
+        },
+        {
+          "id": "claude-sonnet-4-6-thinking",
+          "name": "Claude Sonnet 4.6 Thinking (Kiro)",
+          "capabilities": [
+            "code",
+            "reasoning"
+          ],
+          "limit": {
+            "context": 200000,
+            "output": 8192
+          }
+        },
+        {
+          "id": "claude-opus-4-6",
+          "name": "Claude Opus 4.6 (Kiro)",
+          "capabilities": [
+            "code",
+            "reasoning"
+          ],
+          "limit": {
+            "context": 200000,
+            "output": 8192
+          }
+        },
+        {
+          "id": "claude-opus-4-6-thinking",
+          "name": "Claude Opus 4.6 Thinking (Kiro)",
+          "capabilities": [
+            "code",
+            "reasoning"
+          ],
+          "limit": {
+            "context": 200000,
+            "output": 8192
+          }
+        },
+        {
+          "id": "claude-opus-4-6-1m",
+          "name": "Claude Opus 4.6 1M (Kiro)",
+          "capabilities": [
+            "code",
+            "reasoning"
+          ],
+          "limit": {
+            "context": 1000000,
+            "output": 8192
+          }
+        },
+        {
+          "id": "claude-opus-4-6-1m-thinking",
+          "name": "Claude Opus 4.6 1M Thinking (Kiro)",
+          "capabilities": [
+            "code",
+            "reasoning"
+          ],
+          "limit": {
+            "context": 1000000,
+            "output": 8192
+          }
+        },
+        {
+          "id": "claude-haiku-4-5",
+          "name": "Claude Haiku 4.5 (Kiro)",
+          "capabilities": [
+            "fast",
+            "budget"
+          ],
+          "limit": {
+            "context": 200000,
+            "output": 8192
+          }
+        },
+        {
+          "id": "claude-sonnet-4-5",
+          "name": "Claude Sonnet 4.5 (Kiro)",
+          "capabilities": [
+            "code",
+            "reasoning"
+          ],
+          "limit": {
+            "context": 200000,
+            "output": 8192
+          }
+        },
+        {
+          "id": "claude-sonnet-4-5-thinking",
+          "name": "Claude Sonnet 4.5 Thinking (Kiro)",
+          "capabilities": [
+            "code",
+            "reasoning"
+          ],
+          "limit": {
+            "context": 200000,
+            "output": 8192
+          }
+        },
+        {
+          "id": "deepseek-3.2",
+          "name": "DeepSeek 3.2 (Kiro)",
+          "capabilities": [
+            "code",
+            "reasoning"
+          ],
+          "limit": {
+            "context": 200000,
+            "output": 8192
+          }
+        },
+        {
+          "id": "qwen3-coder-next",
+          "name": "Qwen3 Coder Next (Kiro)",
+          "capabilities": [
+            "code"
+          ],
+          "limit": {
+            "context": 200000,
+            "output": 8192
+          }
+        }
+      ],
+      "defaultModel": "auto",
+      "metadata": {
+        "pluginManaged": true,
+        "authPlugin": "@zhafron/opencode-kiro-auth",
+        "note": "Plugin-managed provider. Do not render npm/options; auth is synced from kiro-cli via @zhafron/opencode-kiro-auth."
+      }
+    },
+    {
+      "id": "cursor-acp",
+      "alias": "cursor-acp",
+      "name": "Cursor ACP local proxy",
+      "type": "openai-compatible",
+      "baseUrl": "http://127.0.0.1:32124/v1",
+      "enabled": true,
+      "secretRef": "",
+      "models": [
+        {
+          "id": "auto",
+          "name": "Cursor Auto",
+          "capabilities": [
+            "code",
+            "reasoning"
+          ],
+          "recommended": true
+        },
+        {
+          "id": "composer-2",
+          "name": "Cursor Composer 2",
+          "capabilities": [
+            "code",
+            "reasoning"
+          ]
+        },
+        {
+          "id": "gpt-5.3-codex",
+          "name": "Cursor GPT-5.3 Codex",
+          "capabilities": [
+            "code",
+            "reasoning"
+          ]
+        },
+        {
+          "id": "gpt-5.2",
+          "name": "Cursor GPT-5.2",
+          "capabilities": [
+            "code",
+            "reasoning"
+          ]
+        }
+      ],
+      "defaultModel": "auto",
+      "metadata": {
+        "note": "From iCloud Opencode-Sync. Requires cursor-agent login and the open-cursor proxy/plugin in the same runtime."
+      }
     }
   ],
   "functionalAliases": {
@@ -164,10 +635,13 @@
     "research": "openrouter",
     "fallback_openai": "openrouter",
     "oauth_google": "google",
-    "oauth_qwen": "qwen-code"
+    "oauth_qwen": "qwen-code",
+    "oauth_kiro": "kiro",
+    "cursor": "cursor-acp",
+    "oauth_cursor": "cursor-acp"
   },
   "metadata": {
-    "lastModified": "2026-03-14T00:00:00Z",
-    "modifiedBy": "system"
+    "lastModified": "2026-05-26T00:00:00Z",
+    "modifiedBy": "opencode-admin"
   }
 }

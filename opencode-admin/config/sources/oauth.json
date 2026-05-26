@@ -5,7 +5,13 @@
     "github": {
       "enabled": true,
       "displayName": "GitHub",
-      "scopes": ["read:user", "user:email", "repo", "models:read", "copilot"],
+      "scopes": [
+        "read:user",
+        "user:email",
+        "repo",
+        "models:read",
+        "copilot"
+      ],
       "metadata": {
         "oauthConsumer": "opencode-github",
         "runtimeManagedAuth": true,
@@ -32,22 +38,87 @@
     "qwen": {
       "enabled": true,
       "displayName": "Qwen",
-      "scopes": ["openid", "profile", "email", "model.completion"],
+      "scopes": [
+        "openid",
+        "profile",
+        "email",
+        "model.completion"
+      ],
       "metadata": {
         "oauthConsumer": "@melodyoftears/opencode-qwen-auth",
         "runtimeManagedAuth": true,
         "directLoginPath": "/qwen-auth/",
         "storesAuthJson": true
       }
+    },
+    "kiro": {
+      "enabled": true,
+      "displayName": "Kiro",
+      "scopes": [
+        "kiro-cli",
+        "codewhisperer"
+      ],
+      "metadata": {
+        "oauthConsumer": "@zhafron/opencode-kiro-auth",
+        "runtimeManagedAuth": true,
+        "directLoginPath": "/kiro-auth/",
+        "storesAuthJson": true,
+        "storesKiroDb": true
+      }
+    },
+    "cursor": {
+      "enabled": true,
+      "displayName": "Cursor",
+      "scopes": [
+        "cursor-agent"
+      ],
+      "metadata": {
+        "oauthConsumer": "@rama_nigg/open-cursor",
+        "runtimeManagedAuth": true,
+        "directLoginPath": "/cursor-auth/",
+        "providerId": "cursor-acp"
+      }
     }
   },
   "status": {
-    "github": { "configured": false, "connected": false, "lastChecked": null, "tokenExpiry": null, "error": null },
-    "google": { "configured": false, "connected": false, "lastChecked": null, "tokenExpiry": null, "error": null },
-    "qwen": { "configured": false, "connected": false, "lastChecked": null, "tokenExpiry": null, "error": null }
+    "github": {
+      "configured": false,
+      "connected": false,
+      "lastChecked": null,
+      "tokenExpiry": null,
+      "error": null
+    },
+    "google": {
+      "configured": false,
+      "connected": false,
+      "lastChecked": null,
+      "tokenExpiry": null,
+      "error": null
+    },
+    "qwen": {
+      "configured": false,
+      "connected": false,
+      "lastChecked": null,
+      "tokenExpiry": null,
+      "error": null
+    },
+    "kiro": {
+      "configured": false,
+      "connected": false,
+      "lastChecked": null,
+      "tokenExpiry": null,
+      "error": null
+    },
+    "cursor": {
+      "configured": false,
+      "connected": false,
+      "lastChecked": null,
+      "tokenExpiry": null,
+      "error": null
+    }
   },
   "metadata": {
-    "lastModified": "2026-03-14T00:00:00Z",
-    "modifiedBy": "system"
+    "lastModified": "2026-05-26T00:00:00Z",
+    "modifiedBy": "opencode-admin"
   }
 }

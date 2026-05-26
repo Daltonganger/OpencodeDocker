@@ -33,6 +33,8 @@ export SFTPGO_WEBDAV_USERNAME="${SFTPGO_WEBDAV_USERNAME:-webdav}"
 mkdir -p \
   "${STACK_DIR}/config/opencode" \
   "${STACK_DIR}/state/opencode/qwen" \
+  "${STACK_DIR}/state/opencode/kiro-cli" \
+  "${STACK_DIR}/state/opencode/cursor" \
   "${STACK_DIR}/state/opencode/share" \
   "${STACK_DIR}/state/opencode/state" \
   "${STACK_DIR}/state/sftpgo" \

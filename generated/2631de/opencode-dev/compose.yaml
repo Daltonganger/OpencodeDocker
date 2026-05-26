@@ -18,6 +18,8 @@ services:
       - /opt/stacks/opencode-dev/workspace:/home/app/workspace
       - /opt/stacks/opencode-dev/config/opencode:/home/app/.config/opencode
       - /opt/stacks/opencode-dev/state/opencode/qwen:/home/app/.qwen
+      - /opt/stacks/opencode-dev/state/opencode/kiro-cli:/home/app/.local/share/kiro-cli
+      - /opt/stacks/opencode-dev/state/opencode/cursor:/home/app/.cursor
       - /opt/stacks/opencode-dev/state/opencode/share:/home/app/.local/share/opencode
       - /opt/stacks/opencode-dev/state/opencode/state:/home/app/.local/state/opencode
       - /opt/stacks/opencode-dev/cache/opencode:/home/app/.cache/opencode
@@ -57,6 +59,8 @@ services:
       - /opt/stacks/opencode-dev/workspace:/home/app/workspace
       - /opt/stacks/opencode-dev/config/opencode:/home/app/.config/opencode
       - /opt/stacks/opencode-dev/state/opencode/qwen:/home/app/.qwen
+      - /opt/stacks/opencode-dev/state/opencode/kiro-cli:/home/app/.local/share/kiro-cli
+      - /opt/stacks/opencode-dev/state/opencode/cursor:/home/app/.cursor
       - /opt/stacks/opencode-dev/state/opencode/share:/home/app/.local/share/opencode
       - /opt/stacks/opencode-dev/state/opencode/state:/home/app/.local/state/opencode
       - /opt/stacks/opencode-dev/cache/opencode:/home/app/.cache/opencode
@@ -107,6 +111,8 @@ services:
       - /opt/stacks/opencode-dev/workspace:/home/app/workspace
       - /opt/stacks/opencode-dev/config/opencode:/home/app/.config/opencode
       - /opt/stacks/opencode-dev/state/opencode/qwen:/home/app/.qwen
+      - /opt/stacks/opencode-dev/state/opencode/kiro-cli:/home/app/.local/share/kiro-cli
+      - /opt/stacks/opencode-dev/state/opencode/cursor:/home/app/.cursor
       - /opt/stacks/opencode-dev/state/opencode/share:/home/app/.local/share/opencode
       - /opt/stacks/opencode-dev/state/opencode/state:/home/app/.local/state/opencode
       - /opt/stacks/opencode-dev/cache/opencode:/home/app/.cache/opencode
@@ -154,6 +160,8 @@ services:
       - /opt/stacks/opencode-dev/workspace:/home/app/workspace
       - /opt/stacks/opencode-dev/config/opencode:/home/app/.config/opencode
       - /opt/stacks/opencode-dev/state/opencode/qwen:/home/app/.qwen
+      - /opt/stacks/opencode-dev/state/opencode/kiro-cli:/home/app/.local/share/kiro-cli
+      - /opt/stacks/opencode-dev/state/opencode/cursor:/home/app/.cursor
       - /opt/stacks/opencode-dev/state/opencode/share:/home/app/.local/share/opencode
       - /opt/stacks/opencode-dev/state/opencode/state:/home/app/.local/state/opencode
       - /opt/stacks/opencode-dev/cache/opencode:/home/app/.cache/opencode
@@ -201,6 +209,8 @@ services:
       - /opt/stacks/opencode-dev/workspace:/home/app/workspace
       - /opt/stacks/opencode-dev/config/opencode:/home/app/.config/opencode
       - /opt/stacks/opencode-dev/state/opencode/qwen:/home/app/.qwen
+      - /opt/stacks/opencode-dev/state/opencode/kiro-cli:/home/app/.local/share/kiro-cli
+      - /opt/stacks/opencode-dev/state/opencode/cursor:/home/app/.cursor
       - /opt/stacks/opencode-dev/state/opencode/share:/home/app/.local/share/opencode
       - /opt/stacks/opencode-dev/state/opencode/state:/home/app/.local/state/opencode
       - /opt/stacks/opencode-dev/cache/opencode:/home/app/.cache/opencode
@@ -229,6 +239,104 @@ services:
     security_opt:
       - no-new-privileges:true
 
+  opencode-kiro-auth:
+    build:
+      context: /opt/stacks/opencode-dev
+      dockerfile: Dockerfile.opencode
+    container_name: opencode-kiro-auth
+    restart: unless-stopped
+    env_file: /opt/stacks/opencode-dev/.env
+    environment:
+      TZ: ${TZ:-Europe/Amsterdam}
+      HOME: /home/app
+      XDG_CONFIG_HOME: /home/app/.config
+      XDG_DATA_HOME: /home/app/.local/share
+      XDG_STATE_HOME: /home/app/.local/state
+      XDG_CACHE_HOME: /home/app/.cache
+    command: ["/usr/local/bin/opencode-kiro-auth.sh"]
+    volumes:
+      - /opt/stacks/opencode-dev/workspace:/home/app/workspace
+      - /opt/stacks/opencode-dev/config/opencode:/home/app/.config/opencode
+      - /opt/stacks/opencode-dev/state/opencode/qwen:/home/app/.qwen
+      - /opt/stacks/opencode-dev/state/opencode/kiro-cli:/home/app/.local/share/kiro-cli
+      - /opt/stacks/opencode-dev/state/opencode/cursor:/home/app/.cursor
+      - /opt/stacks/opencode-dev/state/opencode/share:/home/app/.local/share/opencode
+      - /opt/stacks/opencode-dev/state/opencode/state:/home/app/.local/state/opencode
+      - /opt/stacks/opencode-dev/cache/opencode:/home/app/.cache/opencode
+      - tmux-socket:/shared
+    networks:
+      - traefik-network
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: "traefik-network"
+      traefik.http.routers.opencode-kiro-auth.rule: "Host(`opencode.2631.eu`) && PathPrefix(`/kiro-auth`)"
+      traefik.http.routers.opencode-kiro-auth.entrypoints: "websecure"
+      traefik.http.routers.opencode-kiro-auth.tls: "true"
+      traefik.http.routers.opencode-kiro-auth.tls.certresolver: "gcore"
+      traefik.http.routers.opencode-kiro-auth.middlewares: "authelia@docker,webapp-chain@docker"
+      traefik.http.routers.opencode-kiro-auth.priority: "100"
+      traefik.http.services.opencode-kiro-auth.loadbalancer.server.port: "7685"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:7685/kiro-auth/ >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+    cpus: 1.0
+    mem_limit: 1g
+    pids_limit: 256
+    security_opt:
+      - no-new-privileges:true
+
+  opencode-cursor-auth:
+    build:
+      context: /opt/stacks/opencode-dev
+      dockerfile: Dockerfile.opencode
+    container_name: opencode-cursor-auth
+    restart: unless-stopped
+    env_file: /opt/stacks/opencode-dev/.env
+    environment:
+      TZ: ${TZ:-Europe/Amsterdam}
+      HOME: /home/app
+      XDG_CONFIG_HOME: /home/app/.config
+      XDG_DATA_HOME: /home/app/.local/share
+      XDG_STATE_HOME: /home/app/.local/state
+      XDG_CACHE_HOME: /home/app/.cache
+    command: ["/usr/local/bin/opencode-cursor-auth.sh"]
+    volumes:
+      - /opt/stacks/opencode-dev/workspace:/home/app/workspace
+      - /opt/stacks/opencode-dev/config/opencode:/home/app/.config/opencode
+      - /opt/stacks/opencode-dev/state/opencode/qwen:/home/app/.qwen
+      - /opt/stacks/opencode-dev/state/opencode/kiro-cli:/home/app/.local/share/kiro-cli
+      - /opt/stacks/opencode-dev/state/opencode/cursor:/home/app/.cursor
+      - /opt/stacks/opencode-dev/state/opencode/share:/home/app/.local/share/opencode
+      - /opt/stacks/opencode-dev/state/opencode/state:/home/app/.local/state/opencode
+      - /opt/stacks/opencode-dev/cache/opencode:/home/app/.cache/opencode
+      - tmux-socket:/shared
+    networks:
+      - traefik-network
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: "traefik-network"
+      traefik.http.routers.opencode-cursor-auth.rule: "Host(`opencode.2631.eu`) && PathPrefix(`/cursor-auth`)"
+      traefik.http.routers.opencode-cursor-auth.entrypoints: "websecure"
+      traefik.http.routers.opencode-cursor-auth.tls: "true"
+      traefik.http.routers.opencode-cursor-auth.tls.certresolver: "gcore"
+      traefik.http.routers.opencode-cursor-auth.middlewares: "authelia@docker,webapp-chain@docker"
+      traefik.http.routers.opencode-cursor-auth.priority: "100"
+      traefik.http.services.opencode-cursor-auth.loadbalancer.server.port: "7686"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:7686/cursor-auth/ >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+    cpus: 1.0
+    mem_limit: 1g
+    pids_limit: 256
+    security_opt:
+      - no-new-privileges:true
+
   openchamber:
     build:
       context: /opt/stacks/opencode-dev
@@ -246,6 +354,8 @@ services:
       - /opt/stacks/opencode-dev/state/openchamber-ssh:/home/openchamber/.ssh
       - /opt/stacks/opencode-dev/workspace:/home/openchamber/workspaces
       - /opt/stacks/opencode-dev/config/opencode:/home/openchamber/.config/opencode
+      - /opt/stacks/opencode-dev/state/opencode/kiro-cli:/home/openchamber/.local/share/kiro-cli
+      - /opt/stacks/opencode-dev/state/opencode/cursor:/home/openchamber/.cursor
       - /opt/stacks/opencode-dev/state/opencode/share:/home/openchamber/.local/share/opencode
       - /opt/stacks/opencode-dev/state/opencode/state:/home/openchamber/.local/state/opencode
       - /opt/stacks/opencode-dev/cache/opencode:/home/openchamber/.cache/opencode
@@ -333,6 +443,8 @@ services:
       - /opt/stacks/opencode-dev/config/opencode:/home/coder/opencode-config
       - /opt/stacks/opencode-dev/config/opencode:/home/coder/.config/opencode
       - /opt/stacks/opencode-dev/state/opencode/qwen:/home/coder/.qwen
+      - /opt/stacks/opencode-dev/state/opencode/kiro-cli:/home/coder/.local/share/kiro-cli
+      - /opt/stacks/opencode-dev/state/opencode/cursor:/home/coder/.cursor
       - /opt/stacks/opencode-dev/state/opencode/share:/home/coder/.local/share/opencode
       - /opt/stacks/opencode-dev/state/opencode/state:/home/coder/.local/state/opencode
       - /opt/stacks/opencode-dev/cache/opencode:/home/coder/.cache/opencode

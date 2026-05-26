@@ -36,6 +36,14 @@ run_compose() {
   fi
 }
 
+stack_compose_args() {
+  local files="${OPENCODE_UPDATER_STACK_COMPOSE_FILES:-compose.yaml}"
+  local file
+  for file in $files; do
+    printf '%s\0%s\0' -f "$stack_target/$file"
+  done
+}
+
 mkdir -p "$(dirname "$repo_dir")"
 mkdir -p "$(dirname "$lock_file")"
 
@@ -123,8 +131,10 @@ if [ "$sync_stack" = "true" ] && [ "$skip_repo_sync" != "true" ]; then
   sync_dir "$repo_dir/generated/2631de/opencode-dev" "$stack_target" \
     --exclude '.env' \
     --exclude 'workspace/' \
+    --exclude 'icloud-drive/' \
     --exclude 'state/' \
     --exclude 'cache/' \
+    --exclude 'logs/' \
     --exclude 'config/ssh/authorized_keys'
 fi
 
@@ -140,7 +150,8 @@ fi
 
 if [ "$update_stack" = "true" ]; then
   log "updating stack services"
-  run_compose -f "$stack_target/compose.yaml" up -d --build --pull "$pull_policy" $stack_services
+  mapfile -d '' stack_args < <(stack_compose_args)
+  run_compose "${stack_args[@]}" up -d --build --pull "$pull_policy" $stack_services
 fi
 
 if [ "$refresh_updater" = "true" ]; then

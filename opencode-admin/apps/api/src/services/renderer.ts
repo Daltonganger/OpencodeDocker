@@ -7,6 +7,10 @@ function providerNpm(provider: ProviderEntry): string {
   return '@ai-sdk/openai-compatible';
 }
 
+function isPluginManagedProvider(provider: ProviderEntry): boolean {
+  return provider.type === 'plugin' || provider.metadata?.pluginManaged === true;
+}
+
 function providerOptions(provider: ProviderEntry): Record<string, string> {
   const options: Record<string, unknown> = {};
   if (provider.secretRef) options.apiKey = `{env:${provider.secretRef}}`;
@@ -202,11 +206,12 @@ export function renderConfigs(sources: CombinedSources): RenderedConfigs {
     small_model: smallAgent ? modelRef(renderedProviders, smallAgent[1].primary.provider, smallAgent[1].primary.model) : 'openai/gpt-4o-mini',
     provider: Object.fromEntries(
       renderedProviders.map((provider) => {
+        const models = renderProviderModels(provider);
+        const whitelist = renderProviderWhitelist(provider);
         const config = {
-          npm: providerNpm(provider),
-          options: providerOptions(provider),
-          ...(renderProviderModels(provider) ? { models: renderProviderModels(provider) } : {}),
-          ...(renderProviderWhitelist(provider) ? { whitelist: renderProviderWhitelist(provider) } : {}),
+          ...(isPluginManagedProvider(provider) ? {} : { npm: providerNpm(provider), options: providerOptions(provider) }),
+          ...(models ? { models } : {}),
+          ...(whitelist ? { whitelist } : {}),
         };
 
         return [runtimeProviderKey(provider), config];

@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-mkdir -p /shared /home/app/workspace /home/app/.config/opencode /home/app/.qwen /home/app/.local/share/opencode /home/app/.local/state/opencode /home/app/.cache/opencode
+mkdir -p /shared /home/app/workspace /home/app/.config/opencode /home/app/.cursor /home/app/.qwen /home/app/.local/share/kiro-cli /home/app/.local/share/opencode /home/app/.local/state/opencode /home/app/.cache/opencode
 chown -R app:app \
   /shared \
   /home/app/workspace \
   /home/app/.config/opencode \
+  /home/app/.cursor \
   /home/app/.qwen \
+  /home/app/.local/share/kiro-cli \
   /home/app/.local/share/opencode \
   /home/app/.local/state/opencode \
   /home/app/.cache/opencode
@@ -38,13 +40,15 @@ if cache_path.exists():
     deps = json.loads(cache_path.read_text()).get('dependencies', {})
 
 def package_name(spec: str) -> str:
+    if spec.startswith(('file:', '/', './', '../')):
+        return ''
     if spec.startswith('@'):
         slash = spec.find('/')
         last_at = spec.rfind('@')
         return spec[:last_at] if last_at > slash else spec
     return spec.split('@', 1)[0]
 
-print('\n'.join(spec for spec in plugins if package_name(spec) not in deps))
+print('\n'.join(spec for spec in plugins if package_name(spec) and package_name(spec) not in deps))
 PY
 )"
 
