@@ -3,6 +3,7 @@ services:
     image: ${ICLOUD_RCLONE_IMAGE:-rclone/rclone:latest}
     container_name: icloud-rclone
     restart: unless-stopped
+    network_mode: host
     env_file: /opt/stacks/opencode-dev/.env
     environment:
       TZ: ${TZ:-Europe/Amsterdam}

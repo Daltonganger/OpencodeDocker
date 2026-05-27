@@ -32,6 +32,7 @@ echo "Starting rclone mount: ${ICLOUD_RCLONE_REMOTE} -> /mnt/icloud"
 
 exec rclone mount "$ICLOUD_RCLONE_REMOTE" /mnt/icloud \
   --allow-other \
+  --allow-non-empty \
   --vfs-cache-mode=full \
   --vfs-cache-max-size="$ICLOUD_RCLONE_VFS_CACHE_MAX_SIZE" \
   --vfs-cache-max-age="$ICLOUD_RCLONE_VFS_CACHE_MAX_AGE" \

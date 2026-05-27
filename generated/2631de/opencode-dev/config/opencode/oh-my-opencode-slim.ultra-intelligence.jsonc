@@ -1,0 +1,139 @@
+{// Managed by opencode-admin — preset: ultra-intelligence
+
+  "preset": "ultra-intelligence",
+  "presets": {
+    "ultra-intelligence": {
+      "orchestrator": {
+        "model": "cursor-acp/composer-2.5",
+        "variant": "default",
+        "skills": [
+          "*"
+        ],
+        "mcps": [
+          "searxng",
+          "tavily-search",
+          "websearch"
+        ]
+      },
+      "oracle": {
+        "model": "kiro-auth/claude-opus-4-7",
+        "variant": "default",
+        "skills": [],
+        "mcps": []
+      },
+      "librarian": {
+        "model": "google/antigravity-gemini-3.5-flash-high",
+        "variant": "default",
+        "skills": [],
+        "mcps": [
+          "searxng",
+          "tavily-search",
+          "websearch",
+          "context7",
+          "grep_app"
+        ]
+      },
+      "explorer": {
+        "model": "opencommand/Qwen/Qwen3.7-Max",
+        "variant": "default",
+        "skills": [],
+        "mcps": [
+          "grep_app",
+          "searxng",
+          "tavily-search",
+          "websearch"
+        ]
+      },
+      "designer": {
+        "model": "github-copilot/gemini-3.1-pro-preview",
+        "variant": "default",
+        "skills": [
+          "agent-browser"
+        ],
+        "mcps": [
+          "searxng",
+          "tavily-search",
+          "websearch"
+        ]
+      },
+      "fixer": {
+        "model": "opencommand/deepseek/deepseek-v4-pro",
+        "variant": "medium",
+        "skills": [],
+        "mcps": []
+      },
+      "observer": {
+        "model": "github-copilot/gemini-3.1-pro-preview",
+        "variant": "default",
+        "skills": [
+          "agent-browser"
+        ],
+        "mcps": [
+          "searxng",
+          "tavily-search",
+          "websearch"
+        ]
+      }
+    }
+  },
+  "tmux": {
+    "enabled": true,
+    "layout": "main-vertical"
+  },
+  "council": {
+    "default_preset": "default",
+    "timeout": 180000,
+    "councillor_execution_mode": "parallel",
+    "councillor_retries": 3,
+    "presets": {
+      "default": {
+        "alpha": {
+          "model": "kiro-auth/claude-sonnet-4-6",
+          "variant": "default"
+        },
+        "beta": {
+          "model": "openai/gpt-5.5",
+          "variant": "high"
+        },
+        "gamma": {
+          "model": "opencommand/deepseek/deepseek-v4-pro",
+          "variant": "medium"
+        }
+      },
+      "ultra-intelligence": {
+        "alpha": {
+          "model": "kiro-auth/claude-opus-4-7",
+          "variant": "default"
+        },
+        "beta": {
+          "model": "cursor-acp/claude-opus-4-7",
+          "variant": "thinking-high"
+        },
+        "gamma": {
+          "model": "opencommand/Qwen/Qwen3.7-Max",
+          "variant": "default"
+        }
+      },
+      "fast": {
+        "quick-openai": {
+          "model": "openai/gpt-5.4-mini",
+          "variant": "high"
+        },
+        "quick-zai": {
+          "model": "zai-coding-plan/glm-5-turbo",
+          "variant": "default"
+        },
+        "quick-gemini": {
+          "model": "google/antigravity-gemini-3.5-flash",
+          "variant": "high"
+        }
+      }
+    },
+    "master": {
+      "model": "openai/gpt-5.5",
+      "variant": "high"
+    },
+    "master_timeout": 180000,
+    "councillors_timeout": 180000
+  }
+}

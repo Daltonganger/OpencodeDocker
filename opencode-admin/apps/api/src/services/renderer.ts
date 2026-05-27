@@ -1,4 +1,4 @@
-import type { CombinedSources, McpServerEntry, ProviderEntry, RenderedConfigs } from '../types/index.js';
+import type { AgentModelRef, AgentRouteConfig, CombinedSources, McpServerEntry, ProviderEntry, RenderedConfigs } from '../types/index.js';
 
 function providerNpm(provider: ProviderEntry): string {
   if (provider.type === 'anthropic') return '@ai-sdk/anthropic';
@@ -43,7 +43,38 @@ function normalizeModelLimit(limit?: { context?: number; output?: number }): { c
   };
 }
 
+function readRecord(value: unknown): Record<string, unknown> | undefined {
+  return value && typeof value === 'object' && !Array.isArray(value) ? value as Record<string, unknown> : undefined;
+}
+
+function renderSourceProviderModels(provider: ProviderEntry): Record<string, unknown> | undefined {
+  if (!provider.models?.length) return undefined;
+
+  return Object.fromEntries(provider.models.map((model) => {
+    const opencodeModel = readRecord(model.metadata?.opencodeModel) ?? {};
+    return [
+      model.id,
+      {
+        id: model.id,
+        name: model.name,
+        limit: normalizeModelLimit(model.limit),
+        ...(model.pricing && (model.pricing.input !== undefined || model.pricing.output !== undefined)
+          ? {
+              cost: {
+                input: model.pricing.input ?? 0,
+                output: model.pricing.output ?? 0,
+              },
+            }
+          : {}),
+        ...opencodeModel,
+      },
+    ];
+  }));
+}
+
 function renderProviderModels(provider: ProviderEntry): Record<string, unknown> | undefined {
+  if (provider.metadata?.renderModelsFromSource === true) return renderSourceProviderModels(provider);
+
   if (provider.id === 'google') {
     return {
       'antigravity-gemini-3-pro': {
@@ -134,23 +165,7 @@ function renderProviderModels(provider: ProviderEntry): Record<string, unknown> 
     };
   }
 
-  if (!provider.models?.length) return undefined;
-  return Object.fromEntries(provider.models.map((model) => [
-    model.id,
-    {
-      id: model.id,
-      name: model.name,
-      limit: normalizeModelLimit(model.limit),
-      ...(model.pricing && (model.pricing.input !== undefined || model.pricing.output !== undefined)
-        ? {
-            cost: {
-              input: model.pricing.input ?? 0,
-              output: model.pricing.output ?? 0,
-            },
-          }
-        : {}),
-    },
-  ]));
+  return renderSourceProviderModels(provider);
 }
 
 function renderProviderWhitelist(provider: ProviderEntry): string[] | undefined {
@@ -188,6 +203,27 @@ function modelRef(providers: ProviderEntry[], provider: string, model: string): 
   return `${normalizeProviderRef(providers, provider)}/${model}`;
 }
 
+function agentModelRef(providers: ProviderEntry[], ref: AgentModelRef): string {
+  return modelRef(providers, ref.provider, ref.model);
+}
+
+function renderAgentRoute(providers: ProviderEntry[], agent: AgentRouteConfig): Record<string, unknown> {
+  return {
+    model: agentModelRef(providers, agent.primary),
+    ...(agent.primary.variant ? { variant: agent.primary.variant } : {}),
+    ...(agent.skillsPolicy === 'all'
+      ? { skills: ['*'] }
+      : agent.skillsPolicy === 'selected'
+        ? { skills: agent.skillsAllowlist }
+        : { skills: [] }),
+    ...(agent.mcpAccess === 'all'
+      ? { mcps: ['*'] }
+      : agent.mcpAccess === 'selected'
+        ? { mcps: agent.mcpAllowlist }
+        : { mcps: [] }),
+  };
+}
+
 export function renderConfigs(sources: CombinedSources): RenderedConfigs {
   const enabledProviders = sources.providers.providers.filter((provider) => provider.enabled);
   const renderedProviders = enabledProviders.filter((provider) => provider.type !== 'builtin');
@@ -202,8 +238,15 @@ export function renderConfigs(sources: CombinedSources): RenderedConfigs {
 
   const opencode = {
     $schema: 'https://opencode.ai/config.json',
-    model: defaultAgent ? modelRef(renderedProviders, defaultAgent[1].primary.provider, defaultAgent[1].primary.model) : 'openai/gpt-4o-mini',
-    small_model: smallAgent ? modelRef(renderedProviders, smallAgent[1].primary.provider, smallAgent[1].primary.model) : 'openai/gpt-4o-mini',
+    model: typeof sources.routing.metadata?.model === 'string'
+      ? sources.routing.metadata.model
+      : defaultAgent ? agentModelRef(renderedProviders, defaultAgent[1].primary) : 'openai/gpt-4o-mini',
+    small_model: typeof sources.routing.metadata?.smallModel === 'string'
+      ? sources.routing.metadata.smallModel
+      : smallAgent ? agentModelRef(renderedProviders, smallAgent[1].primary) : 'openai/gpt-4o-mini',
+    ...(typeof sources.routing.metadata?.defaultAgent === 'string' ? { default_agent: sources.routing.metadata.defaultAgent } : {}),
+    ...(Array.isArray(sources.routing.metadata?.instructions) ? { instructions: sources.routing.metadata.instructions } : {}),
+    ...(Array.isArray(sources.providers.metadata?.disabledProviders) ? { disabled_providers: sources.providers.metadata.disabledProviders } : {}),
     provider: Object.fromEntries(
       renderedProviders.map((provider) => {
         const models = renderProviderModels(provider);
@@ -230,31 +273,19 @@ export function renderConfigs(sources: CombinedSources): RenderedConfigs {
   const agentPreset = Object.fromEntries(
     Object.entries(sources.routing.agents).filter(([, agent]) => agent.enabled).map(([id, agent]) => [
       id,
-      {
-        model: modelRef(renderedProviders, agent.primary.provider, agent.primary.model),
-        ...(agent.skillsPolicy === 'all'
-          ? { skills: ['*'] }
-          : agent.skillsPolicy === 'selected'
-            ? { skills: agent.skillsAllowlist }
-            : { skills: [] }),
-        ...(agent.mcpAccess === 'all'
-          ? { mcps: ['*'] }
-          : agent.mcpAccess === 'selected'
-            ? { mcps: agent.mcpAllowlist }
-            : { mcps: [] }),
-      },
+      renderAgentRoute(renderedProviders, agent),
     ])
   );
+
+  const renderPresetAgents = (presetId: string) => sources.routing.agentPresets?.[presetId] ?? agentPreset;
 
   // Build all presets, not just the active one
   const allAgentPresets: Record<string, Record<string, unknown>> = {};
   for (const [presetId] of Object.entries(sources.routing.presets)) {
-    // For now, all presets render the same agent models (they share one agent routing config)
-    // The activePreset is the "live" one; others get the same agent map as a starting point
-    allAgentPresets[presetId] = agentPreset;
+    allAgentPresets[presetId] = renderPresetAgents(presetId);
   }
   // Ensure the active preset is always included (in case presets map is empty)
-  allAgentPresets[activePreset] = agentPreset;
+  allAgentPresets[activePreset] = renderPresetAgents(activePreset);
 
   const slimObject: Record<string, unknown> = {
     preset: activePreset,
@@ -276,7 +307,7 @@ export function renderConfigs(sources: CombinedSources): RenderedConfigs {
   for (const [presetId] of Object.entries(sources.routing.presets)) {
     const presetSlimObject: Record<string, unknown> = {
       preset: presetId,
-      presets: { [presetId]: agentPreset },
+      presets: { [presetId]: renderPresetAgents(presetId) },
       tmux: { enabled: true, layout: 'main-vertical' },
     };
     if (sources.routing.council) {

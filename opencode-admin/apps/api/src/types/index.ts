@@ -5,6 +5,7 @@ export const AGENT_IDS = [
   'librarian',
   'designer',
   'fixer',
+  'observer',
 ] as const;
 
 export type AgentId = (typeof AGENT_IDS)[number];
@@ -19,6 +20,14 @@ export interface Metadata {
 export interface AgentModelRef {
   provider: string;
   model: string;
+  variant?: string;
+}
+
+export interface PresetAgentConfig {
+  model: string;
+  variant?: string;
+  skills?: string[];
+  mcps?: string[];
 }
 
 export interface AgentRouteConfig {
@@ -73,6 +82,7 @@ export interface RoutingSource {
   defaultPreset: string;
   agents: Record<string, AgentRouteConfig>;
   presets: Record<string, { name: string; description: string }>;
+  agentPresets?: Record<string, Record<string, PresetAgentConfig>>;
   council?: CouncilConfig;
   metadata?: Metadata;
 }

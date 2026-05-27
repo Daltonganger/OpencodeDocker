@@ -75,9 +75,9 @@ function StatCard({ label, value, subtext }: { label: string; value: number; sub
 
 function InfoRow({ label, value, mono, status }: { label: string; value: string; mono?: boolean; status?: 'warning' | 'success' }) {
   return (
-    <div style={{ display: 'flex', justifyContent: 'space-between', gap: 16, padding: '10px 0', borderBottom: '1px solid var(--border-primary)' }}>
-      <span style={{ color: 'var(--text-secondary)' }}>{label}</span>
-      <span style={{ fontFamily: mono ? 'SF Mono, Menlo, monospace' : undefined, color: status === 'warning' ? 'var(--accent-warning)' : status === 'success' ? 'var(--accent-success)' : 'var(--text-primary)' }}>{value}</span>
+    <div className="info-row">
+      <span className="info-row-label">{label}</span>
+      <span className={`info-row-value ${mono ? 'mono' : ''} ${status || ''}`}>{value}</span>
     </div>
   );
 }

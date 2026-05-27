@@ -1,588 +1,10 @@
 {
-  "$schema": "./schemas/providers.schema.json",
   "version": "1.0.0",
   "providers": [
     {
-      "id": "google",
-      "alias": "google",
-      "name": "Google / Antigravity",
-      "type": "google",
-      "baseUrl": "",
-      "enabled": true,
-      "secretRef": "",
-      "models": [
-        {
-          "id": "antigravity-gemini-3-flash",
-          "name": "Gemini 3 Flash (Antigravity)",
-          "capabilities": [
-            "reasoning",
-            "fast"
-          ],
-          "recommended": true
-        },
-        {
-          "id": "antigravity-gemini-3-pro",
-          "name": "Gemini 3 Pro (Antigravity)",
-          "capabilities": [
-            "reasoning",
-            "code"
-          ]
-        },
-        {
-          "id": "antigravity-gemini-3.1-pro",
-          "name": "Gemini 3.1 Pro (Antigravity)",
-          "capabilities": [
-            "reasoning",
-            "code"
-          ]
-        },
-        {
-          "id": "antigravity-claude-sonnet-4-6",
-          "name": "Claude Sonnet 4.6 (Antigravity)",
-          "capabilities": [
-            "reasoning",
-            "code"
-          ]
-        },
-        {
-          "id": "antigravity-claude-opus-4-6-thinking",
-          "name": "Claude Opus 4.6 Thinking (Antigravity)",
-          "capabilities": [
-            "reasoning"
-          ]
-        },
-        {
-          "id": "gemini-2.5-flash",
-          "name": "Gemini 2.5 Flash (Gemini CLI)",
-          "capabilities": [
-            "fast",
-            "budget"
-          ]
-        },
-        {
-          "id": "gemini-2.5-pro",
-          "name": "Gemini 2.5 Pro (Gemini CLI)",
-          "capabilities": [
-            "reasoning",
-            "code"
-          ]
-        },
-        {
-          "id": "gemini-3-flash-preview",
-          "name": "Gemini 3 Flash Preview (Gemini CLI)",
-          "capabilities": [
-            "fast",
-            "budget"
-          ]
-        },
-        {
-          "id": "gemini-3-pro-preview",
-          "name": "Gemini 3 Pro Preview (Gemini CLI)",
-          "capabilities": [
-            "reasoning",
-            "code"
-          ]
-        },
-        {
-          "id": "gemini-3.1-pro-preview",
-          "name": "Gemini 3.1 Pro Preview (Gemini CLI)",
-          "capabilities": [
-            "reasoning",
-            "code"
-          ]
-        },
-        {
-          "id": "gemini-3.1-pro-preview-customtools",
-          "name": "Gemini 3.1 Pro Preview Custom Tools (Gemini CLI)",
-          "capabilities": [
-            "reasoning",
-            "code"
-          ]
-        }
-      ],
-      "defaultModel": "antigravity-gemini-3-flash"
-    },
-    {
-      "id": "openai",
-      "alias": "openai",
-      "name": "OpenAI",
-      "type": "openai",
-      "baseUrl": "https://api.openai.com/v1",
-      "enabled": false,
-      "secretRef": "OPENAI_API_KEY",
-      "models": [
-        {
-          "id": "gpt-4o",
-          "name": "GPT-4o",
-          "capabilities": [
-            "reasoning",
-            "code"
-          ],
-          "recommended": true
-        },
-        {
-          "id": "gpt-4o-mini",
-          "name": "GPT-4o Mini",
-          "capabilities": [
-            "fast",
-            "budget",
-            "code"
-          ]
-        }
-      ],
-      "defaultModel": "gpt-4o"
-    },
-    {
-      "id": "openrouter",
-      "alias": "openrouter",
-      "name": "OpenRouter",
-      "type": "openai-compatible",
-      "baseUrl": "https://openrouter.ai/api/v1",
-      "enabled": true,
-      "secretRef": "OPENROUTER_API_KEY",
-      "models": [
-        {
-          "id": "openai/gpt-4o-mini",
-          "name": "GPT-4o Mini via OpenRouter",
-          "capabilities": [
-            "research",
-            "budget"
-          ]
-        },
-        {
-          "id": "anthropic/claude-3.5-sonnet",
-          "name": "Claude 3.5 Sonnet via OpenRouter",
-          "capabilities": [
-            "reasoning",
-            "code"
-          ]
-        }
-      ],
-      "defaultModel": "openai/gpt-4o-mini"
-    },
-    {
-      "id": "codexlb",
-      "alias": "codexlb",
-      "name": "Codex (codex.2631.eu)",
-      "type": "openai-compatible",
-      "baseUrl": "https://codex.2631.eu/v1",
-      "enabled": true,
-      "secretRef": "CODEXLB_API_KEY",
-      "models": [
-        {
-          "id": "gpt-5",
-          "name": "Gpt 5",
-          "capabilities": [
-            "reasoning",
-            "code",
-            "fast",
-            "budget",
-            "multimodal"
-          ],
-          "recommended": true,
-          "limit": {
-            "context": 272000,
-            "output": 8192
-          }
-        },
-        {
-          "id": "gpt-5.4",
-          "name": "Gpt 5.4",
-          "capabilities": [
-            "reasoning",
-            "code",
-            "fast",
-            "budget",
-            "multimodal"
-          ],
-          "limit": {
-            "context": 272000,
-            "output": 8192
-          }
-        }
-      ],
-      "defaultModel": "gpt-5"
-    },
-    {
-      "id": "chat2631",
-      "alias": "chat2631",
-      "name": "chat.2631.eu",
-      "type": "openai-compatible",
-      "baseUrl": "https://chat.2631.eu/v1",
-      "enabled": true,
-      "secretRef": "CHAT2631_API_KEY",
-      "models": [
-        {
-          "id": "anthropic/claude-haiku-4-5",
-          "name": "Anthropic/Claude Haiku 4 5",
-          "capabilities": [
-            "reasoning",
-            "code"
-          ],
-          "limit": {
-            "context": 200000,
-            "output": 8192
-          }
-        },
-        {
-          "id": "google/gemini-3-flash-preview",
-          "name": "Google/Gemini 3 Flash Preview",
-          "capabilities": [
-            "code",
-            "fast",
-            "budget"
-          ],
-          "limit": {
-            "context": 1000000,
-            "output": 8192
-          }
-        }
-      ],
-      "defaultModel": "anthropic/claude-haiku-4-5"
-    },
-    {
-      "id": "nanogpt",
-      "alias": "nanogpt",
-      "name": "NanoGPT / NanoProxy",
-      "type": "openai-compatible",
-      "baseUrl": "https://nanoproxy.2631.eu/v1",
-      "enabled": true,
-      "secretRef": "NANOGPT_API_KEY",
-      "models": [
-        {
-          "id": "auto-model-standard",
-          "name": "NanoGPT Auto Standard",
-          "capabilities": [
-            "budget",
-            "reasoning"
-          ],
-          "recommended": true
-        },
-        {
-          "id": "auto-model-premium",
-          "name": "NanoGPT Auto Premium",
-          "capabilities": [
-            "reasoning",
-            "code"
-          ]
-        },
-        {
-          "id": "auto-model-basic",
-          "name": "NanoGPT Auto Basic",
-          "capabilities": [
-            "fast",
-            "budget"
-          ]
-        },
-        {
-          "id": "moonshotai/kimi-k2.5:thinking",
-          "name": "Moonshotai/Kimi K2.5:Thinking",
-          "capabilities": [
-            "reasoning",
-            "code"
-          ]
-        },
-        {
-          "id": "zai-org/glm-5:thinking",
-          "name": "Zai Org/Glm 5:Thinking",
-          "capabilities": [
-            "reasoning",
-            "code"
-          ]
-        }
-      ],
-      "defaultModel": "auto-model-standard"
-    },
-    {
-      "id": "nvidia",
-      "alias": "nvidia",
-      "name": "NVIDIA NIM",
-      "type": "openai-compatible",
-      "baseUrl": "https://integrate.api.nvidia.com/v1",
-      "enabled": false,
-      "secretRef": "NVIDIA_API_KEY",
-      "models": [
-        {
-          "id": "nvidia/llama-3.1-nemotron-70b-instruct",
-          "name": "Nemotron 70B",
-          "capabilities": [
-            "budget",
-            "reasoning"
-          ]
-        }
-      ],
-      "defaultModel": "nvidia/llama-3.1-nemotron-70b-instruct"
-    },
-    {
-      "id": "qwen-code",
-      "alias": "qwen-code",
-      "name": "Qwen Code",
-      "type": "openai-compatible",
-      "baseUrl": "https://portal.qwen.ai/v1",
-      "enabled": true,
-      "secretRef": "",
-      "models": [
-        {
-          "id": "coder-model",
-          "name": "Qwen Coder (Qwen 3.5 Plus)",
-          "capabilities": [
-            "reasoning",
-            "code"
-          ],
-          "recommended": true
-        },
-        {
-          "id": "vision-model",
-          "name": "Qwen VL Plus (Vision)",
-          "capabilities": [
-            "multimodal"
-          ]
-        }
-      ],
-      "defaultModel": "coder-model"
-    },
-    {
-      "id": "kilo",
-      "alias": "kilo",
-      "name": "Kilo Gateway",
-      "type": "openai-compatible",
-      "baseUrl": "https://api.kilo.ai/api/gateway",
-      "enabled": true,
-      "secretRef": "KILO_GATEWAY_API_KEY",
-      "models": [
-        {
-          "id": "minimax/minimax-m2.5:free",
-          "name": "Minimax/Minimax M2.5:Free",
-          "capabilities": [
-            "fast",
-            "budget"
-          ]
-        },
-        {
-          "id": "openrouter/hunter-alpha",
-          "name": "Openrouter/Hunter Alpha",
-          "capabilities": [
-            "reasoning",
-            "code"
-          ]
-        }
-      ],
-      "defaultModel": "minimax/minimax-m2.5:free"
-    },
-    {
-      "id": "zai",
-      "alias": "z.ai",
-      "name": "Z.AI",
-      "type": "openai-compatible",
-      "baseUrl": "https://api.z.ai/api/coding/paas/v4",
-      "enabled": false,
-      "secretRef": "ZAI_API_KEY",
-      "models": [
-        {
-          "id": "glm-4.5",
-          "name": "Glm 4.5",
-          "capabilities": [
-            "reasoning"
-          ]
-        },
-        {
-          "id": "glm-4.5-air",
-          "name": "Glm 4.5 Air",
-          "capabilities": [
-            "reasoning",
-            "budget"
-          ]
-        },
-        {
-          "id": "glm-4.6",
-          "name": "Glm 4.6",
-          "capabilities": [
-            "reasoning"
-          ]
-        },
-        {
-          "id": "glm-4.7",
-          "name": "Glm 4.7",
-          "capabilities": [
-            "reasoning"
-          ]
-        },
-        {
-          "id": "glm-5",
-          "name": "Glm 5",
-          "capabilities": [
-            "reasoning",
-            "code"
-          ]
-        }
-      ],
-      "defaultModel": "glm-5"
-    },
-    {
-      "id": "kiro",
-      "alias": "kiro",
-      "name": "Kiro CLI/Auth",
-      "type": "plugin",
-      "baseUrl": "",
-      "enabled": true,
-      "secretRef": "",
-      "models": [
-        {
-          "id": "auto",
-          "name": "Kiro Auto",
-          "capabilities": [
-            "code",
-            "reasoning"
-          ],
-          "recommended": true,
-          "limit": {
-            "context": 200000,
-            "output": 8192
-          }
-        },
-        {
-          "id": "claude-sonnet-4-6",
-          "name": "Claude Sonnet 4.6 (Kiro)",
-          "capabilities": [
-            "code",
-            "reasoning"
-          ],
-          "limit": {
-            "context": 200000,
-            "output": 8192
-          }
-        },
-        {
-          "id": "claude-sonnet-4-6-thinking",
-          "name": "Claude Sonnet 4.6 Thinking (Kiro)",
-          "capabilities": [
-            "code",
-            "reasoning"
-          ],
-          "limit": {
-            "context": 200000,
-            "output": 8192
-          }
-        },
-        {
-          "id": "claude-opus-4-6",
-          "name": "Claude Opus 4.6 (Kiro)",
-          "capabilities": [
-            "code",
-            "reasoning"
-          ],
-          "limit": {
-            "context": 200000,
-            "output": 8192
-          }
-        },
-        {
-          "id": "claude-opus-4-6-thinking",
-          "name": "Claude Opus 4.6 Thinking (Kiro)",
-          "capabilities": [
-            "code",
-            "reasoning"
-          ],
-          "limit": {
-            "context": 200000,
-            "output": 8192
-          }
-        },
-        {
-          "id": "claude-opus-4-6-1m",
-          "name": "Claude Opus 4.6 1M (Kiro)",
-          "capabilities": [
-            "code",
-            "reasoning"
-          ],
-          "limit": {
-            "context": 1000000,
-            "output": 8192
-          }
-        },
-        {
-          "id": "claude-opus-4-6-1m-thinking",
-          "name": "Claude Opus 4.6 1M Thinking (Kiro)",
-          "capabilities": [
-            "code",
-            "reasoning"
-          ],
-          "limit": {
-            "context": 1000000,
-            "output": 8192
-          }
-        },
-        {
-          "id": "claude-haiku-4-5",
-          "name": "Claude Haiku 4.5 (Kiro)",
-          "capabilities": [
-            "fast",
-            "budget"
-          ],
-          "limit": {
-            "context": 200000,
-            "output": 8192
-          }
-        },
-        {
-          "id": "claude-sonnet-4-5",
-          "name": "Claude Sonnet 4.5 (Kiro)",
-          "capabilities": [
-            "code",
-            "reasoning"
-          ],
-          "limit": {
-            "context": 200000,
-            "output": 8192
-          }
-        },
-        {
-          "id": "claude-sonnet-4-5-thinking",
-          "name": "Claude Sonnet 4.5 Thinking (Kiro)",
-          "capabilities": [
-            "code",
-            "reasoning"
-          ],
-          "limit": {
-            "context": 200000,
-            "output": 8192
-          }
-        },
-        {
-          "id": "deepseek-3.2",
-          "name": "DeepSeek 3.2 (Kiro)",
-          "capabilities": [
-            "code",
-            "reasoning"
-          ],
-          "limit": {
-            "context": 200000,
-            "output": 8192
-          }
-        },
-        {
-          "id": "qwen3-coder-next",
-          "name": "Qwen3 Coder Next (Kiro)",
-          "capabilities": [
-            "code"
-          ],
-          "limit": {
-            "context": 200000,
-            "output": 8192
-          }
-        }
-      ],
-      "defaultModel": "auto",
-      "metadata": {
-        "pluginManaged": true,
-        "authPlugin": "@zhafron/opencode-kiro-auth",
-        "note": "Plugin-managed provider. Do not render npm/options; auth is synced from kiro-cli via @zhafron/opencode-kiro-auth."
-      }
-    },
-    {
       "id": "cursor-acp",
       "alias": "cursor-acp",
-      "name": "Cursor ACP local proxy",
+      "name": "Cursor",
       "type": "openai-compatible",
       "baseUrl": "http://127.0.0.1:32124/v1",
       "enabled": true,
@@ -590,58 +12,3277 @@
       "models": [
         {
           "id": "auto",
-          "name": "Cursor Auto",
+          "name": "Auto",
           "capabilities": [
-            "code",
-            "reasoning"
+            "general"
           ],
-          "recommended": true
+          "metadata": {
+            "opencodeModel": {
+              "name": "Auto",
+              "cost": {
+                "input": 1.25,
+                "output": 6,
+                "cache_read": 0.25,
+                "cache_write": 1.25
+              }
+            },
+            "source": "local-opencode"
+          },
+          "pricing": {
+            "input": 1.25,
+            "output": 6
+          }
         },
         {
           "id": "composer-2",
-          "name": "Cursor Composer 2",
+          "name": "Composer 2",
           "capabilities": [
             "code",
-            "reasoning"
-          ]
+            "fast"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "Composer 2",
+              "options": {
+                "cursorModel": "composer-2"
+              },
+              "variants": {
+                "fast": {
+                  "cursorModel": "composer-2-fast",
+                  "cost": {
+                    "input": 1.5,
+                    "output": 7.5,
+                    "cache_read": 0.35,
+                    "cache_write": 1.5
+                  }
+                }
+              },
+              "cost": {
+                "input": 0.5,
+                "output": 2.5,
+                "cache_read": 0.2,
+                "cache_write": 0.5
+              }
+            },
+            "source": "local-opencode"
+          },
+          "pricing": {
+            "input": 0.5,
+            "output": 2.5
+          }
+        },
+        {
+          "id": "composer-1.5",
+          "name": "Composer 1.5",
+          "capabilities": [
+            "code"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "Composer 1.5",
+              "cost": {
+                "input": 3.5,
+                "output": 17.5,
+                "cache_read": 0.35,
+                "cache_write": 3.5
+              }
+            },
+            "source": "local-opencode"
+          },
+          "pricing": {
+            "input": 3.5,
+            "output": 17.5
+          }
         },
         {
           "id": "gpt-5.3-codex",
-          "name": "Cursor GPT-5.3 Codex",
+          "name": "Codex 5.3",
           "capabilities": [
+            "reasoning",
             "code",
-            "reasoning"
-          ]
+            "fast"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "Codex 5.3",
+              "options": {
+                "cursorModel": "gpt-5.3-codex"
+              },
+              "variants": {
+                "low": {
+                  "cursorModel": "gpt-5.3-codex-low",
+                  "cost": {
+                    "input": 1.75,
+                    "output": 14,
+                    "cache_read": 0.175,
+                    "cache_write": 1.75
+                  }
+                },
+                "low-fast": {
+                  "cursorModel": "gpt-5.3-codex-low-fast",
+                  "cost": {
+                    "input": 1.75,
+                    "output": 14,
+                    "cache_read": 0.175,
+                    "cache_write": 1.75
+                  }
+                },
+                "fast": {
+                  "cursorModel": "gpt-5.3-codex-fast",
+                  "cost": {
+                    "input": 1.75,
+                    "output": 14,
+                    "cache_read": 0.175,
+                    "cache_write": 1.75
+                  }
+                },
+                "high": {
+                  "cursorModel": "gpt-5.3-codex-high",
+                  "cost": {
+                    "input": 1.75,
+                    "output": 14,
+                    "cache_read": 0.175,
+                    "cache_write": 1.75
+                  }
+                },
+                "high-fast": {
+                  "cursorModel": "gpt-5.3-codex-high-fast",
+                  "cost": {
+                    "input": 1.75,
+                    "output": 14,
+                    "cache_read": 0.175,
+                    "cache_write": 1.75
+                  }
+                },
+                "xhigh": {
+                  "cursorModel": "gpt-5.3-codex-xhigh",
+                  "cost": {
+                    "input": 1.75,
+                    "output": 14,
+                    "cache_read": 0.175,
+                    "cache_write": 1.75
+                  }
+                },
+                "xhigh-fast": {
+                  "cursorModel": "gpt-5.3-codex-xhigh-fast",
+                  "cost": {
+                    "input": 1.75,
+                    "output": 14,
+                    "cache_read": 0.175,
+                    "cache_write": 1.75
+                  }
+                },
+                "spark-preview": {
+                  "cursorModel": "gpt-5.3-codex-spark-preview",
+                  "cost": {
+                    "input": 1.75,
+                    "output": 14,
+                    "cache_read": 0.175,
+                    "cache_write": 1.75
+                  }
+                },
+                "spark-preview-low": {
+                  "cursorModel": "gpt-5.3-codex-spark-preview-low",
+                  "cost": {
+                    "input": 1.75,
+                    "output": 14,
+                    "cache_read": 0.175,
+                    "cache_write": 1.75
+                  }
+                },
+                "spark-preview-high": {
+                  "cursorModel": "gpt-5.3-codex-spark-preview-high",
+                  "cost": {
+                    "input": 1.75,
+                    "output": 14,
+                    "cache_read": 0.175,
+                    "cache_write": 1.75
+                  }
+                },
+                "spark-preview-xhigh": {
+                  "cursorModel": "gpt-5.3-codex-spark-preview-xhigh",
+                  "cost": {
+                    "input": 1.75,
+                    "output": 14,
+                    "cache_read": 0.175,
+                    "cache_write": 1.75
+                  }
+                }
+              },
+              "cost": {
+                "input": 1.75,
+                "output": 14,
+                "cache_read": 0.175,
+                "cache_write": 1.75
+              }
+            },
+            "source": "local-opencode"
+          },
+          "pricing": {
+            "input": 1.75,
+            "output": 14
+          }
         },
         {
           "id": "gpt-5.2",
-          "name": "Cursor GPT-5.2",
+          "name": "GPT-5.2",
+          "capabilities": [
+            "reasoning",
+            "code",
+            "fast"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "GPT-5.2",
+              "options": {
+                "cursorModel": "gpt-5.2"
+              },
+              "variants": {
+                "low": {
+                  "cursorModel": "gpt-5.2-low",
+                  "cost": {
+                    "input": 1.75,
+                    "output": 14,
+                    "cache_read": 0.175,
+                    "cache_write": 1.75
+                  }
+                },
+                "low-fast": {
+                  "cursorModel": "gpt-5.2-low-fast",
+                  "cost": {
+                    "input": 1.75,
+                    "output": 14,
+                    "cache_read": 0.175,
+                    "cache_write": 1.75
+                  }
+                },
+                "fast": {
+                  "cursorModel": "gpt-5.2-fast",
+                  "cost": {
+                    "input": 1.75,
+                    "output": 14,
+                    "cache_read": 0.175,
+                    "cache_write": 1.75
+                  }
+                },
+                "high": {
+                  "cursorModel": "gpt-5.2-high",
+                  "cost": {
+                    "input": 1.75,
+                    "output": 14,
+                    "cache_read": 0.175,
+                    "cache_write": 1.75
+                  }
+                },
+                "high-fast": {
+                  "cursorModel": "gpt-5.2-high-fast",
+                  "cost": {
+                    "input": 1.75,
+                    "output": 14,
+                    "cache_read": 0.175,
+                    "cache_write": 1.75
+                  }
+                },
+                "xhigh": {
+                  "cursorModel": "gpt-5.2-xhigh",
+                  "cost": {
+                    "input": 1.75,
+                    "output": 14,
+                    "cache_read": 0.175,
+                    "cache_write": 1.75
+                  }
+                },
+                "xhigh-fast": {
+                  "cursorModel": "gpt-5.2-xhigh-fast",
+                  "cost": {
+                    "input": 1.75,
+                    "output": 14,
+                    "cache_read": 0.175,
+                    "cache_write": 1.75
+                  }
+                },
+                "codex": {
+                  "cursorModel": "gpt-5.2-codex",
+                  "cost": {
+                    "input": 1.75,
+                    "output": 14,
+                    "cache_read": 0.175,
+                    "cache_write": 1.75
+                  }
+                },
+                "codex-fast": {
+                  "cursorModel": "gpt-5.2-codex-fast",
+                  "cost": {
+                    "input": 1.75,
+                    "output": 14,
+                    "cache_read": 0.175,
+                    "cache_write": 1.75
+                  }
+                },
+                "codex-high": {
+                  "cursorModel": "gpt-5.2-codex-high",
+                  "cost": {
+                    "input": 1.75,
+                    "output": 14,
+                    "cache_read": 0.175,
+                    "cache_write": 1.75
+                  }
+                },
+                "codex-high-fast": {
+                  "cursorModel": "gpt-5.2-codex-high-fast",
+                  "cost": {
+                    "input": 1.75,
+                    "output": 14,
+                    "cache_read": 0.175,
+                    "cache_write": 1.75
+                  }
+                },
+                "codex-low": {
+                  "cursorModel": "gpt-5.2-codex-low",
+                  "cost": {
+                    "input": 1.75,
+                    "output": 14,
+                    "cache_read": 0.175,
+                    "cache_write": 1.75
+                  }
+                },
+                "codex-low-fast": {
+                  "cursorModel": "gpt-5.2-codex-low-fast",
+                  "cost": {
+                    "input": 1.75,
+                    "output": 14,
+                    "cache_read": 0.175,
+                    "cache_write": 1.75
+                  }
+                },
+                "codex-xhigh": {
+                  "cursorModel": "gpt-5.2-codex-xhigh",
+                  "cost": {
+                    "input": 1.75,
+                    "output": 14,
+                    "cache_read": 0.175,
+                    "cache_write": 1.75
+                  }
+                },
+                "codex-xhigh-fast": {
+                  "cursorModel": "gpt-5.2-codex-xhigh-fast",
+                  "cost": {
+                    "input": 1.75,
+                    "output": 14,
+                    "cache_read": 0.175,
+                    "cache_write": 1.75
+                  }
+                }
+              },
+              "cost": {
+                "input": 1.75,
+                "output": 14,
+                "cache_read": 0.175,
+                "cache_write": 1.75
+              }
+            },
+            "source": "local-opencode"
+          },
+          "pricing": {
+            "input": 1.75,
+            "output": 14
+          }
+        },
+        {
+          "id": "gemini-3.1-pro",
+          "name": "Gemini 3.1 Pro",
+          "capabilities": [
+            "fast",
+            "budget",
+            "multimodal"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "Gemini 3.1 Pro",
+              "cost": {
+                "input": 2,
+                "output": 12,
+                "cache_read": 0.2,
+                "cache_write": 2,
+                "context_over_200k": {
+                  "input": 4,
+                  "output": 18,
+                  "cache_read": 0.4,
+                  "cache_write": 4
+                }
+              }
+            },
+            "source": "local-opencode"
+          },
+          "pricing": {
+            "input": 2,
+            "output": 12
+          }
+        },
+        {
+          "id": "gpt-5.1",
+          "name": "GPT-5.1",
+          "capabilities": [
+            "reasoning",
+            "code",
+            "fast",
+            "budget"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "GPT-5.1",
+              "options": {
+                "cursorModel": "gpt-5.1"
+              },
+              "variants": {
+                "low": {
+                  "cursorModel": "gpt-5.1-low",
+                  "cost": {
+                    "input": 1.25,
+                    "output": 10,
+                    "cache_read": 0.125,
+                    "cache_write": 1.25
+                  }
+                },
+                "high": {
+                  "cursorModel": "gpt-5.1-high",
+                  "cost": {
+                    "input": 1.25,
+                    "output": 10,
+                    "cache_read": 0.125,
+                    "cache_write": 1.25
+                  }
+                },
+                "codex-max-high": {
+                  "cursorModel": "gpt-5.1-codex-max-high",
+                  "cost": {
+                    "input": 1.25,
+                    "output": 10,
+                    "cache_read": 0.125,
+                    "cache_write": 1.25
+                  }
+                },
+                "codex-max-high-fast": {
+                  "cursorModel": "gpt-5.1-codex-max-high-fast",
+                  "cost": {
+                    "input": 1.25,
+                    "output": 10,
+                    "cache_read": 0.125,
+                    "cache_write": 1.25
+                  }
+                },
+                "codex-max-low": {
+                  "cursorModel": "gpt-5.1-codex-max-low",
+                  "cost": {
+                    "input": 1.25,
+                    "output": 10,
+                    "cache_read": 0.125,
+                    "cache_write": 1.25
+                  }
+                },
+                "codex-max-low-fast": {
+                  "cursorModel": "gpt-5.1-codex-max-low-fast",
+                  "cost": {
+                    "input": 1.25,
+                    "output": 10,
+                    "cache_read": 0.125,
+                    "cache_write": 1.25
+                  }
+                },
+                "codex-max-medium": {
+                  "cursorModel": "gpt-5.1-codex-max-medium",
+                  "cost": {
+                    "input": 1.25,
+                    "output": 10,
+                    "cache_read": 0.125,
+                    "cache_write": 1.25
+                  }
+                },
+                "codex-max-medium-fast": {
+                  "cursorModel": "gpt-5.1-codex-max-medium-fast",
+                  "cost": {
+                    "input": 1.25,
+                    "output": 10,
+                    "cache_read": 0.125,
+                    "cache_write": 1.25
+                  }
+                },
+                "codex-max-xhigh": {
+                  "cursorModel": "gpt-5.1-codex-max-xhigh",
+                  "cost": {
+                    "input": 1.25,
+                    "output": 10,
+                    "cache_read": 0.125,
+                    "cache_write": 1.25
+                  }
+                },
+                "codex-max-xhigh-fast": {
+                  "cursorModel": "gpt-5.1-codex-max-xhigh-fast",
+                  "cost": {
+                    "input": 1.25,
+                    "output": 10,
+                    "cache_read": 0.125,
+                    "cache_write": 1.25
+                  }
+                },
+                "codex-mini": {
+                  "cursorModel": "gpt-5.1-codex-mini",
+                  "cost": {
+                    "input": 0.25,
+                    "output": 2,
+                    "cache_read": 0.025,
+                    "cache_write": 0.25
+                  }
+                },
+                "codex-mini-high": {
+                  "cursorModel": "gpt-5.1-codex-mini-high",
+                  "cost": {
+                    "input": 0.25,
+                    "output": 2,
+                    "cache_read": 0.025,
+                    "cache_write": 0.25
+                  }
+                },
+                "codex-mini-low": {
+                  "cursorModel": "gpt-5.1-codex-mini-low",
+                  "cost": {
+                    "input": 0.25,
+                    "output": 2,
+                    "cache_read": 0.025,
+                    "cache_write": 0.25
+                  }
+                }
+              },
+              "cost": {
+                "input": 1.25,
+                "output": 10,
+                "cache_read": 0.125,
+                "cache_write": 1.25
+              }
+            },
+            "source": "local-opencode"
+          },
+          "pricing": {
+            "input": 1.25,
+            "output": 10
+          }
+        },
+        {
+          "id": "gemini-3-flash",
+          "name": "Gemini 3 Flash",
+          "capabilities": [
+            "fast",
+            "budget",
+            "multimodal"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "Gemini 3 Flash",
+              "cost": {
+                "input": 0.5,
+                "output": 3,
+                "cache_read": 0.05,
+                "cache_write": 0.5
+              }
+            },
+            "source": "local-opencode"
+          },
+          "pricing": {
+            "input": 0.5,
+            "output": 3
+          }
+        },
+        {
+          "id": "gpt-5-mini",
+          "name": "GPT-5 Mini",
+          "capabilities": [
+            "reasoning",
+            "fast",
+            "budget"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "GPT-5 Mini",
+              "cost": {
+                "input": 0.25,
+                "output": 2,
+                "cache_read": 0.025,
+                "cache_write": 0.25
+              }
+            },
+            "source": "local-opencode"
+          },
+          "pricing": {
+            "input": 0.25,
+            "output": 2
+          }
+        },
+        {
+          "id": "kimi-k2.5",
+          "name": "Kimi K2.5",
+          "capabilities": [
+            "general"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "Kimi K2.5",
+              "cost": {
+                "input": 0.6,
+                "output": 3,
+                "cache_read": 0.1,
+                "cache_write": 0.6
+              }
+            },
+            "source": "local-opencode"
+          },
+          "pricing": {
+            "input": 0.6,
+            "output": 3
+          }
+        },
+        {
+          "id": "gpt-5.1-codex-max",
+          "name": "GPT 5.1 Codex Max",
+          "capabilities": [
+            "reasoning",
+            "code",
+            "fast"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "GPT 5.1 Codex Max",
+              "options": {
+                "cursorModel": "gpt-5.1-codex-max-medium"
+              },
+              "variants": {
+                "low": {
+                  "cursorModel": "gpt-5.1-codex-max-low",
+                  "cost": {
+                    "input": 1.25,
+                    "output": 10,
+                    "cache_read": 0.125,
+                    "cache_write": 1.25
+                  }
+                },
+                "low-fast": {
+                  "cursorModel": "gpt-5.1-codex-max-low-fast",
+                  "cost": {
+                    "input": 1.25,
+                    "output": 10,
+                    "cache_read": 0.125,
+                    "cache_write": 1.25
+                  }
+                },
+                "medium": {
+                  "cursorModel": "gpt-5.1-codex-max-medium",
+                  "cost": {
+                    "input": 1.25,
+                    "output": 10,
+                    "cache_read": 0.125,
+                    "cache_write": 1.25
+                  }
+                },
+                "medium-fast": {
+                  "cursorModel": "gpt-5.1-codex-max-medium-fast",
+                  "cost": {
+                    "input": 1.25,
+                    "output": 10,
+                    "cache_read": 0.125,
+                    "cache_write": 1.25
+                  }
+                },
+                "high": {
+                  "cursorModel": "gpt-5.1-codex-max-high",
+                  "cost": {
+                    "input": 1.25,
+                    "output": 10,
+                    "cache_read": 0.125,
+                    "cache_write": 1.25
+                  }
+                },
+                "high-fast": {
+                  "cursorModel": "gpt-5.1-codex-max-high-fast",
+                  "cost": {
+                    "input": 1.25,
+                    "output": 10,
+                    "cache_read": 0.125,
+                    "cache_write": 1.25
+                  }
+                },
+                "xhigh": {
+                  "cursorModel": "gpt-5.1-codex-max-xhigh",
+                  "cost": {
+                    "input": 1.25,
+                    "output": 10,
+                    "cache_read": 0.125,
+                    "cache_write": 1.25
+                  }
+                },
+                "xhigh-fast": {
+                  "cursorModel": "gpt-5.1-codex-max-xhigh-fast",
+                  "cost": {
+                    "input": 1.25,
+                    "output": 10,
+                    "cache_read": 0.125,
+                    "cache_write": 1.25
+                  }
+                }
+              },
+              "cost": {
+                "input": 1.25,
+                "output": 10,
+                "cache_read": 0.125,
+                "cache_write": 1.25
+              }
+            },
+            "source": "local-opencode"
+          },
+          "pricing": {
+            "input": 1.25,
+            "output": 10
+          }
+        },
+        {
+          "id": "gpt-5.5",
+          "name": "GPT 5.5",
+          "capabilities": [
+            "reasoning",
+            "fast"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "GPT 5.5",
+              "options": {
+                "cursorModel": "gpt-5.5-medium"
+              },
+              "variants": {
+                "none": {
+                  "cursorModel": "gpt-5.5-none",
+                  "cost": {
+                    "input": 5,
+                    "output": 30,
+                    "cache_read": 0.5,
+                    "cache_write": 5,
+                    "context_over_200k": {
+                      "input": 10,
+                      "output": 45,
+                      "cache_read": 1,
+                      "cache_write": 10
+                    }
+                  }
+                },
+                "low": {
+                  "cursorModel": "gpt-5.5-low",
+                  "cost": {
+                    "input": 5,
+                    "output": 30,
+                    "cache_read": 0.5,
+                    "cache_write": 5,
+                    "context_over_200k": {
+                      "input": 10,
+                      "output": 45,
+                      "cache_read": 1,
+                      "cache_write": 10
+                    }
+                  }
+                },
+                "low-fast": {
+                  "cursorModel": "gpt-5.5-low-fast",
+                  "cost": {
+                    "input": 5,
+                    "output": 30,
+                    "cache_read": 0.5,
+                    "cache_write": 5,
+                    "context_over_200k": {
+                      "input": 10,
+                      "output": 45,
+                      "cache_read": 1,
+                      "cache_write": 10
+                    }
+                  }
+                },
+                "medium": {
+                  "cursorModel": "gpt-5.5-medium",
+                  "cost": {
+                    "input": 5,
+                    "output": 30,
+                    "cache_read": 0.5,
+                    "cache_write": 5,
+                    "context_over_200k": {
+                      "input": 10,
+                      "output": 45,
+                      "cache_read": 1,
+                      "cache_write": 10
+                    }
+                  }
+                },
+                "medium-fast": {
+                  "cursorModel": "gpt-5.5-medium-fast",
+                  "cost": {
+                    "input": 5,
+                    "output": 30,
+                    "cache_read": 0.5,
+                    "cache_write": 5,
+                    "context_over_200k": {
+                      "input": 10,
+                      "output": 45,
+                      "cache_read": 1,
+                      "cache_write": 10
+                    }
+                  }
+                },
+                "high": {
+                  "cursorModel": "gpt-5.5-high",
+                  "cost": {
+                    "input": 5,
+                    "output": 30,
+                    "cache_read": 0.5,
+                    "cache_write": 5,
+                    "context_over_200k": {
+                      "input": 10,
+                      "output": 45,
+                      "cache_read": 1,
+                      "cache_write": 10
+                    }
+                  }
+                },
+                "high-fast": {
+                  "cursorModel": "gpt-5.5-high-fast",
+                  "cost": {
+                    "input": 5,
+                    "output": 30,
+                    "cache_read": 0.5,
+                    "cache_write": 5,
+                    "context_over_200k": {
+                      "input": 10,
+                      "output": 45,
+                      "cache_read": 1,
+                      "cache_write": 10
+                    }
+                  }
+                },
+                "extra-high": {
+                  "cursorModel": "gpt-5.5-extra-high",
+                  "cost": {
+                    "input": 5,
+                    "output": 30,
+                    "cache_read": 0.5,
+                    "cache_write": 5,
+                    "context_over_200k": {
+                      "input": 10,
+                      "output": 45,
+                      "cache_read": 1,
+                      "cache_write": 10
+                    }
+                  }
+                },
+                "extra-high-fast": {
+                  "cursorModel": "gpt-5.5-extra-high-fast",
+                  "cost": {
+                    "input": 5,
+                    "output": 30,
+                    "cache_read": 0.5,
+                    "cache_write": 5,
+                    "context_over_200k": {
+                      "input": 10,
+                      "output": 45,
+                      "cache_read": 1,
+                      "cache_write": 10
+                    }
+                  }
+                },
+                "none-fast": {
+                  "cursorModel": "gpt-5.5-none-fast",
+                  "cost": {
+                    "input": 5,
+                    "output": 30,
+                    "cache_read": 0.5,
+                    "cache_write": 5,
+                    "context_over_200k": {
+                      "input": 10,
+                      "output": 45,
+                      "cache_read": 1,
+                      "cache_write": 10
+                    }
+                  }
+                }
+              },
+              "cost": {
+                "input": 5,
+                "output": 30,
+                "cache_read": 0.5,
+                "cache_write": 5,
+                "context_over_200k": {
+                  "input": 10,
+                  "output": 45,
+                  "cache_read": 1,
+                  "cache_write": 10
+                }
+              }
+            },
+            "source": "local-opencode"
+          },
+          "pricing": {
+            "input": 5,
+            "output": 30
+          }
+        },
+        {
+          "id": "claude-opus-4-7",
+          "name": "Claude Opus 4 7",
+          "capabilities": [
+            "reasoning",
+            "fast"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "Claude Opus 4 7",
+              "options": {
+                "cursorModel": "claude-opus-4-7-medium"
+              },
+              "variants": {
+                "low": {
+                  "cursorModel": "claude-opus-4-7-low",
+                  "cost": {
+                    "input": 5,
+                    "output": 25,
+                    "cache_read": 0.5,
+                    "cache_write": 6.25
+                  }
+                },
+                "low-fast": {
+                  "cursorModel": "claude-opus-4-7-low-fast",
+                  "cost": {
+                    "input": 5,
+                    "output": 25,
+                    "cache_read": 0.5,
+                    "cache_write": 6.25
+                  }
+                },
+                "medium": {
+                  "cursorModel": "claude-opus-4-7-medium",
+                  "cost": {
+                    "input": 5,
+                    "output": 25,
+                    "cache_read": 0.5,
+                    "cache_write": 6.25
+                  }
+                },
+                "medium-fast": {
+                  "cursorModel": "claude-opus-4-7-medium-fast",
+                  "cost": {
+                    "input": 5,
+                    "output": 25,
+                    "cache_read": 0.5,
+                    "cache_write": 6.25
+                  }
+                },
+                "high": {
+                  "cursorModel": "claude-opus-4-7-high",
+                  "cost": {
+                    "input": 5,
+                    "output": 25,
+                    "cache_read": 0.5,
+                    "cache_write": 6.25
+                  }
+                },
+                "high-fast": {
+                  "cursorModel": "claude-opus-4-7-high-fast",
+                  "cost": {
+                    "input": 5,
+                    "output": 25,
+                    "cache_read": 0.5,
+                    "cache_write": 6.25
+                  }
+                },
+                "xhigh": {
+                  "cursorModel": "claude-opus-4-7-xhigh",
+                  "cost": {
+                    "input": 5,
+                    "output": 25,
+                    "cache_read": 0.5,
+                    "cache_write": 6.25
+                  }
+                },
+                "xhigh-fast": {
+                  "cursorModel": "claude-opus-4-7-xhigh-fast",
+                  "cost": {
+                    "input": 5,
+                    "output": 25,
+                    "cache_read": 0.5,
+                    "cache_write": 6.25
+                  }
+                },
+                "max": {
+                  "cursorModel": "claude-opus-4-7-max",
+                  "cost": {
+                    "input": 5,
+                    "output": 25,
+                    "cache_read": 0.5,
+                    "cache_write": 6.25
+                  }
+                },
+                "thinking-low": {
+                  "cursorModel": "claude-opus-4-7-thinking-low",
+                  "cost": {
+                    "input": 5,
+                    "output": 25,
+                    "cache_read": 0.5,
+                    "cache_write": 6.25
+                  }
+                },
+                "thinking-medium": {
+                  "cursorModel": "claude-opus-4-7-thinking-medium",
+                  "cost": {
+                    "input": 5,
+                    "output": 25,
+                    "cache_read": 0.5,
+                    "cache_write": 6.25
+                  }
+                },
+                "thinking-high": {
+                  "cursorModel": "claude-opus-4-7-thinking-high",
+                  "cost": {
+                    "input": 5,
+                    "output": 25,
+                    "cache_read": 0.5,
+                    "cache_write": 6.25
+                  }
+                },
+                "thinking-high-fast": {
+                  "cursorModel": "claude-opus-4-7-thinking-high-fast",
+                  "cost": {
+                    "input": 5,
+                    "output": 25,
+                    "cache_read": 0.5,
+                    "cache_write": 6.25
+                  }
+                },
+                "thinking-xhigh": {
+                  "cursorModel": "claude-opus-4-7-thinking-xhigh",
+                  "cost": {
+                    "input": 5,
+                    "output": 25,
+                    "cache_read": 0.5,
+                    "cache_write": 6.25
+                  }
+                },
+                "thinking-max": {
+                  "cursorModel": "claude-opus-4-7-thinking-max",
+                  "cost": {
+                    "input": 5,
+                    "output": 25,
+                    "cache_read": 0.5,
+                    "cache_write": 6.25
+                  }
+                },
+                "max-fast": {
+                  "cursorModel": "claude-opus-4-7-max-fast",
+                  "cost": {
+                    "input": 5,
+                    "output": 25,
+                    "cache_read": 0.5,
+                    "cache_write": 6.25
+                  }
+                },
+                "thinking-low-fast": {
+                  "cursorModel": "claude-opus-4-7-thinking-low-fast",
+                  "cost": {
+                    "input": 5,
+                    "output": 25,
+                    "cache_read": 0.5,
+                    "cache_write": 6.25
+                  }
+                },
+                "thinking-max-fast": {
+                  "cursorModel": "claude-opus-4-7-thinking-max-fast",
+                  "cost": {
+                    "input": 5,
+                    "output": 25,
+                    "cache_read": 0.5,
+                    "cache_write": 6.25
+                  }
+                },
+                "thinking-medium-fast": {
+                  "cursorModel": "claude-opus-4-7-thinking-medium-fast",
+                  "cost": {
+                    "input": 5,
+                    "output": 25,
+                    "cache_read": 0.5,
+                    "cache_write": 6.25
+                  }
+                },
+                "thinking-xhigh-fast": {
+                  "cursorModel": "claude-opus-4-7-thinking-xhigh-fast",
+                  "cost": {
+                    "input": 5,
+                    "output": 25,
+                    "cache_read": 0.5,
+                    "cache_write": 6.25
+                  }
+                }
+              },
+              "cost": {
+                "input": 5,
+                "output": 25,
+                "cache_read": 0.5,
+                "cache_write": 6.25
+              }
+            },
+            "source": "local-opencode"
+          },
+          "recommended": true,
+          "visibleInOpencode": true,
+          "pricing": {
+            "input": 5,
+            "output": 25
+          }
+        },
+        {
+          "id": "gpt-5.4",
+          "name": "GPT 5.4",
+          "capabilities": [
+            "reasoning",
+            "fast",
+            "budget"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "GPT 5.4",
+              "options": {
+                "cursorModel": "gpt-5.4-medium"
+              },
+              "variants": {
+                "low": {
+                  "cursorModel": "gpt-5.4-low",
+                  "cost": {
+                    "input": 2.5,
+                    "output": 15,
+                    "cache_read": 0.25,
+                    "cache_write": 2.5,
+                    "context_over_200k": {
+                      "input": 5,
+                      "output": 22.5,
+                      "cache_read": 0.5,
+                      "cache_write": 5
+                    }
+                  }
+                },
+                "medium": {
+                  "cursorModel": "gpt-5.4-medium",
+                  "cost": {
+                    "input": 2.5,
+                    "output": 15,
+                    "cache_read": 0.25,
+                    "cache_write": 2.5,
+                    "context_over_200k": {
+                      "input": 5,
+                      "output": 22.5,
+                      "cache_read": 0.5,
+                      "cache_write": 5
+                    }
+                  }
+                },
+                "medium-fast": {
+                  "cursorModel": "gpt-5.4-medium-fast",
+                  "cost": {
+                    "input": 5,
+                    "output": 30,
+                    "cache_read": 0.5,
+                    "cache_write": 5
+                  }
+                },
+                "high": {
+                  "cursorModel": "gpt-5.4-high",
+                  "cost": {
+                    "input": 2.5,
+                    "output": 15,
+                    "cache_read": 0.25,
+                    "cache_write": 2.5,
+                    "context_over_200k": {
+                      "input": 5,
+                      "output": 22.5,
+                      "cache_read": 0.5,
+                      "cache_write": 5
+                    }
+                  }
+                },
+                "high-fast": {
+                  "cursorModel": "gpt-5.4-high-fast",
+                  "cost": {
+                    "input": 5,
+                    "output": 30,
+                    "cache_read": 0.5,
+                    "cache_write": 5
+                  }
+                },
+                "xhigh": {
+                  "cursorModel": "gpt-5.4-xhigh",
+                  "cost": {
+                    "input": 2.5,
+                    "output": 15,
+                    "cache_read": 0.25,
+                    "cache_write": 2.5,
+                    "context_over_200k": {
+                      "input": 5,
+                      "output": 22.5,
+                      "cache_read": 0.5,
+                      "cache_write": 5
+                    }
+                  }
+                },
+                "xhigh-fast": {
+                  "cursorModel": "gpt-5.4-xhigh-fast",
+                  "cost": {
+                    "input": 5,
+                    "output": 30,
+                    "cache_read": 0.5,
+                    "cache_write": 5
+                  }
+                },
+                "mini-high": {
+                  "cursorModel": "gpt-5.4-mini-high",
+                  "cost": {
+                    "input": 0.75,
+                    "output": 4.5,
+                    "cache_read": 0.075,
+                    "cache_write": 0.75
+                  }
+                },
+                "mini-low": {
+                  "cursorModel": "gpt-5.4-mini-low",
+                  "cost": {
+                    "input": 0.75,
+                    "output": 4.5,
+                    "cache_read": 0.075,
+                    "cache_write": 0.75
+                  }
+                },
+                "mini-medium": {
+                  "cursorModel": "gpt-5.4-mini-medium",
+                  "cost": {
+                    "input": 0.75,
+                    "output": 4.5,
+                    "cache_read": 0.075,
+                    "cache_write": 0.75
+                  }
+                },
+                "mini-none": {
+                  "cursorModel": "gpt-5.4-mini-none",
+                  "cost": {
+                    "input": 0.75,
+                    "output": 4.5,
+                    "cache_read": 0.075,
+                    "cache_write": 0.75
+                  }
+                },
+                "mini-xhigh": {
+                  "cursorModel": "gpt-5.4-mini-xhigh",
+                  "cost": {
+                    "input": 0.75,
+                    "output": 4.5,
+                    "cache_read": 0.075,
+                    "cache_write": 0.75
+                  }
+                },
+                "nano-high": {
+                  "cursorModel": "gpt-5.4-nano-high",
+                  "cost": {
+                    "input": 0.2,
+                    "output": 1.25,
+                    "cache_read": 0.02,
+                    "cache_write": 0.2
+                  }
+                },
+                "nano-low": {
+                  "cursorModel": "gpt-5.4-nano-low",
+                  "cost": {
+                    "input": 0.2,
+                    "output": 1.25,
+                    "cache_read": 0.02,
+                    "cache_write": 0.2
+                  }
+                },
+                "nano-medium": {
+                  "cursorModel": "gpt-5.4-nano-medium",
+                  "cost": {
+                    "input": 0.2,
+                    "output": 1.25,
+                    "cache_read": 0.02,
+                    "cache_write": 0.2
+                  }
+                },
+                "nano-none": {
+                  "cursorModel": "gpt-5.4-nano-none",
+                  "cost": {
+                    "input": 0.2,
+                    "output": 1.25,
+                    "cache_read": 0.02,
+                    "cache_write": 0.2
+                  }
+                },
+                "nano-xhigh": {
+                  "cursorModel": "gpt-5.4-nano-xhigh",
+                  "cost": {
+                    "input": 0.2,
+                    "output": 1.25,
+                    "cache_read": 0.02,
+                    "cache_write": 0.2
+                  }
+                }
+              },
+              "cost": {
+                "input": 2.5,
+                "output": 15,
+                "cache_read": 0.25,
+                "cache_write": 2.5,
+                "context_over_200k": {
+                  "input": 5,
+                  "output": 22.5,
+                  "cache_read": 0.5,
+                  "cache_write": 5
+                }
+              }
+            },
+            "source": "local-opencode"
+          },
+          "pricing": {
+            "input": 2.5,
+            "output": 15
+          }
+        },
+        {
+          "id": "claude-4.6-opus",
+          "name": "Claude 4.6 Opus",
+          "capabilities": [
+            "reasoning",
+            "fast"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "Claude 4.6 Opus",
+              "options": {
+                "cursorModel": "claude-4.6-opus-high"
+              },
+              "variants": {
+                "high": {
+                  "cursorModel": "claude-4.6-opus-high",
+                  "cost": {
+                    "input": 5,
+                    "output": 25,
+                    "cache_read": 0.5,
+                    "cache_write": 6.25
+                  }
+                },
+                "high-thinking": {
+                  "cursorModel": "claude-4.6-opus-high-thinking",
+                  "cost": {
+                    "input": 5,
+                    "output": 25,
+                    "cache_read": 0.5,
+                    "cache_write": 6.25
+                  }
+                },
+                "high-thinking-fast": {
+                  "cursorModel": "claude-4.6-opus-high-thinking-fast",
+                  "cost": {
+                    "input": 30,
+                    "output": 150,
+                    "cache_read": 3,
+                    "cache_write": 37.5
+                  }
+                },
+                "max": {
+                  "cursorModel": "claude-4.6-opus-max",
+                  "cost": {
+                    "input": 5,
+                    "output": 25,
+                    "cache_read": 0.5,
+                    "cache_write": 6.25
+                  }
+                },
+                "max-thinking": {
+                  "cursorModel": "claude-4.6-opus-max-thinking",
+                  "cost": {
+                    "input": 5,
+                    "output": 25,
+                    "cache_read": 0.5,
+                    "cache_write": 6.25
+                  }
+                },
+                "max-thinking-fast": {
+                  "cursorModel": "claude-4.6-opus-max-thinking-fast",
+                  "cost": {
+                    "input": 30,
+                    "output": 150,
+                    "cache_read": 3,
+                    "cache_write": 37.5
+                  }
+                }
+              },
+              "cost": {
+                "input": 5,
+                "output": 25,
+                "cache_read": 0.5,
+                "cache_write": 6.25
+              }
+            },
+            "source": "local-opencode"
+          },
+          "pricing": {
+            "input": 5,
+            "output": 25
+          }
+        },
+        {
+          "id": "claude-4.6-sonnet",
+          "name": "Claude 4.6 Sonnet",
+          "capabilities": [
+            "reasoning"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "Claude 4.6 Sonnet",
+              "options": {
+                "cursorModel": "claude-4.6-sonnet-medium"
+              },
+              "variants": {
+                "medium": {
+                  "cursorModel": "claude-4.6-sonnet-medium",
+                  "cost": {
+                    "input": 3,
+                    "output": 15,
+                    "cache_read": 0.3,
+                    "cache_write": 3.75,
+                    "context_over_200k": {
+                      "input": 6,
+                      "output": 22.5,
+                      "cache_read": 0.6,
+                      "cache_write": 7.5
+                    }
+                  }
+                },
+                "medium-thinking": {
+                  "cursorModel": "claude-4.6-sonnet-medium-thinking",
+                  "cost": {
+                    "input": 3,
+                    "output": 15,
+                    "cache_read": 0.3,
+                    "cache_write": 3.75,
+                    "context_over_200k": {
+                      "input": 6,
+                      "output": 22.5,
+                      "cache_read": 0.6,
+                      "cache_write": 7.5
+                    }
+                  }
+                }
+              },
+              "cost": {
+                "input": 3,
+                "output": 15,
+                "cache_read": 0.3,
+                "cache_write": 3.75,
+                "context_over_200k": {
+                  "input": 6,
+                  "output": 22.5,
+                  "cache_read": 0.6,
+                  "cache_write": 7.5
+                }
+              }
+            },
+            "source": "local-opencode"
+          },
+          "pricing": {
+            "input": 3,
+            "output": 15
+          }
+        },
+        {
+          "id": "claude-4.5-opus",
+          "name": "Claude 4.5 Opus",
+          "capabilities": [
+            "reasoning"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "Claude 4.5 Opus",
+              "options": {
+                "cursorModel": "claude-4.5-opus-high"
+              },
+              "variants": {
+                "high": {
+                  "cursorModel": "claude-4.5-opus-high",
+                  "cost": {
+                    "input": 5,
+                    "output": 25,
+                    "cache_read": 0.5,
+                    "cache_write": 6.25
+                  }
+                },
+                "high-thinking": {
+                  "cursorModel": "claude-4.5-opus-high-thinking",
+                  "cost": {
+                    "input": 5,
+                    "output": 25,
+                    "cache_read": 0.5,
+                    "cache_write": 6.25
+                  }
+                }
+              },
+              "cost": {
+                "input": 5,
+                "output": 25,
+                "cache_read": 0.5,
+                "cache_write": 6.25
+              }
+            },
+            "source": "local-opencode"
+          },
+          "pricing": {
+            "input": 5,
+            "output": 25
+          }
+        },
+        {
+          "id": "gpt-5.4-mini",
+          "name": "GPT 5.4 Mini",
+          "capabilities": [
+            "reasoning",
+            "fast",
+            "budget"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "GPT 5.4 Mini",
+              "options": {
+                "cursorModel": "gpt-5.4-mini-medium"
+              },
+              "variants": {
+                "none": {
+                  "cursorModel": "gpt-5.4-mini-none",
+                  "cost": {
+                    "input": 0.75,
+                    "output": 4.5,
+                    "cache_read": 0.075,
+                    "cache_write": 0.75
+                  }
+                },
+                "low": {
+                  "cursorModel": "gpt-5.4-mini-low",
+                  "cost": {
+                    "input": 0.75,
+                    "output": 4.5,
+                    "cache_read": 0.075,
+                    "cache_write": 0.75
+                  }
+                },
+                "medium": {
+                  "cursorModel": "gpt-5.4-mini-medium",
+                  "cost": {
+                    "input": 0.75,
+                    "output": 4.5,
+                    "cache_read": 0.075,
+                    "cache_write": 0.75
+                  }
+                },
+                "high": {
+                  "cursorModel": "gpt-5.4-mini-high",
+                  "cost": {
+                    "input": 0.75,
+                    "output": 4.5,
+                    "cache_read": 0.075,
+                    "cache_write": 0.75
+                  }
+                },
+                "xhigh": {
+                  "cursorModel": "gpt-5.4-mini-xhigh",
+                  "cost": {
+                    "input": 0.75,
+                    "output": 4.5,
+                    "cache_read": 0.075,
+                    "cache_write": 0.75
+                  }
+                }
+              },
+              "cost": {
+                "input": 0.75,
+                "output": 4.5,
+                "cache_read": 0.075,
+                "cache_write": 0.75
+              }
+            },
+            "source": "local-opencode"
+          },
+          "pricing": {
+            "input": 0.75,
+            "output": 4.5
+          }
+        },
+        {
+          "id": "gpt-5.4-nano",
+          "name": "GPT 5.4 Nano",
+          "capabilities": [
+            "reasoning",
+            "fast"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "GPT 5.4 Nano",
+              "options": {
+                "cursorModel": "gpt-5.4-nano-medium"
+              },
+              "variants": {
+                "none": {
+                  "cursorModel": "gpt-5.4-nano-none",
+                  "cost": {
+                    "input": 0.2,
+                    "output": 1.25,
+                    "cache_read": 0.02,
+                    "cache_write": 0.2
+                  }
+                },
+                "low": {
+                  "cursorModel": "gpt-5.4-nano-low",
+                  "cost": {
+                    "input": 0.2,
+                    "output": 1.25,
+                    "cache_read": 0.02,
+                    "cache_write": 0.2
+                  }
+                },
+                "medium": {
+                  "cursorModel": "gpt-5.4-nano-medium",
+                  "cost": {
+                    "input": 0.2,
+                    "output": 1.25,
+                    "cache_read": 0.02,
+                    "cache_write": 0.2
+                  }
+                },
+                "high": {
+                  "cursorModel": "gpt-5.4-nano-high",
+                  "cost": {
+                    "input": 0.2,
+                    "output": 1.25,
+                    "cache_read": 0.02,
+                    "cache_write": 0.2
+                  }
+                },
+                "xhigh": {
+                  "cursorModel": "gpt-5.4-nano-xhigh",
+                  "cost": {
+                    "input": 0.2,
+                    "output": 1.25,
+                    "cache_read": 0.02,
+                    "cache_write": 0.2
+                  }
+                }
+              },
+              "cost": {
+                "input": 0.2,
+                "output": 1.25,
+                "cache_read": 0.02,
+                "cache_write": 0.2
+              }
+            },
+            "source": "local-opencode"
+          },
+          "pricing": {
+            "input": 0.2,
+            "output": 1.25
+          }
+        },
+        {
+          "id": "claude-4.6",
+          "name": "Claude 4.6",
+          "capabilities": [
+            "reasoning"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "Claude 4.6",
+              "options": {
+                "cursorModel": "claude-4.6-sonnet-medium"
+              },
+              "variants": {
+                "sonnet-medium": {
+                  "cursorModel": "claude-4.6-sonnet-medium",
+                  "cost": {
+                    "input": 3,
+                    "output": 15,
+                    "cache_read": 0.3,
+                    "cache_write": 3.75,
+                    "context_over_200k": {
+                      "input": 6,
+                      "output": 22.5,
+                      "cache_read": 0.6,
+                      "cache_write": 7.5
+                    }
+                  }
+                },
+                "sonnet-medium-thinking": {
+                  "cursorModel": "claude-4.6-sonnet-medium-thinking",
+                  "cost": {
+                    "input": 3,
+                    "output": 15,
+                    "cache_read": 0.3,
+                    "cache_write": 3.75,
+                    "context_over_200k": {
+                      "input": 6,
+                      "output": 22.5,
+                      "cache_read": 0.6,
+                      "cache_write": 7.5
+                    }
+                  }
+                }
+              },
+              "cost": {
+                "input": 3,
+                "output": 15,
+                "cache_read": 0.3,
+                "cache_write": 3.75,
+                "context_over_200k": {
+                  "input": 6,
+                  "output": 22.5,
+                  "cache_read": 0.6,
+                  "cache_write": 7.5
+                }
+              }
+            },
+            "source": "local-opencode"
+          },
+          "pricing": {
+            "input": 3,
+            "output": 15
+          }
+        },
+        {
+          "id": "claude-4.5",
+          "name": "Claude 4.5",
+          "capabilities": [
+            "reasoning"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "Claude 4.5",
+              "options": {
+                "cursorModel": "claude-4.5-opus-high"
+              },
+              "variants": {
+                "opus-high": {
+                  "cursorModel": "claude-4.5-opus-high",
+                  "cost": {
+                    "input": 5,
+                    "output": 25,
+                    "cache_read": 0.5,
+                    "cache_write": 6.25
+                  }
+                },
+                "opus-high-thinking": {
+                  "cursorModel": "claude-4.5-opus-high-thinking",
+                  "cost": {
+                    "input": 5,
+                    "output": 25,
+                    "cache_read": 0.5,
+                    "cache_write": 6.25
+                  }
+                },
+                "sonnet": {
+                  "cursorModel": "claude-4.5-sonnet",
+                  "cost": {
+                    "input": 3,
+                    "output": 15,
+                    "cache_read": 0.3,
+                    "cache_write": 3.75,
+                    "context_over_200k": {
+                      "input": 6,
+                      "output": 22.5,
+                      "cache_read": 0.6,
+                      "cache_write": 7.5
+                    }
+                  }
+                },
+                "sonnet-thinking": {
+                  "cursorModel": "claude-4.5-sonnet-thinking",
+                  "cost": {
+                    "input": 3,
+                    "output": 15,
+                    "cache_read": 0.3,
+                    "cache_write": 3.75,
+                    "context_over_200k": {
+                      "input": 6,
+                      "output": 22.5,
+                      "cache_read": 0.6,
+                      "cache_write": 7.5
+                    }
+                  }
+                }
+              },
+              "cost": {
+                "input": 5,
+                "output": 25,
+                "cache_read": 0.5,
+                "cache_write": 6.25
+              }
+            },
+            "source": "local-opencode"
+          },
+          "pricing": {
+            "input": 5,
+            "output": 25
+          }
+        },
+        {
+          "id": "grok-4",
+          "name": "Grok 4",
+          "capabilities": [
+            "reasoning"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "Grok 4",
+              "options": {
+                "cursorModel": "grok-4-20"
+              },
+              "variants": {
+                "20": {
+                  "cursorModel": "grok-4-20",
+                  "cost": {
+                    "input": 2,
+                    "output": 6,
+                    "cache_read": 0.2,
+                    "cache_write": 2,
+                    "context_over_200k": {
+                      "input": 4,
+                      "output": 12,
+                      "cache_read": 0.4,
+                      "cache_write": 4
+                    }
+                  }
+                },
+                "20-thinking": {
+                  "cursorModel": "grok-4-20-thinking",
+                  "cost": {
+                    "input": 2,
+                    "output": 6,
+                    "cache_read": 0.2,
+                    "cache_write": 2,
+                    "context_over_200k": {
+                      "input": 4,
+                      "output": 12,
+                      "cache_read": 0.4,
+                      "cache_write": 4
+                    }
+                  }
+                }
+              },
+              "cost": {
+                "input": 2,
+                "output": 6,
+                "cache_read": 0.2,
+                "cache_write": 2,
+                "context_over_200k": {
+                  "input": 4,
+                  "output": 12,
+                  "cache_read": 0.4,
+                  "cache_write": 4
+                }
+              }
+            },
+            "source": "local-opencode"
+          },
+          "pricing": {
+            "input": 2,
+            "output": 6
+          }
+        },
+        {
+          "id": "claude-4",
+          "name": "Claude 4",
+          "capabilities": [
+            "reasoning"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "Claude 4",
+              "options": {
+                "cursorModel": "claude-4-sonnet"
+              },
+              "variants": {
+                "sonnet": {
+                  "cursorModel": "claude-4-sonnet",
+                  "cost": {
+                    "input": 3,
+                    "output": 15,
+                    "cache_read": 0.3,
+                    "cache_write": 3.75
+                  }
+                },
+                "sonnet-thinking": {
+                  "cursorModel": "claude-4-sonnet-thinking",
+                  "cost": {
+                    "input": 3,
+                    "output": 15,
+                    "cache_read": 0.3,
+                    "cache_write": 3.75
+                  }
+                }
+              },
+              "cost": {
+                "input": 3,
+                "output": 15,
+                "cache_read": 0.3,
+                "cache_write": 3.75
+              }
+            },
+            "source": "local-opencode"
+          },
+          "pricing": {
+            "input": 3,
+            "output": 15
+          }
+        },
+        {
+          "id": "grok-4.3",
+          "name": "Grok 4.3 1M",
+          "capabilities": [
+            "general"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "Grok 4.3 1M"
+            },
+            "source": "local-opencode"
+          }
+        },
+        {
+          "id": "composer-2.5",
+          "name": "Composer 2.5",
           "capabilities": [
             "code",
-            "reasoning"
-          ]
+            "fast"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "Composer 2.5",
+              "options": {
+                "cursorModel": "composer-2.5"
+              },
+              "variants": {
+                "fast": {
+                  "cursorModel": "composer-2.5-fast"
+                }
+              }
+            },
+            "source": "local-opencode"
+          },
+          "recommended": true,
+          "visibleInOpencode": true
+        },
+        {
+          "id": "grok-build-0.1",
+          "name": "Grok Build 0.1 1M",
+          "capabilities": [
+            "general"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "Grok Build 0.1 1M"
+            },
+            "source": "local-opencode"
+          }
+        },
+        {
+          "id": "gemini-3.5-flash",
+          "name": "Gemini 3.5 Flash",
+          "capabilities": [
+            "fast",
+            "budget",
+            "multimodal"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "Gemini 3.5 Flash"
+            },
+            "source": "local-opencode"
+          }
         }
       ],
-      "defaultModel": "auto",
+      "defaultModel": "claude-opus-4-7",
       "metadata": {
-        "note": "From iCloud Opencode-Sync. Requires cursor-agent login and the open-cursor proxy/plugin in the same runtime."
+        "renderModelsFromSource": true,
+        "importedFrom": "/Users/rubenbeuker/.config/opencode/opencode.jsonc"
+      }
+    },
+    {
+      "id": "openai",
+      "alias": "openai",
+      "name": "OpenAI Codex",
+      "type": "openai",
+      "baseUrl": "https://codex.2631.eu/v1",
+      "enabled": true,
+      "secretRef": "",
+      "models": [
+        {
+          "id": "gpt-5.5",
+          "name": "GPT-5.5",
+          "capabilities": [
+            "reasoning"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "GPT-5.5",
+              "limit": {
+                "context": 1000000,
+                "output": 8192
+              }
+            },
+            "source": "local-opencode"
+          },
+          "recommended": true,
+          "visibleInOpencode": true,
+          "limit": {
+            "context": 1000000,
+            "output": 8192
+          }
+        },
+        {
+          "id": "gpt-5.4",
+          "name": "GPT-5.4 (Codex)",
+          "capabilities": [
+            "reasoning",
+            "code"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "GPT-5.4 (Codex)",
+              "limit": {
+                "context": 1000000,
+                "output": 8192
+              }
+            },
+            "source": "local-opencode"
+          },
+          "limit": {
+            "context": 1000000,
+            "output": 8192
+          }
+        },
+        {
+          "id": "gpt-5.4-mini",
+          "name": "GPT-5.4 Mini (Codex)",
+          "capabilities": [
+            "reasoning",
+            "code",
+            "fast",
+            "budget"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "GPT-5.4 Mini (Codex)",
+              "limit": {
+                "context": 1000000,
+                "output": 8192
+              }
+            },
+            "source": "local-opencode"
+          },
+          "recommended": true,
+          "visibleInOpencode": true,
+          "limit": {
+            "context": 1000000,
+            "output": 8192
+          }
+        },
+        {
+          "id": "gpt-5.3-codex",
+          "name": "GPT-5.3 Codex",
+          "capabilities": [
+            "reasoning",
+            "code"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "GPT-5.3 Codex",
+              "limit": {
+                "context": 1000000,
+                "output": 8192
+              }
+            },
+            "source": "local-opencode"
+          },
+          "limit": {
+            "context": 1000000,
+            "output": 8192
+          }
+        },
+        {
+          "id": "gpt-5.2",
+          "name": "GPT-5.2 (Codex)",
+          "capabilities": [
+            "reasoning",
+            "code"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "GPT-5.2 (Codex)",
+              "limit": {
+                "context": 1000000,
+                "output": 8192
+              }
+            },
+            "source": "local-opencode"
+          },
+          "limit": {
+            "context": 1000000,
+            "output": 8192
+          }
+        }
+      ],
+      "defaultModel": "gpt-5.5",
+      "metadata": {
+        "renderModelsFromSource": true,
+        "importedFrom": "/Users/rubenbeuker/.config/opencode/opencode.jsonc"
+      }
+    },
+    {
+      "id": "openrelay",
+      "alias": "openrelay",
+      "name": "OpenRelay",
+      "type": "openai-compatible",
+      "baseUrl": "https://relay.2631.eu/v1",
+      "enabled": true,
+      "secretRef": "",
+      "models": [
+        {
+          "id": "chatplayground-2631eu/claude-sonnet-4-6",
+          "name": "Claude Sonnet 4.6 via OpenRelay",
+          "capabilities": [
+            "reasoning"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "Claude Sonnet 4.6 via OpenRelay"
+            },
+            "source": "local-opencode"
+          }
+        },
+        {
+          "id": "chatplayground-2631eu/gpt-5.2-chat",
+          "name": "GPT-5.2 Chat via OpenRelay",
+          "capabilities": [
+            "reasoning"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "GPT-5.2 Chat via OpenRelay"
+            },
+            "source": "local-opencode"
+          }
+        },
+        {
+          "id": "google/antigravity-gemini-3.1-pro",
+          "name": "Gemini 3.1 Pro via OpenRelay",
+          "capabilities": [
+            "fast",
+            "budget",
+            "multimodal"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "Gemini 3.1 Pro via OpenRelay"
+            },
+            "source": "local-opencode"
+          }
+        },
+        {
+          "id": "qwen-code/coder-model",
+          "name": "Qwen Coder via OpenRelay",
+          "capabilities": [
+            "reasoning",
+            "code"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "Qwen Coder via OpenRelay"
+            },
+            "source": "local-opencode"
+          }
+        },
+        {
+          "id": "opencode/deepseek-v4-flash-free",
+          "name": "DeepSeek V4 Flash Free via OpenRelay",
+          "capabilities": [
+            "reasoning",
+            "code",
+            "fast",
+            "budget"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "DeepSeek V4 Flash Free via OpenRelay"
+            },
+            "source": "local-opencode"
+          }
+        },
+        {
+          "id": "opencode/qwen3.6-plus-free",
+          "name": "Qwen 3.6 Plus Free via OpenRelay",
+          "capabilities": [
+            "reasoning",
+            "code",
+            "budget"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "Qwen 3.6 Plus Free via OpenRelay"
+            },
+            "source": "local-opencode"
+          }
+        }
+      ],
+      "defaultModel": "chatplayground-2631eu/claude-sonnet-4-6",
+      "metadata": {
+        "renderModelsFromSource": true,
+        "importedFrom": "/Users/rubenbeuker/.config/opencode/opencode.jsonc"
+      }
+    },
+    {
+      "id": "chat2631",
+      "alias": "chat2631",
+      "name": "Chat2631",
+      "type": "openai-compatible",
+      "baseUrl": "https://chat.2631.eu/v1",
+      "enabled": true,
+      "secretRef": "",
+      "models": [
+        {
+          "id": "openai/gpt-5.4",
+          "name": "ChatGPT-5.4",
+          "capabilities": [
+            "reasoning"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "ChatGPT-5.4",
+              "limit": {
+                "context": 1000000,
+                "output": 8192
+              }
+            },
+            "source": "local-opencode"
+          },
+          "limit": {
+            "context": 1000000,
+            "output": 8192
+          }
+        },
+        {
+          "id": "meta-llama/llama-4-scout-17b-16e-instruct",
+          "name": "Llama 4 Scout",
+          "capabilities": [
+            "general"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "Llama 4 Scout",
+              "limit": {
+                "context": 10000000,
+                "output": 4096
+              }
+            },
+            "source": "local-opencode"
+          },
+          "limit": {
+            "context": 10000000,
+            "output": 4096
+          }
+        },
+        {
+          "id": "openai/gpt-5.5",
+          "name": "ChatGPT-5.5",
+          "capabilities": [
+            "reasoning"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "ChatGPT-5.5",
+              "limit": {
+                "context": 1000000,
+                "output": 8192
+              }
+            },
+            "source": "local-opencode"
+          },
+          "limit": {
+            "context": 1000000,
+            "output": 8192
+          }
+        },
+        {
+          "id": "openai/gpt-5.3-chat",
+          "name": "ChatGPT-5.3",
+          "capabilities": [
+            "reasoning"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "ChatGPT-5.3",
+              "limit": {
+                "context": 1000000,
+                "output": 8192
+              }
+            },
+            "source": "local-opencode"
+          },
+          "limit": {
+            "context": 1000000,
+            "output": 8192
+          }
+        },
+        {
+          "id": "google/gemini-3-flash-preview",
+          "name": "Gemini (Latest Model)",
+          "capabilities": [
+            "fast",
+            "budget",
+            "multimodal"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "Gemini (Latest Model)",
+              "limit": {
+                "context": 1000000,
+                "output": 8192
+              }
+            },
+            "source": "local-opencode"
+          },
+          "limit": {
+            "context": 1000000,
+            "output": 8192
+          }
+        },
+        {
+          "id": "opensonnet",
+          "name": "OpenSonnet",
+          "capabilities": [
+            "reasoning"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "OpenSonnet",
+              "limit": {
+                "context": 200000,
+                "output": 64000
+              }
+            },
+            "source": "local-opencode"
+          },
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        {
+          "id": "sonnaiku",
+          "name": "Sonnaiku",
+          "capabilities": [
+            "general"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "Sonnaiku",
+              "limit": {
+                "context": 200000,
+                "output": 8192
+              }
+            },
+            "source": "local-opencode"
+          },
+          "limit": {
+            "context": 200000,
+            "output": 8192
+          }
+        },
+        {
+          "id": "anthropic/claude-haiku-4-5",
+          "name": "Claude (Latest Model)",
+          "capabilities": [
+            "reasoning"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "Claude (Latest Model)",
+              "limit": {
+                "context": 200000,
+                "output": 8192
+              }
+            },
+            "source": "local-opencode"
+          },
+          "limit": {
+            "context": 200000,
+            "output": 8192
+          }
+        },
+        {
+          "id": "deepseek-v4-flash",
+          "name": "DeepSeek V4 Flash",
+          "capabilities": [
+            "reasoning",
+            "code",
+            "fast",
+            "budget"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "DeepSeek V4 Flash",
+              "limit": {
+                "context": 128000,
+                "output": 4096
+              }
+            },
+            "source": "local-opencode"
+          },
+          "limit": {
+            "context": 128000,
+            "output": 4096
+          }
+        },
+        {
+          "id": "deepseek/deepseek-r1-0528",
+          "name": "DeepSeek R1",
+          "capabilities": [
+            "reasoning",
+            "code"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "DeepSeek R1",
+              "limit": {
+                "context": 128000,
+                "output": 4096
+              }
+            },
+            "source": "local-opencode"
+          },
+          "limit": {
+            "context": 128000,
+            "output": 4096
+          }
+        },
+        {
+          "id": "deepseek/deepseek-chat-v3-0324",
+          "name": "DeepSeek V3",
+          "capabilities": [
+            "reasoning",
+            "code"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "DeepSeek V3",
+              "limit": {
+                "context": 128000,
+                "output": 4096
+              }
+            },
+            "source": "local-opencode"
+          },
+          "limit": {
+            "context": 128000,
+            "output": 4096
+          }
+        },
+        {
+          "id": "openai/gpt-5.2-chat",
+          "name": "ChatGPT-5.2",
+          "capabilities": [
+            "reasoning"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "ChatGPT-5.2",
+              "limit": {
+                "context": 1000000,
+                "output": 8192
+              }
+            },
+            "source": "local-opencode"
+          },
+          "limit": {
+            "context": 1000000,
+            "output": 8192
+          }
+        },
+        {
+          "id": "openai/gpt-5.1-chat",
+          "name": "ChatGPT-5.1",
+          "capabilities": [
+            "reasoning"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "ChatGPT-5.1",
+              "limit": {
+                "context": 1000000,
+                "output": 8192
+              }
+            },
+            "source": "local-opencode"
+          },
+          "limit": {
+            "context": 1000000,
+            "output": 8192
+          }
+        },
+        {
+          "id": "openai/gpt-5-chat",
+          "name": "ChatGPT-5",
+          "capabilities": [
+            "reasoning"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "ChatGPT-5",
+              "limit": {
+                "context": 1000000,
+                "output": 8192
+              }
+            },
+            "source": "local-opencode"
+          },
+          "limit": {
+            "context": 1000000,
+            "output": 8192
+          }
+        },
+        {
+          "id": "meta-llama/llama-4-maverick",
+          "name": "Llama 4 Maverick",
+          "capabilities": [
+            "general"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "Llama 4 Maverick",
+              "limit": {
+                "context": 1000000,
+                "output": 4096
+              }
+            },
+            "source": "local-opencode"
+          },
+          "limit": {
+            "context": 1000000,
+            "output": 4096
+          }
+        },
+        {
+          "id": "grok-4-20-non-reasoning",
+          "name": "Grok 4.2",
+          "capabilities": [
+            "reasoning"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "Grok 4.2",
+              "limit": {
+                "context": 256000,
+                "output": 4096
+              }
+            },
+            "source": "local-opencode"
+          },
+          "limit": {
+            "context": 256000,
+            "output": 4096
+          }
+        },
+        {
+          "id": "x-ai/grok-4.1-fast",
+          "name": "Grok 4.1",
+          "capabilities": [
+            "fast"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "Grok 4.1",
+              "limit": {
+                "context": 256000,
+                "output": 4096
+              }
+            },
+            "source": "local-opencode"
+          },
+          "limit": {
+            "context": 256000,
+            "output": 4096
+          }
+        },
+        {
+          "id": "openai/o4-mini",
+          "name": "ChatGPT O4-mini",
+          "capabilities": [
+            "fast",
+            "budget"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "ChatGPT O4-mini",
+              "limit": {
+                "context": 200000,
+                "output": 8192
+              }
+            },
+            "source": "local-opencode"
+          },
+          "limit": {
+            "context": 200000,
+            "output": 8192
+          }
+        },
+        {
+          "id": "openai/o3-mini",
+          "name": "ChatGPT O3-mini",
+          "capabilities": [
+            "fast",
+            "budget"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "ChatGPT O3-mini",
+              "limit": {
+                "context": 200000,
+                "output": 8192
+              }
+            },
+            "source": "local-opencode"
+          },
+          "limit": {
+            "context": 200000,
+            "output": 8192
+          }
+        },
+        {
+          "id": "openai/gpt-4o",
+          "name": "ChatGPT-4o",
+          "capabilities": [
+            "reasoning"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "ChatGPT-4o",
+              "limit": {
+                "context": 128000,
+                "output": 4096
+              }
+            },
+            "source": "local-opencode"
+          },
+          "limit": {
+            "context": 128000,
+            "output": 4096
+          }
+        },
+        {
+          "id": "kimi-k2.6",
+          "name": "Kimi K2.6",
+          "capabilities": [
+            "general"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "Kimi K2.6",
+              "limit": {
+                "context": 128000,
+                "output": 4096
+              }
+            },
+            "source": "local-opencode"
+          },
+          "limit": {
+            "context": 128000,
+            "output": 4096
+          }
+        },
+        {
+          "id": "kimi-k2.5",
+          "name": "Kimi K2.5",
+          "capabilities": [
+            "general"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "Kimi K2.5",
+              "limit": {
+                "context": 128000,
+                "output": 4096
+              }
+            },
+            "source": "local-opencode"
+          },
+          "limit": {
+            "context": 128000,
+            "output": 4096
+          }
+        },
+        {
+          "id": "deepseek-r1",
+          "name": "DeepSeek R1",
+          "capabilities": [
+            "reasoning",
+            "code"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "DeepSeek R1",
+              "limit": {
+                "context": 128000,
+                "output": 4096
+              }
+            },
+            "source": "local-opencode"
+          },
+          "limit": {
+            "context": 128000,
+            "output": 4096
+          }
+        },
+        {
+          "id": "mistral-large-3",
+          "name": "Mistral Large 3",
+          "capabilities": [
+            "general"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "Mistral Large 3",
+              "limit": {
+                "context": 128000,
+                "output": 4096
+              }
+            },
+            "source": "local-opencode"
+          },
+          "limit": {
+            "context": 128000,
+            "output": 4096
+          }
+        },
+        {
+          "id": "mistralai/ministral-14b-2512",
+          "name": "Ministral 14B",
+          "capabilities": [
+            "fast",
+            "budget"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "Ministral 14B",
+              "limit": {
+                "context": 128000,
+                "output": 4096
+              }
+            },
+            "source": "local-opencode"
+          },
+          "limit": {
+            "context": 128000,
+            "output": 4096
+          }
+        },
+        {
+          "id": "cohere/command-r-plus-08-2024",
+          "name": "Command R+",
+          "capabilities": [
+            "general"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "Command R+",
+              "limit": {
+                "context": 128000,
+                "output": 4096
+              }
+            },
+            "source": "local-opencode"
+          },
+          "limit": {
+            "context": 128000,
+            "output": 4096
+          }
+        },
+        {
+          "id": "sonar",
+          "name": "Perplexity Sonar",
+          "capabilities": [
+            "general"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "Perplexity Sonar",
+              "limit": {
+                "context": 127000,
+                "output": 4096
+              }
+            },
+            "source": "local-opencode"
+          },
+          "limit": {
+            "context": 127000,
+            "output": 4096
+          }
+        },
+        {
+          "id": "sonar-reasoning-pro",
+          "name": "Perplexity Sonar Pro Reasoning",
+          "capabilities": [
+            "reasoning"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "Perplexity Sonar Pro Reasoning",
+              "limit": {
+                "context": 127000,
+                "output": 4096
+              }
+            },
+            "source": "local-opencode"
+          },
+          "limit": {
+            "context": 127000,
+            "output": 4096
+          }
+        },
+        {
+          "id": "sonar-pro",
+          "name": "Perplexity Sonar Pro",
+          "capabilities": [
+            "general"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "Perplexity Sonar Pro",
+              "limit": {
+                "context": 127000,
+                "output": 4096
+              }
+            },
+            "source": "local-opencode"
+          },
+          "limit": {
+            "context": 127000,
+            "output": 4096
+          }
+        }
+      ],
+      "defaultModel": "openai/gpt-5.4",
+      "metadata": {
+        "renderModelsFromSource": true,
+        "importedFrom": "/Users/rubenbeuker/.config/opencode/opencode.jsonc"
+      }
+    },
+    {
+      "id": "google",
+      "alias": "google",
+      "name": "Google",
+      "type": "plugin",
+      "baseUrl": "",
+      "enabled": true,
+      "secretRef": "",
+      "models": [
+        {
+          "id": "antigravity-gemini-3.1-pro",
+          "name": "Gemini 3.1 Pro (Antigravity)",
+          "capabilities": [
+            "reasoning",
+            "fast",
+            "budget",
+            "multimodal"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "Gemini 3.1 Pro (Antigravity)",
+              "limit": {
+                "context": 1048576,
+                "output": 65535
+              },
+              "modalities": {
+                "input": [
+                  "text",
+                  "image",
+                  "pdf"
+                ],
+                "output": [
+                  "text"
+                ]
+              },
+              "variants": {
+                "low": {
+                  "thinkingLevel": "low"
+                },
+                "high": {
+                  "thinkingLevel": "high"
+                }
+              }
+            },
+            "source": "local-opencode"
+          },
+          "limit": {
+            "context": 1048576,
+            "output": 65535
+          }
+        },
+        {
+          "id": "antigravity-claude-sonnet-4-6",
+          "name": "Claude Sonnet 4.6 (Antigravity)",
+          "capabilities": [
+            "reasoning",
+            "multimodal"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "Claude Sonnet 4.6 (Antigravity)",
+              "limit": {
+                "context": 200000,
+                "output": 64000
+              },
+              "modalities": {
+                "input": [
+                  "text",
+                  "image",
+                  "pdf"
+                ],
+                "output": [
+                  "text"
+                ]
+              }
+            },
+            "source": "local-opencode"
+          },
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        {
+          "id": "antigravity-claude-opus-4-6-thinking",
+          "name": "Claude Opus 4.6 Thinking (Antigravity)",
+          "capabilities": [
+            "reasoning",
+            "multimodal"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "Claude Opus 4.6 Thinking (Antigravity)",
+              "limit": {
+                "context": 200000,
+                "output": 64000
+              },
+              "modalities": {
+                "input": [
+                  "text",
+                  "image",
+                  "pdf"
+                ],
+                "output": [
+                  "text"
+                ]
+              }
+            },
+            "source": "local-opencode"
+          },
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        {
+          "id": "antigravity-gpt-oss-120b-medium",
+          "name": "GPT-OSS 120B Medium (Antigravity)",
+          "capabilities": [
+            "multimodal"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "GPT-OSS 120B Medium (Antigravity)",
+              "limit": {
+                "context": 200000,
+                "output": 64000
+              },
+              "modalities": {
+                "input": [
+                  "text",
+                  "image",
+                  "pdf"
+                ],
+                "output": [
+                  "text"
+                ]
+              }
+            },
+            "source": "local-opencode"
+          },
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        {
+          "id": "antigravity-gemini-3.5-flash",
+          "name": "Gemini 3.5 Flash (Antigravity)",
+          "capabilities": [
+            "reasoning",
+            "fast",
+            "budget",
+            "multimodal"
+          ],
+          "metadata": {
+            "opencodeModel": {
+              "name": "Gemini 3.5 Flash (Antigravity)",
+              "limit": {
+                "context": 1048576,
+                "output": 65536
+              },
+              "modalities": {
+                "input": [
+                  "text",
+                  "image",
+                  "pdf"
+                ],
+                "output": [
+                  "text"
+                ]
+              },
+              "variants": {
+                "low": {
+                  "thinkingLevel": "low"
+                },
+                "high": {
+                  "thinkingLevel": "high"
+                }
+              }
+            },
+            "source": "local-opencode"
+          },
+          "recommended": true,
+          "visibleInOpencode": true,
+          "limit": {
+            "context": 1048576,
+            "output": 65536
+          }
+        }
+      ],
+      "defaultModel": "antigravity-gemini-3.5-flash",
+      "metadata": {
+        "renderModelsFromSource": true,
+        "importedFrom": "/Users/rubenbeuker/.config/opencode/opencode.jsonc",
+        "pluginManaged": true
+      }
+    },
+    {
+      "id": "github-copilot",
+      "alias": "github-copilot",
+      "name": "Github Copilot",
+      "type": "plugin",
+      "baseUrl": "",
+      "enabled": true,
+      "secretRef": "",
+      "models": [
+        {
+          "id": "gemini-3.1-pro-preview",
+          "name": "Gemini 3.1 Pro Preview",
+          "capabilities": [
+            "fast",
+            "budget",
+            "multimodal"
+          ],
+          "recommended": true,
+          "visibleInOpencode": true,
+          "limit": {
+            "context": 128000,
+            "output": 8192
+          },
+          "metadata": {
+            "manual": true,
+            "source": "local-oh-my-opencode"
+          }
+        }
+      ],
+      "defaultModel": "gemini-3.1-pro-preview",
+      "metadata": {
+        "pluginManaged": true,
+        "renderModelsFromSource": true,
+        "importedFrom": "/Users/rubenbeuker/.config/opencode/oh-my-opencode-slim.jsonc"
+      }
+    },
+    {
+      "id": "kiro-auth",
+      "alias": "kiro-auth",
+      "name": "Kiro Auth",
+      "type": "plugin",
+      "baseUrl": "",
+      "enabled": true,
+      "secretRef": "",
+      "models": [
+        {
+          "id": "claude-opus-4-7",
+          "name": "Claude Opus 4 7",
+          "capabilities": [
+            "reasoning"
+          ],
+          "recommended": true,
+          "visibleInOpencode": true,
+          "limit": {
+            "context": 128000,
+            "output": 8192
+          },
+          "metadata": {
+            "manual": true,
+            "source": "local-oh-my-opencode"
+          }
+        },
+        {
+          "id": "claude-sonnet-4-6",
+          "name": "Claude Sonnet 4 6",
+          "capabilities": [
+            "reasoning"
+          ],
+          "recommended": true,
+          "visibleInOpencode": true,
+          "limit": {
+            "context": 128000,
+            "output": 8192
+          },
+          "metadata": {
+            "manual": true,
+            "source": "local-oh-my-opencode"
+          }
+        }
+      ],
+      "defaultModel": "claude-opus-4-7",
+      "metadata": {
+        "pluginManaged": true,
+        "renderModelsFromSource": true,
+        "importedFrom": "/Users/rubenbeuker/.config/opencode/oh-my-opencode-slim.jsonc"
+      }
+    },
+    {
+      "id": "opencommand",
+      "alias": "opencommand",
+      "name": "Opencommand",
+      "type": "plugin",
+      "baseUrl": "",
+      "enabled": true,
+      "secretRef": "",
+      "models": [
+        {
+          "id": "Qwen/Qwen3.7-Max",
+          "name": "Qwen Qwen3.7 Max",
+          "capabilities": [
+            "reasoning"
+          ],
+          "recommended": true,
+          "visibleInOpencode": true,
+          "limit": {
+            "context": 128000,
+            "output": 8192
+          },
+          "metadata": {
+            "manual": true,
+            "source": "local-oh-my-opencode"
+          }
+        },
+        {
+          "id": "deepseek/deepseek-v4-pro",
+          "name": "Deepseek Deepseek V4 Pro",
+          "capabilities": [
+            "reasoning",
+            "code"
+          ],
+          "recommended": true,
+          "visibleInOpencode": true,
+          "limit": {
+            "context": 128000,
+            "output": 8192
+          },
+          "metadata": {
+            "manual": true,
+            "source": "local-oh-my-opencode"
+          }
+        }
+      ],
+      "defaultModel": "Qwen/Qwen3.7-Max",
+      "metadata": {
+        "pluginManaged": true,
+        "renderModelsFromSource": true,
+        "importedFrom": "/Users/rubenbeuker/.config/opencode/oh-my-opencode-slim.jsonc"
+      }
+    },
+    {
+      "id": "zai-coding-plan",
+      "alias": "zai-coding-plan",
+      "name": "Zai Coding Plan",
+      "type": "plugin",
+      "baseUrl": "",
+      "enabled": true,
+      "secretRef": "",
+      "models": [
+        {
+          "id": "glm-5-turbo",
+          "name": "Glm 5 Turbo",
+          "capabilities": [
+            "fast",
+            "budget"
+          ],
+          "recommended": true,
+          "visibleInOpencode": true,
+          "limit": {
+            "context": 128000,
+            "output": 8192
+          },
+          "metadata": {
+            "manual": true,
+            "source": "local-oh-my-opencode"
+          }
+        },
+        {
+          "id": "glm-5.1",
+          "name": "Glm 5.1",
+          "capabilities": [
+            "general"
+          ],
+          "recommended": true,
+          "visibleInOpencode": true,
+          "limit": {
+            "context": 128000,
+            "output": 8192
+          },
+          "metadata": {
+            "manual": true,
+            "source": "local-oh-my-opencode"
+          }
+        }
+      ],
+      "defaultModel": "glm-5-turbo",
+      "metadata": {
+        "pluginManaged": true,
+        "renderModelsFromSource": true,
+        "importedFrom": "/Users/rubenbeuker/.config/opencode/oh-my-opencode-slim.jsonc"
       }
     }
   ],
-  "functionalAliases": {
-    "primary_reasoning": "google",
-    "fast_coder": "codexlb",
-    "budget_coder": "openrouter",
-    "research": "openrouter",
-    "fallback_openai": "openrouter",
-    "oauth_google": "google",
-    "oauth_qwen": "qwen-code",
-    "oauth_kiro": "kiro",
-    "cursor": "cursor-acp",
-    "oauth_cursor": "cursor-acp"
-  },
+  "functionalAliases": {},
   "metadata": {
-    "lastModified": "2026-05-26T00:00:00Z",
-    "modifiedBy": "opencode-admin"
+    "lastModified": "2026-05-26T19:20:12.347106Z",
+    "modifiedBy": "local-opencode-sync",
+    "importedFrom": "/Users/rubenbeuker/.config/opencode/opencode.jsonc",
+    "disabledProviders": [
+      "qwen",
+      "qwen-code",
+      "kiro"
+    ]
   }
 }

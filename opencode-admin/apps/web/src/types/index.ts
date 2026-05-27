@@ -1,4 +1,4 @@
-export const AGENT_IDS = ['orchestrator', 'explorer', 'oracle', 'librarian', 'designer', 'fixer'] as const;
+export const AGENT_IDS = ['orchestrator', 'explorer', 'oracle', 'librarian', 'designer', 'fixer', 'observer'] as const;
 export type BuiltInAgentId = (typeof AGENT_IDS)[number];
 
 export interface AgentConfig {
@@ -7,8 +7,8 @@ export interface AgentConfig {
   enabled: boolean;
   displayName: string;
   description: string;
-  primary: { provider: string; model: string };
-  fallback: { provider: string; model: string };
+  primary: { provider: string; model: string; variant?: string };
+  fallback: { provider: string; model: string; variant?: string };
   temperature: number;
   maxReasoningEffort: 'low' | 'medium' | 'high';
   mcpAccess: 'all' | 'selected' | 'none';
@@ -151,6 +151,28 @@ export interface CouncilConfig {
   master_timeout?: number;
   councillors_timeout?: number;
   master_fallback?: string[];
+}
+
+export interface RoutingPresetInfo {
+  name: string;
+  description: string;
+}
+
+export interface PresetAgentConfig {
+  model: string;
+  variant?: string;
+  skills?: string[];
+  mcps?: string[];
+}
+
+export interface RoutingConfig {
+  version: string;
+  defaultPreset: string;
+  agents: Record<string, AgentConfig>;
+  presets: Record<string, RoutingPresetInfo>;
+  agentPresets?: Record<string, Record<string, PresetAgentConfig>>;
+  council?: CouncilConfig;
+  metadata?: Record<string, unknown>;
 }
 
 export interface ValidationIssue {

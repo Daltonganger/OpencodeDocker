@@ -2,9 +2,9 @@
 set -euo pipefail
 
 mkdir -p /shared /home/app/workspace /home/app/.config/opencode /home/app/.cursor /home/app/.qwen /home/app/.local/share/kiro-cli /home/app/.local/share/opencode /home/app/.local/state/opencode /home/app/.cache/opencode
+chown app:app /home/app/workspace
 chown -R app:app \
   /shared \
-  /home/app/workspace \
   /home/app/.config/opencode \
   /home/app/.cursor \
   /home/app/.qwen \

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { createAgent, deleteAgent, getAgents, getFullConfig, getProviders, updateAgent, updateFullConfig } from '@/api';
-import type { AgentConfig, CouncilConfig, CouncilPreset, ProviderConfig } from '@/types';
+import type { AgentConfig, CouncilConfig, CouncilPreset, PresetAgentConfig, ProviderConfig, ProvidersSourceConfig, RoutingConfig } from '@/types';
 import { Modal } from '@/components/Modal';
 
 // ── Council defaults (same values as Council.tsx) ──────────────────────
@@ -33,10 +33,109 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 
 function DetailRow({ label, value, mono }: { label: string; value: string; mono?: boolean }) {
   return (
-    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid var(--border-primary)', gap: 16 }}>
-      <span style={{ color: 'var(--text-secondary)' }}>{label}</span>
-      <span style={{ fontFamily: mono ? 'SF Mono, Menlo, monospace' : undefined }}>{value}</span>
+    <div className="info-row">
+      <span className="info-row-label">{label}</span>
+      <span className={`info-row-value ${mono ? 'mono' : ''}`}>{value}</span>
     </div>
+  );
+}
+
+type ModelSelection = { provider: string; model: string; variant?: string };
+
+function splitModelRef(value?: string): { provider: string; model: string } {
+  const ref = value ?? '';
+  const slashIndex = ref.indexOf('/');
+  if (slashIndex === -1) return { provider: '', model: ref };
+  return { provider: ref.slice(0, slashIndex), model: ref.slice(slashIndex + 1) };
+}
+
+function joinModelRef(provider: string, model: string): string {
+  if (!provider) return model;
+  if (!model) return provider;
+  return `${provider}/${model}`;
+}
+
+function csv(value?: string[]): string {
+  return (value ?? []).join(', ');
+}
+
+function fromCsv(value: string): string[] {
+  return value.split(',').map((item) => item.trim()).filter(Boolean);
+}
+
+function providerModels(providers: ProviderConfig[], providerId: string) {
+  return providers.find((provider) => provider.id === providerId)?.models ?? [];
+}
+
+function ModelPicker({
+  providers,
+  value,
+  onChange,
+  variant = true,
+}: {
+  providers: ProviderConfig[];
+  value: ModelSelection;
+  onChange: (next: ModelSelection) => void;
+  variant?: boolean;
+}) {
+  const models = providerModels(providers, value.provider);
+  return (
+    <div className={variant ? 'grid grid-3' : 'grid grid-2'}>
+      <Field label="Provider">
+        <select
+          className="form-select"
+          value={value.provider}
+          onChange={(event) => {
+            const provider = event.target.value;
+            onChange({ ...value, provider, model: providerModels(providers, provider)[0]?.id ?? '' });
+          }}
+        >
+          <option value="">— select —</option>
+          {providers.map((provider) => <option key={provider.id} value={provider.id}>{provider.alias || provider.id}</option>)}
+        </select>
+      </Field>
+      <Field label="Model">
+        <select className="form-select" value={value.model} onChange={(event) => onChange({ ...value, model: event.target.value })}>
+          <option value="">— select —</option>
+          {models.map((model) => <option key={model.id} value={model.id}>{model.name || model.id}</option>)}
+          {value.model && !models.some((model) => model.id === value.model) && <option value={value.model}>{value.model}</option>}
+        </select>
+      </Field>
+      {variant && (
+        <Field label="Variant">
+          <input
+            className="form-input"
+            list="model-variant-options"
+            value={value.variant ?? ''}
+            onChange={(event) => onChange({ ...value, variant: event.target.value || undefined })}
+            placeholder="default / high / medium"
+          />
+        </Field>
+      )}
+    </div>
+  );
+}
+
+function FullModelPicker({
+  providers,
+  value,
+  variant,
+  onChange,
+  showVariant = true,
+}: {
+  providers: ProviderConfig[];
+  value: string;
+  variant?: string;
+  onChange: (model: string, variant?: string) => void;
+  showVariant?: boolean;
+}) {
+  return (
+    <ModelPicker
+      providers={providers}
+      value={{ ...splitModelRef(value), variant }}
+      variant={showVariant}
+      onChange={(next) => onChange(joinModelRef(next.provider, next.model), next.variant)}
+    />
   );
 }
 
@@ -51,10 +150,12 @@ function councillorCount(preset: CouncilPreset): number {
 function CouncilSystemCard({
   initialCouncil,
   routing,
+  providers,
   onSaved,
 }: {
   initialCouncil: CouncilConfig | null;
-  routing: Record<string, unknown>;
+  routing: RoutingConfig;
+  providers: ProviderConfig[];
   onSaved: (council: CouncilConfig | null) => void;
 }) {
   // ── state ──
@@ -147,6 +248,38 @@ function CouncilSystemCard({
 
   // ── preset keys for dropdown ──
   const presetKeys = council ? Object.keys(council.presets) : [];
+
+  const updateCouncilPresets = (nextPresets: Record<string, CouncilPreset>) => {
+    if (!council) return;
+    setCouncil({ ...council, presets: nextPresets });
+    setPresetsJson(JSON.stringify(nextPresets, null, 2));
+  };
+
+  const renameCouncilPreset = (from: string, to: string) => {
+    if (!council || !to || from === to || council.presets[to]) return;
+    const nextPresets: Record<string, CouncilPreset> = {};
+    for (const [name, preset] of Object.entries(council.presets)) {
+      nextPresets[name === from ? to : name] = preset;
+    }
+    updateCouncilPresets(nextPresets);
+    if (council.default_preset === from) setCouncil({ ...council, default_preset: to, presets: nextPresets });
+  };
+
+  const updateCouncilPresetEntry = (presetName: string, entryName: string, nextName: string, patch: { model?: string; variant?: string; prompt?: string }) => {
+    if (!council || !nextName) return;
+    const preset = { ...(council.presets[presetName] ?? {}) };
+    const current = (preset[entryName] ?? {}) as { model?: string; variant?: string; prompt?: string };
+    if (entryName !== nextName) delete preset[entryName];
+    preset[nextName] = { ...current, ...patch };
+    updateCouncilPresets({ ...council.presets, [presetName]: preset });
+  };
+
+  const deleteCouncilPresetEntry = (presetName: string, entryName: string) => {
+    if (!council) return;
+    const preset = { ...(council.presets[presetName] ?? {}) };
+    delete preset[entryName];
+    updateCouncilPresets({ ...council.presets, [presetName]: preset });
+  };
 
   // ── render: empty state ──
   if (!council) {
@@ -269,22 +402,55 @@ function CouncilSystemCard({
               Each preset is a named group of councillors. The <code>master</code> key overrides the global master model for that preset.
             </p>
             {Object.entries(council.presets).map(([presetName, preset]) => (
-              <div key={presetName} style={{ marginBottom: 12 }}>
-                <div style={{ fontWeight: 600, marginBottom: 4 }}>
-                  {presetName}
+              <div key={presetName} style={{ border: '1px solid var(--border-primary)', borderRadius: 8, padding: 12, marginBottom: 12 }}>
+                <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 8, flexWrap: 'wrap' }}>
+                  <input
+                    className="form-input"
+                    style={{ maxWidth: 220, fontWeight: 600 }}
+                    value={presetName}
+                    onChange={(e) => renameCouncilPreset(presetName, e.target.value)}
+                  />
                   {council.default_preset === presetName && <span className="badge badge-success" style={{ marginLeft: 8 }}>default</span>}
                   <span style={{ fontWeight: 400, color: 'var(--text-secondary)', marginLeft: 8, fontSize: 12 }}>
                     {councillorCount(preset)} councillor{councillorCount(preset) !== 1 ? 's' : ''}
                   </span>
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={() => {
+                      const name = window.prompt('Councillor name', `councillor-${councillorCount(preset) + 1}`);
+                      if (!name) return;
+                      updateCouncilPresetEntry(presetName, name, name, { model: council.master.model, variant: council.master.variant });
+                    }}
+                  >Add councillor</button>
                 </div>
-                {Object.entries(preset).filter(([key]) => key !== 'master').map(([cName, cfg]) =>
+                {Object.entries(preset).map(([cName, cfg]) =>
                   cfg ? (
-                    <div key={cName} style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 0', borderBottom: '1px solid var(--border-primary)', fontSize: 13 }}>
-                      <span style={{ color: 'var(--text-secondary)' }}>{cName}</span>
-                      <span style={{ fontFamily: 'SF Mono, Menlo, monospace' }}>
-                        {(cfg as { model: string; variant?: string }).model}
-                        {(cfg as { variant?: string }).variant ? ` (${(cfg as { variant?: string }).variant})` : ''}
-                      </span>
+                    <div key={cName} style={{ borderTop: '1px solid var(--border-primary)', paddingTop: 10, marginTop: 10 }}>
+                      <div className="grid grid-2">
+                        <Field label={cName === 'master' ? 'Master override' : 'Councillor name'}>
+                          <input
+                            className="form-input"
+                            value={cName}
+                            disabled={cName === 'master'}
+                            onChange={(e) => updateCouncilPresetEntry(presetName, cName, e.target.value, {})}
+                          />
+                        </Field>
+                        <Field label="Prompt">
+                          <input
+                            className="form-input"
+                            value={(cfg as { prompt?: string }).prompt ?? ''}
+                            onChange={(e) => updateCouncilPresetEntry(presetName, cName, cName, { prompt: e.target.value || undefined })}
+                          />
+                        </Field>
+                      </div>
+                      <FullModelPicker
+                        providers={providers}
+                        value={(cfg as { model?: string }).model ?? ''}
+                        variant={(cfg as { variant?: string }).variant}
+                        onChange={(model, variant) => updateCouncilPresetEntry(presetName, cName, cName, { model, variant })}
+                      />
+                      <button type="button" className="btn btn-danger" onClick={() => deleteCouncilPresetEntry(presetName, cName)}>Remove</button>
                     </div>
                   ) : null,
                 )}
@@ -317,13 +483,270 @@ function CouncilSystemCard({
   );
 }
 
+function RoutingDefaultsCard({
+  routing,
+  providersSource,
+  providers,
+  agents,
+  onSaved,
+}: {
+  routing: RoutingConfig;
+  providersSource: ProvidersSourceConfig;
+  providers: ProviderConfig[];
+  agents: AgentConfig[];
+  onSaved: (routing: RoutingConfig, providersSource: ProvidersSourceConfig) => void;
+}) {
+  const metadata = routing.metadata ?? {};
+  const providerMetadata = providersSource.metadata ?? {};
+  const [model, setModel] = useState(typeof metadata.model === 'string' ? metadata.model : '');
+  const [smallModel, setSmallModel] = useState(typeof metadata.smallModel === 'string' ? metadata.smallModel : '');
+  const [defaultAgent, setDefaultAgent] = useState(typeof metadata.defaultAgent === 'string' ? metadata.defaultAgent : 'orchestrator');
+  const [defaultPreset, setDefaultPreset] = useState(routing.defaultPreset);
+  const [instructions, setInstructions] = useState(csv(Array.isArray(metadata.instructions) ? metadata.instructions as string[] : []));
+  const [disabledProviders, setDisabledProviders] = useState(csv(Array.isArray(providerMetadata.disabledProviders) ? providerMetadata.disabledProviders as string[] : []));
+  const [message, setMessage] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const nextMetadata = routing.metadata ?? {};
+    const nextProviderMetadata = providersSource.metadata ?? {};
+    setModel(typeof nextMetadata.model === 'string' ? nextMetadata.model : '');
+    setSmallModel(typeof nextMetadata.smallModel === 'string' ? nextMetadata.smallModel : '');
+    setDefaultAgent(typeof nextMetadata.defaultAgent === 'string' ? nextMetadata.defaultAgent : 'orchestrator');
+    setDefaultPreset(routing.defaultPreset);
+    setInstructions(csv(Array.isArray(nextMetadata.instructions) ? nextMetadata.instructions as string[] : []));
+    setDisabledProviders(csv(Array.isArray(nextProviderMetadata.disabledProviders) ? nextProviderMetadata.disabledProviders as string[] : []));
+  }, [routing, providersSource]);
+
+  const save = async () => {
+    setMessage(null);
+    setError(null);
+    try {
+      const nextRouting: RoutingConfig = {
+        ...routing,
+        defaultPreset,
+        metadata: {
+          ...(routing.metadata ?? {}),
+          model: model || undefined,
+          smallModel: smallModel || undefined,
+          defaultAgent: defaultAgent || undefined,
+          instructions: fromCsv(instructions),
+        },
+      };
+      const nextProvidersSource: ProvidersSourceConfig = {
+        ...providersSource,
+        metadata: {
+          ...(providersSource.metadata ?? {}),
+          disabledProviders: fromCsv(disabledProviders),
+        },
+      };
+      const response = await updateFullConfig({ routing: nextRouting as never, providers: nextProvidersSource });
+      onSaved(response.data.routing as unknown as RoutingConfig, response.data.providers);
+      setMessage('Defaults opgeslagen');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Save failed');
+    }
+  };
+
+  return (
+    <div className="card" style={{ marginBottom: 24 }}>
+      <div className="card-header">
+        <div>
+          <h3 className="card-title">OpenCode defaults</h3>
+          <div style={{ color: 'var(--text-secondary)', fontSize: 13, marginTop: 4 }}>
+            Top-level model, small model, default agent, actieve preset en disabled providers.
+          </div>
+        </div>
+        <button type="button" className="btn btn-primary" onClick={() => void save()}>Save defaults</button>
+      </div>
+      <div className="grid grid-2">
+        <div>
+          <h4 style={{ fontSize: 13, marginBottom: 8 }}>Model</h4>
+          <FullModelPicker providers={providers} value={model} showVariant={false} onChange={(next) => setModel(next)} />
+        </div>
+        <div>
+          <h4 style={{ fontSize: 13, marginBottom: 8 }}>Small model</h4>
+          <FullModelPicker providers={providers} value={smallModel} showVariant={false} onChange={(next) => setSmallModel(next)} />
+        </div>
+      </div>
+      <div className="grid grid-3" style={{ marginTop: 12 }}>
+        <Field label="Default agent">
+          <select className="form-select" value={defaultAgent} onChange={(event) => setDefaultAgent(event.target.value)}>
+            {agents.map((agent) => <option key={agent.id} value={agent.id}>{agent.displayName || agent.id}</option>)}
+            {defaultAgent && !agents.some((agent) => agent.id === defaultAgent) && <option value={defaultAgent}>{defaultAgent}</option>}
+          </select>
+        </Field>
+        <Field label="Active oh-my preset">
+          <select className="form-select" value={defaultPreset} onChange={(event) => setDefaultPreset(event.target.value)}>
+            {Object.keys(routing.presets ?? {}).map((preset) => <option key={preset} value={preset}>{routing.presets[preset]?.name || preset}</option>)}
+          </select>
+        </Field>
+        <Field label="Disabled providers">
+          <input className="form-input" value={disabledProviders} onChange={(event) => setDisabledProviders(event.target.value)} placeholder="qwen, qwen-code, kiro" />
+        </Field>
+      </div>
+      <Field label="Instructions">
+        <input className="form-input" value={instructions} onChange={(event) => setInstructions(event.target.value)} placeholder="comma separated paths" />
+      </Field>
+      {message && <div style={{ color: 'var(--accent-success)', fontSize: 13 }}>{message}</div>}
+      {error && <div style={{ color: 'var(--accent-error)', fontSize: 13 }}>{error}</div>}
+    </div>
+  );
+}
+
+function AgentPresetRoutingCard({
+  routing,
+  providers,
+  agents,
+  onSaved,
+}: {
+  routing: RoutingConfig;
+  providers: ProviderConfig[];
+  agents: AgentConfig[];
+  onSaved: (routing: RoutingConfig) => void;
+}) {
+  const presetIds = Object.keys(routing.presets ?? {});
+  const [selectedPreset, setSelectedPreset] = useState(routing.defaultPreset || presetIds[0] || 'default');
+  const [message, setMessage] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const agentIds = useMemo(() => {
+    const ids = new Set(agents.map((agent) => agent.id));
+    for (const preset of Object.values(routing.agentPresets ?? {})) {
+      Object.keys(preset).forEach((id) => ids.add(id));
+    }
+    return [...ids];
+  }, [agents, routing.agentPresets]);
+
+  const selectedInfo = routing.presets?.[selectedPreset] ?? { name: selectedPreset, description: '' };
+  const selectedAgents = routing.agentPresets?.[selectedPreset] ?? {};
+
+  const saveRouting = async (nextRouting: RoutingConfig, savedMessage: string) => {
+    setMessage(null);
+    setError(null);
+    try {
+      const response = await updateFullConfig({ routing: nextRouting as never });
+      const updated = response.data.routing as unknown as RoutingConfig;
+      onSaved(updated);
+      setMessage(savedMessage);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Save failed');
+    }
+  };
+
+  const updatePresetInfo = (patch: Partial<{ name: string; description: string }>) => {
+    void saveRouting({
+      ...routing,
+      presets: { ...(routing.presets ?? {}), [selectedPreset]: { ...selectedInfo, ...patch } },
+    }, 'Preset opgeslagen');
+  };
+
+  const updateAgentPreset = (agentId: string, patch: Partial<PresetAgentConfig>) => {
+    const agent = agents.find((item) => item.id === agentId);
+    const existing = selectedAgents[agentId] ?? {
+      model: joinModelRef(agent?.primary.provider ?? '', agent?.primary.model ?? ''),
+      variant: agent?.primary.variant,
+      skills: [],
+      mcps: [],
+    };
+    void saveRouting({
+      ...routing,
+      agentPresets: {
+        ...(routing.agentPresets ?? {}),
+        [selectedPreset]: { ...selectedAgents, [agentId]: { ...existing, ...patch } },
+      },
+    }, `${agentId} opgeslagen`);
+  };
+
+  const addPreset = () => {
+    const id = window.prompt('Preset id');
+    if (!id) return;
+    if (routing.presets?.[id]) {
+      setError('Preset bestaat al');
+      return;
+    }
+    setSelectedPreset(id);
+    void saveRouting({
+      ...routing,
+      presets: { ...(routing.presets ?? {}), [id]: { name: id, description: '' } },
+      agentPresets: { ...(routing.agentPresets ?? {}), [id]: structuredClone(selectedAgents) },
+    }, `Preset ${id} toegevoegd`);
+  };
+
+  const deletePreset = () => {
+    if (presetIds.length <= 1 || !window.confirm(`Preset ${selectedPreset} verwijderen?`)) return;
+    const nextPresets = { ...(routing.presets ?? {}) };
+    const nextAgentPresets = { ...(routing.agentPresets ?? {}) };
+    delete nextPresets[selectedPreset];
+    delete nextAgentPresets[selectedPreset];
+    const nextDefault = routing.defaultPreset === selectedPreset ? Object.keys(nextPresets)[0] : routing.defaultPreset;
+    setSelectedPreset(nextDefault);
+    void saveRouting({ ...routing, defaultPreset: nextDefault, presets: nextPresets, agentPresets: nextAgentPresets }, `Preset ${selectedPreset} verwijderd`);
+  };
+
+  return (
+    <div className="card" style={{ marginBottom: 24 }}>
+      <div className="card-header">
+        <div>
+          <h3 className="card-title">Oh-my agent presets</h3>
+          <div style={{ color: 'var(--text-secondary)', fontSize: 13, marginTop: 4 }}>
+            Visueel beheer van model, variant, skills en MCPs per preset.
+          </div>
+        </div>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button type="button" className="btn btn-secondary" onClick={addPreset}>Add preset</button>
+          <button type="button" className="btn btn-danger" onClick={deletePreset} disabled={presetIds.length <= 1}>Delete preset</button>
+        </div>
+      </div>
+      <div className="grid grid-3">
+        <Field label="Preset">
+          <select className="form-select" value={selectedPreset} onChange={(event) => setSelectedPreset(event.target.value)}>
+            {presetIds.map((id) => <option key={id} value={id}>{id}</option>)}
+          </select>
+        </Field>
+        <Field label="Name">
+          <input className="form-input" value={selectedInfo.name ?? ''} onChange={(event) => updatePresetInfo({ name: event.target.value })} />
+        </Field>
+        <Field label="Description">
+          <input className="form-input" value={selectedInfo.description ?? ''} onChange={(event) => updatePresetInfo({ description: event.target.value })} />
+        </Field>
+      </div>
+      <div style={{ display: 'grid', gap: 12, marginTop: 12 }}>
+        {agentIds.map((agentId) => {
+          const agent = agents.find((item) => item.id === agentId);
+          const config = selectedAgents[agentId] ?? { model: joinModelRef(agent?.primary.provider ?? '', agent?.primary.model ?? ''), variant: agent?.primary.variant, skills: [], mcps: [] };
+          return (
+            <div key={agentId} style={{ border: '1px solid var(--border-primary)', borderRadius: 8, padding: 12 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, alignItems: 'center', marginBottom: 8 }}>
+                <strong>{agent?.displayName || agentId}</strong>
+                <span className="badge badge-info">{agentId}</span>
+              </div>
+              <FullModelPicker providers={providers} value={config.model} variant={config.variant} onChange={(model, variant) => updateAgentPreset(agentId, { model, variant })} />
+              <div className="grid grid-2" style={{ marginTop: 8 }}>
+                <Field label="Skills">
+                  <input className="form-input" value={csv(config.skills)} onChange={(event) => updateAgentPreset(agentId, { skills: fromCsv(event.target.value) })} />
+                </Field>
+                <Field label="MCPs">
+                  <input className="form-input" value={csv(config.mcps)} onChange={(event) => updateAgentPreset(agentId, { mcps: fromCsv(event.target.value) })} />
+                </Field>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      {message && <div style={{ color: 'var(--accent-success)', fontSize: 13, marginTop: 12 }}>{message}</div>}
+      {error && <div style={{ color: 'var(--accent-error)', fontSize: 13, marginTop: 12 }}>{error}</div>}
+    </div>
+  );
+}
+
 // ══════════════════════════════════════════════════════════════════════
 //  Agents page
 // ══════════════════════════════════════════════════════════════════════
 export function Agents() {
   const [agents, setAgents] = useState<AgentConfig[]>([]);
   const [providers, setProviders] = useState<ProviderConfig[]>([]);
-  const [routing, setRouting] = useState<Record<string, unknown> | null>(null);
+  const [providersSource, setProvidersSource] = useState<ProvidersSourceConfig | null>(null);
+  const [routing, setRouting] = useState<RoutingConfig | null>(null);
   const [councilConfig, setCouncilConfig] = useState<CouncilConfig | null>(null);
   const [editing, setEditing] = useState<AgentConfig | null>(null);
   const [isCreating, setIsCreating] = useState(false);
@@ -341,7 +764,8 @@ export function Agents() {
         ]);
         setAgents(agentsRes.data);
         setProviders(providersRes.data);
-        const r = configRes.data.routing as Record<string, unknown>;
+        setProvidersSource(configRes.data.providers);
+        const r = configRes.data.routing as unknown as RoutingConfig;
         setRouting(r);
         setCouncilConfig((r.council as CouncilConfig | undefined) ?? null);
       } catch (err) {
@@ -401,6 +825,12 @@ export function Agents() {
 
   const handleCouncilSaved = (updated: CouncilConfig | null) => {
     setCouncilConfig(updated);
+    if (routing) {
+      const nextRouting = { ...routing };
+      if (updated) nextRouting.council = updated;
+      else delete nextRouting.council;
+      setRouting(nextRouting);
+    }
   };
 
   if (error) {
@@ -409,6 +839,32 @@ export function Agents() {
 
   return (
     <div>
+      <datalist id="model-variant-options">
+        {['default', 'low', 'medium', 'high', 'thinking-high'].map((variant) => <option key={variant} value={variant} />)}
+      </datalist>
+
+      <div className="page-section-header">
+        <div>
+          <h2 className="page-section-title">Model routing</h2>
+          <p className="page-section-subtitle">Configureer defaults, variants en oh-my presets zonder Advanced JSON.</p>
+        </div>
+      </div>
+
+      {routing && providersSource && (
+        <RoutingDefaultsCard
+          routing={routing}
+          providersSource={providersSource}
+          providers={providers}
+          agents={agents}
+          onSaved={(nextRouting, nextProvidersSource) => {
+            setRouting(nextRouting);
+            setProvidersSource(nextProvidersSource);
+          }}
+        />
+      )}
+
+      {routing && <AgentPresetRoutingCard routing={routing} providers={providers} agents={agents} onSaved={setRouting} />}
+
       {/* ── System Agents header ── */}
       <div className="page-section-header">
         <div>
@@ -422,6 +878,7 @@ export function Agents() {
         <CouncilSystemCard
           initialCouncil={councilConfig}
           routing={routing}
+          providers={providers}
           onSaved={handleCouncilSaved}
         />
       )}
@@ -495,30 +952,10 @@ export function Agents() {
             {isCreating && <Field label="Agent ID"><input className="form-input" value={editing.id} onChange={(e) => setEditing({ ...editing, id: e.target.value })} placeholder="researcher" /></Field>}
             <Field label="Display name"><input className="form-input" value={editing.displayName} onChange={(e) => setEditing({ ...editing, displayName: e.target.value })} /></Field>
             <Field label="Description"><textarea className="form-textarea" value={editing.description} onChange={(e) => setEditing({ ...editing, description: e.target.value })} /></Field>
-            <div className="grid grid-2">
-              <Field label="Primary provider">
-                <select className="form-select" value={editing.primary.provider} onChange={(e) => setEditing({ ...editing, primary: { provider: e.target.value, model: modelsFor(e.target.value)[0]?.id ?? '' } })}>
-                  {providers.map((provider) => <option key={provider.id} value={provider.id}>{provider.alias}</option>)}
-                </select>
-              </Field>
-              <Field label="Primary model">
-                <select className="form-select" value={editing.primary.model} onChange={(e) => setEditing({ ...editing, primary: { ...editing.primary, model: e.target.value } })}>
-                  {modelsFor(editing.primary.provider).map((model) => <option key={model.id} value={model.id}>{model.name}</option>)}
-                </select>
-              </Field>
-            </div>
-            <div className="grid grid-2">
-              <Field label="Fallback provider">
-                <select className="form-select" value={editing.fallback.provider} onChange={(e) => setEditing({ ...editing, fallback: { provider: e.target.value, model: modelsFor(e.target.value)[0]?.id ?? '' } })}>
-                  {providers.map((provider) => <option key={provider.id} value={provider.id}>{provider.alias}</option>)}
-                </select>
-              </Field>
-              <Field label="Fallback model">
-                <select className="form-select" value={editing.fallback.model} onChange={(e) => setEditing({ ...editing, fallback: { ...editing.fallback, model: e.target.value } })}>
-                  {modelsFor(editing.fallback.provider).map((model) => <option key={model.id} value={model.id}>{model.name}</option>)}
-                </select>
-              </Field>
-            </div>
+            <h4 style={{ fontSize: 14, fontWeight: 600, marginBottom: 8, marginTop: 16 }}>Primary</h4>
+            <ModelPicker providers={providers} value={editing.primary} onChange={(primary) => setEditing({ ...editing, primary })} />
+            <h4 style={{ fontSize: 14, fontWeight: 600, marginBottom: 8, marginTop: 16 }}>Fallback</h4>
+            <ModelPicker providers={providers} value={editing.fallback} onChange={(fallback) => setEditing({ ...editing, fallback })} />
             <div className="grid grid-3">
               <Field label="Temperature"><input className="form-input" type="number" step="0.1" min="0" max="1" value={editing.temperature} onChange={(e) => setEditing({ ...editing, temperature: Number(e.target.value) })} /></Field>
               <Field label="Reasoning"><select className="form-select" value={editing.maxReasoningEffort} onChange={(e) => setEditing({ ...editing, maxReasoningEffort: e.target.value as AgentConfig['maxReasoningEffort'] })}><option value="low">low</option><option value="medium">medium</option><option value="high">high</option></select></Field>

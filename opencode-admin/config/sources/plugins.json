@@ -1,113 +1,31 @@
 {
-  "$schema": "./schemas/plugins.schema.json",
   "version": "1.0.0",
   "plugins": [
+    {
+      "id": "warp-terminal",
+      "name": "Warp Terminal Integration",
+      "package": "@warp-dot-dev/opencode-warp",
+      "enabled": true,
+      "order": 10,
+      "version": "latest",
+      "description": "Warp terminal integration from Opencode-Sync; mainly useful on desktop Warp clients"
+    },
     {
       "id": "oh-my-opencode-slim",
       "name": "oh-my-opencode-slim",
       "package": "oh-my-opencode-slim",
       "enabled": true,
-      "order": 10,
+      "order": 20,
       "version": "latest",
       "description": "Agent orchestration and Pantheon profile layer",
       "required": true
     },
     {
-      "id": "copilot-hydra",
-      "name": "CopilotHydra",
-      "package": "copilothydra",
-      "enabled": true,
-      "order": 20,
-      "version": "latest",
-      "description": "Multiple GitHub Copilot accounts side by side — account-scoped providers with explicit model routing"
-    },
-    {
-      "id": "vibeguard",
-      "name": "Vibeguard",
-      "package": "opencode-vibeguard",
-      "enabled": true,
-      "order": 30,
-      "version": "latest",
-      "description": "Safety guardrails and flow checks"
-    },
-    {
-      "id": "qwen-auth",
-      "name": "Qwen Auth",
-      "package": "@melodyoftears/opencode-qwen-auth",
-      "enabled": true,
-      "order": 40,
-      "version": "latest",
-      "description": "OAuth helper for Qwen auth flow"
-    },
-    {
-      "id": "antigravity-auth",
-      "name": "Antigravity Auth",
-      "package": "opencode-antigravity-auth@beta",
-      "enabled": false,
-      "order": 50,
-      "version": "beta",
-      "description": "NPM beta Antigravity auth plugin; disabled because the local Opencode-Sync fork is enabled instead."
-    },
-    {
-      "id": "dynamic-context-pruning",
-      "name": "Dynamic Context Pruning",
-      "package": "@tarquinen/opencode-dcp",
-      "enabled": true,
-      "order": 55,
-      "version": "latest",
-      "description": "Prunes context to keep sessions efficient"
-    },
-    {
-      "id": "opencode-quota",
-      "name": "OpenCode Quota",
-      "package": "@slkiser/opencode-quota",
-      "enabled": true,
-      "order": 60,
-      "version": "latest",
-      "description": "Quota and usage monitoring across OAuth and provider accounts"
-    },
-    {
-      "id": "tokenspeed-monitor",
-      "name": "TokenSpeed Monitor",
-      "package": "opencode-tokenspeed-monitor@latest",
-      "enabled": true,
-      "order": 70,
-      "version": "latest",
-      "description": "Runtime token and latency monitoring"
-    },
-    {
-      "id": "kiro-auth",
-      "name": "Kiro Auth",
-      "package": "opencode-kiro-auth@latest",
-      "enabled": false,
-      "order": 80,
-      "version": "latest",
-      "description": "Kiro Desktop auth provider for Claude and Gemini via Kiro credentials"
-    },
-    {
-      "id": "cursor-auth",
-      "name": "Cursor Auth",
-      "package": "opencode-cursor-auth@latest",
-      "enabled": false,
-      "order": 100,
-      "version": "latest",
-      "description": "Cursor Agent auth/provider bridge for OpenCode; requires cursor-agent login when enabled"
-    },
-    {
-      "id": "warp-terminal",
-      "name": "Warp Terminal Integration",
-      "package": "@warp-dot-dev/opencode-warp",
-      "enabled": false,
-      "order": 110,
-      "version": "latest",
-      "description": "Warp terminal integration from Opencode-Sync; mainly useful on desktop Warp clients"
-    },
-    {
       "id": "openqwencode",
       "name": "OpenQwenCode",
       "package": "openqwencode",
-      "enabled": false,
-      "order": 120,
+      "enabled": true,
+      "order": 30,
       "version": "latest",
       "description": "Qwen OAuth/free Qwen Code models plugin from Opencode-Sync; keep disabled when Qwen Auth is enough"
     },
@@ -115,17 +33,35 @@
       "id": "opencommand",
       "name": "OpenCommand",
       "package": "opencommand-plugin@latest",
-      "enabled": false,
-      "order": 130,
+      "enabled": true,
+      "order": 40,
       "version": "latest",
       "description": "CommandCode/OpenCommand plugin; requires COMMAND_CODE_TOKEN or local OpenCommand secret before enabling"
+    },
+    {
+      "id": "tokenspeed-monitor",
+      "name": "TokenSpeed Monitor",
+      "package": "opencode-tokenspeed-monitor@latest",
+      "enabled": true,
+      "order": 50,
+      "version": "latest",
+      "description": "Runtime token and latency monitoring"
+    },
+    {
+      "id": "tarquinen-opencode-dcp",
+      "name": "Tarquinen Opencode Dcp",
+      "package": "@tarquinen/opencode-dcp@latest",
+      "enabled": true,
+      "order": 60,
+      "version": "latest",
+      "description": "Imported from local opencode plugin @tarquinen/opencode-dcp@latest"
     },
     {
       "id": "open-cursor-fork",
       "name": "Open Cursor Fork",
       "package": "@rama_nigg/open-cursor@github:Nomadcxx/opencode-cursor#main",
       "enabled": true,
-      "order": 140,
+      "order": 70,
       "version": "github:Nomadcxx/opencode-cursor#main",
       "description": "Cursor subscription integration from Opencode-Sync; requires cursor-agent login and model sync when enabled"
     },
@@ -133,8 +69,8 @@
       "id": "codexvision",
       "name": "CodexVision",
       "package": "file:///opt/opencode-plugins/codexvision/dist/index.js",
-      "enabled": false,
-      "order": 150,
+      "enabled": true,
+      "order": 80,
       "version": "local",
       "description": "Local CodexVision image generation tool plugin, vendored into the Docker image from Opencode-Sync"
     },
@@ -143,7 +79,7 @@
       "name": "Cursor ACP Adapter",
       "package": "cursor-acp",
       "enabled": true,
-      "order": 160,
+      "order": 90,
       "version": "latest",
       "description": "Cursor Agent Protocol adapter listed in Opencode-Sync; pair with the disabled cursor-acp provider before use"
     },
@@ -152,7 +88,7 @@
       "name": "Kiro Auth (@zhafron)",
       "package": "@zhafron/opencode-kiro-auth",
       "enabled": true,
-      "order": 170,
+      "order": 100,
       "version": "latest",
       "description": "Scoped Kiro auth plugin used by Opencode-Sync; alternative to the unscoped Kiro Auth toggle"
     },
@@ -161,13 +97,14 @@
       "name": "Antigravity Auth Local Fork",
       "package": "file:///opt/opencode-plugins/opencode-antigravity-auth/dist/index.js",
       "enabled": true,
-      "order": 180,
+      "order": 110,
       "version": "local",
       "description": "Local Antigravity auth fork vendored from Opencode-Sync; do not enable together with Antigravity Auth beta"
     }
   ],
   "metadata": {
-    "lastModified": "2026-05-26T00:00:00Z",
-    "modifiedBy": "opencode-admin"
+    "lastModified": "2026-05-26T19:20:12.347106Z",
+    "modifiedBy": "local-opencode-sync",
+    "importedFrom": "/Users/rubenbeuker/.config/opencode/opencode.jsonc"
   }
 }

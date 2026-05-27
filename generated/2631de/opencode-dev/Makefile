@@ -72,7 +72,7 @@ icloud-config:
 
 icloud-reconnect:
 	@remote=$$(grep -E '^ICLOUD_RCLONE_REMOTE=' $(STACK_DIR)/.env 2>/dev/null | tail -1 | cut -d= -f2-); \
-	$(COMPOSE_ICLOUD) run --rm --entrypoint rclone icloud-rclone reconnect "$${remote:-icloud:}"
+	$(COMPOSE_ICLOUD) run --rm --entrypoint rclone icloud-rclone config reconnect "$${remote:-icloud:}"
 
 icloud-logs:
 	@$(COMPOSE_ICLOUD) logs -f icloud-rclone
