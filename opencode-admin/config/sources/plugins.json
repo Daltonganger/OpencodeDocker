@@ -32,10 +32,10 @@
     {
       "id": "opencommand",
       "name": "OpenCommand",
-      "package": "opencommand-plugin@latest",
+      "package": "opencommand-plugin@0.0.22",
       "enabled": true,
       "order": 40,
-      "version": "latest",
+      "version": "0.0.22",
       "description": "CommandCode/OpenCommand plugin; requires COMMAND_CODE_TOKEN or local OpenCommand secret before enabling"
     },
     {

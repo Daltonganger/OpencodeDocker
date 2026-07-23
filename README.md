@@ -102,7 +102,7 @@ The admin plugin catalog now also contains the plugins found in `iCloud Drive / 
 
 - `@warp-dot-dev/opencode-warp`
 - `openqwencode`
-- `opencommand-plugin@latest`
+- `opencommand-plugin@0.0.22`
 - `@rama_nigg/open-cursor@github:Nomadcxx/opencode-cursor#main`
 - `file:///opt/opencode-plugins/codexvision/dist/index.js`
 - `cursor-acp`
